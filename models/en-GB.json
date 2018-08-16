@@ -1,7 +1,7 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "game",
+      "invocationName": "free food",
       "intents": [
         {
           "name": "AnswerIntent",
@@ -34,12 +34,7 @@
         },
         {
           "name": "AMAZON.StartOverIntent",
-          "samples": [
-            "start game",
-            "new game",
-            "start",
-            "start new game"
-          ]
+          "samples": ["start game", "new game", "start", "start new game"]
         },
         {
           "name": "AMAZON.RepeatIntent"

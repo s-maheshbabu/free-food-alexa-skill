@@ -1,7 +1,7 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "reindeer trivia",
+      "invocationName": "free food",
       "intents": [
         {
           "name": "AMAZON.CancelIntent",
@@ -17,23 +17,23 @@
         },
         {
           "name": "AnswerIntent",
+          "slots": [
+            {
+              "name": "Answer",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
           "samples": [
             "the answer is {Answer}",
             "my answer is {Answer}",
             "is it {Answer}",
             "{Answer} is my answer",
             "{Answer}"
-          ],
-          "slots": [
-            {
-              "name": "Answer",
-              "type": "AMAZON.NUMBER",
-              "samples": []
-            }
           ]
         },
         {
           "name": "DontKnowIntent",
+          "slots": [],
           "samples": [
             "i don't know",
             "don't know",
@@ -43,26 +43,55 @@
             "i don't know that",
             "who knows",
             "i don't know this question"
-          ],
-          "slots": []
-        },
-        {
-          "name": "AMAZON.StartOverIntent",
-          "samples": [
-            "start game",
-            "new game",
-            "start",
-            "start new game"
           ]
         },
         {
-          "name": "AMAZON.RepeatIntent"
+          "name": "AMAZON.StartOverIntent",
+          "samples": ["start game", "new game", "start", "start new game"]
         },
         {
-          "name": "AMAZON.YesIntent"
+          "name": "AMAZON.RepeatIntent",
+          "samples": []
         },
         {
-          "name": "AMAZON.NoIntent"
+          "name": "AMAZON.YesIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.NoIntent",
+          "samples": []
+        },
+        {
+          "name": "StartGameIntent",
+          "slots": [
+            {
+              "name": "game_category",
+              "type": "GAME_CATEGORY"
+            }
+          ],
+          "samples": ["play {game_category}", "play {game_category} questions"]
+        }
+      ],
+      "types": [
+        {
+          "name": "GAME_CATEGORY",
+          "values": [
+            {
+              "name": {
+                "value": "science"
+              }
+            },
+            {
+              "name": {
+                "value": "technology"
+              }
+            },
+            {
+              "name": {
+                "value": "harry potter"
+              }
+            }
+          ]
         }
       ]
     }
