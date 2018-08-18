@@ -1,7 +1,5 @@
 const Alexa = require("ask-sdk-core");
 
-const questions = require("./resources/questions");
-
 const LaunchRequestHandler = require("./requesthandlers/LaunchRequestHandler");
 const SessionEndedRequestHandler = require("./requesthandlers/SessionEndedRequestHandler");
 
@@ -195,6 +193,19 @@ function handleUserGuess(userGaveUp, handlerInput) {
     .getResponse();
 }
 
+function getQuestions(category) {
+  const questions = require("./resources/questions");
+  const movieQuestions = require("./resources/movieQuestions");
+  const technologyQuestions = require("./resources/technologyQuestions");
+  const scienceQuestions = require("./resources/scienceQuestions");
+
+  if (category == "movies") return movieQuestions;
+  if (category == "technology") return technologyQuestions;
+  if (category == "science") return scienceQuestions;
+
+  return questions;
+}
+
 function startGame(newGame, handlerInput) {
   const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
   let speechOutput = newGame
@@ -204,6 +215,9 @@ function startGame(newGame, handlerInput) {
       ) + requestAttributes.t("WELCOME_MESSAGE", GAME_LENGTH.toString())
     : "";
 
+  const { requestEnvelope } = handlerInput;
+  const { intent } = requestEnvelope.request;
+  const questions = getQuestions(intent.slots.game_category.value);
   requestAttributes.addResourceBundle(
     handlerInput.requestEnvelope.request.locale,
     "translation",

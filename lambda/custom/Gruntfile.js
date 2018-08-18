@@ -6,7 +6,7 @@ grunt.initConfig({
     default: {
       options: {
         file_name: "index.js",
-        event: "event.json"
+        event: "event2.json"
       }
     }
   },
@@ -24,7 +24,8 @@ grunt.initConfig({
         aliases: "prod",
         enableVersioning: true
       },
-      arn: "arn:aws:lambda:us-east-1:837603326872:function:free-food-development"
+      arn:
+        "arn:aws:lambda:us-east-1:837603326872:function:free-food-development"
     }
   },
   lambda_package: {
