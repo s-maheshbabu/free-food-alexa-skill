@@ -1,9 +1,6 @@
 const Alexa = require("ask-sdk-core");
-const i18n = require("i18next");
-const sprintf = require("i18next-sprintf-postprocessor");
 
-const questions = require("resources/questions");
-const prompts = require("./resources/prompts");
+const questions = require("./resources/questions");
 
 const LaunchRequestHandler = require("./requesthandlers/LaunchRequestHandler");
 const SessionEndedRequestHandler = require("./requesthandlers/SessionEndedRequestHandler");
@@ -17,6 +14,8 @@ const CancelIntentHandler = require("./intenthandlers/CancelIntentHandler");
 const RepeatIntentHandler = require("./intenthandlers/RepeatIntentHandler");
 const HelpIntentHandler = require("./intenthandlers/HelpIntentHandler");
 const UnhandledIntentHandler = require("./intenthandlers/UnhandledIntentHandler");
+
+const LocalizationInterceptor = require("./interceptors/LocalizationInterceptor");
 
 const ANSWER_COUNT = 4;
 const GAME_LENGTH = 5;
@@ -264,29 +263,6 @@ function startGame(newGame, handlerInput) {
     .withSimpleCard(requestAttributes.t("GAME_NAME"), repromptText)
     .getResponse();
 }
-
-const LocalizationInterceptor = {
-  process(handlerInput) {
-    const localizationClient = i18n.use(sprintf).init({
-      lng: handlerInput.requestEnvelope.request.locale,
-      overloadTranslationOptionHandler:
-        sprintf.overloadTranslationOptionHandler,
-      resources: prompts,
-      returnObjects: true
-    });
-
-    const attributes = handlerInput.attributesManager.getRequestAttributes();
-    attributes.t = function(...args) {
-      return localizationClient.t(...args);
-    };
-    attributes.addResourceBundle = function(lng, ns, resources) {
-      localizationClient.addResourceBundle(lng, ns, resources, true);
-    };
-    attributes.getResourceBundle = function(lng, ns) {
-      return localizationClient.getResourceBundle(lng, ns);
-    };
-  }
-};
 
 const StartGameIntent = {
   canHandle(handlerInput) {

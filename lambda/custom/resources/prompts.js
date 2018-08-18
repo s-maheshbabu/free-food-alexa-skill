@@ -19,7 +19,7 @@ module.exports = prompts = {
       START_UNHANDLED: "Say start to start a new game.",
       NEW_GAME_MESSAGE: "Welcome to %s. ",
       ASK_FOR_CATEGORY:
-        "Welcome to Free Food. Choose a category. Movies, Technology or Science?",
+        "Welcome to Free Food. Choose a category. Sustainability, Technology or Science?",
       WELCOME_MESSAGE:
         "I will ask you %s questions, try to get as many right as you can. Just say the number of the answer. Let's begin. ",
       ANSWER_CORRECT_MESSAGE: "correct. ",
@@ -64,6 +64,8 @@ module.exports = prompts = {
       START_UNHANDLED:
         "Du kannst jederzeit ein neues Spiel beginnen, sage einfach „Spiel starten“.",
       NEW_GAME_MESSAGE: "Willkommen bei %s. ",
+      ASK_FOR_CATEGORY:
+        "Willkommen bei Gratis Essen. Wähle eine Kategorie. Nachhaltigkeit, Technologie or Wissenschaft?",
       WELCOME_MESSAGE:
         "Ich stelle dir %s Fragen und du versuchst, so viele wie möglich richtig zu beantworten. Sage einfach die Zahl, die zur richtigen Antwort passt. Fangen wir an. ",
       ANSWER_CORRECT_MESSAGE: "Richtig. ",

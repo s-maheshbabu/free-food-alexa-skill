@@ -1,7 +1,7 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "freies essen",
+      "invocationName": "gratis essen",
       "intents": [
         {
           "name": "AnswerIntent",
