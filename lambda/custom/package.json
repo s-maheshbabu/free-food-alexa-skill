@@ -12,7 +12,8 @@
     "ask-sdk-core": "^2.0.0",
     "ask-sdk-model": "^1.0.0",
     "i18next": "^10.6.0",
-    "i18next-sprintf-postprocessor": "^0.2.2"
+    "i18next-sprintf-postprocessor": "^0.2.2",
+    "immutable": "^3.8.2"
   },
   "devDependencies": {
     "grunt": "0.4.*",

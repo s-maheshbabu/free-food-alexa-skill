@@ -17,8 +17,14 @@ module.exports = LocalizationInterceptor = {
     attributes.t = function(...args) {
       return localizationClient.t(...args);
     };
-    attributes.addResourceBundle = function(lng, ns, resources) {
-      localizationClient.addResourceBundle(lng, ns, resources, true);
+    attributes.addResourceBundle = function(
+      lng,
+      ns,
+      resources,
+      deep,
+      overwrite
+    ) {
+      localizationClient.addResourceBundle(lng, ns, resources, deep, overwrite);
     };
     attributes.getResourceBundle = function(lng, ns) {
       return localizationClient.getResourceBundle(lng, ns);

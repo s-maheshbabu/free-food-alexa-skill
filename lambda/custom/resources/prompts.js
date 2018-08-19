@@ -1,4 +1,4 @@
-const questions = require("./questions");
+const questions = require("./defaultQuestions");
 
 module.exports = prompts = {
   en: {
@@ -40,13 +40,13 @@ module.exports = prompts = {
   },
   "en-GB": {
     translation: {
-      QUESTIONS: questions.QUESTIONS_EN_GB,
+      //QUESTIONS: questions.QUESTIONS_EN_GB,
       GAME_NAME: "British Reindeer Trivia"
     }
   },
   de: {
     translation: {
-      QUESTIONS: questions.QUESTIONS_DE_DE,
+      //QUESTIONS: questions.QUESTIONS_DE_DE,
       GAME_NAME: "Wissenswertes über Rentiere in Deutsch",
       HELP_MESSAGE:
         "Ich stelle dir %s Multiple-Choice-Fragen. Antworte mit der Zahl, die zur richtigen Antwort gehört. Sage beispielsweise eins, zwei, drei oder vier. Du kannst jederzeit ein neues Spiel beginnen, sage einfach „Spiel starten“. ",
