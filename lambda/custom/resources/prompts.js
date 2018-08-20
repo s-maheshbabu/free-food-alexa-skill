@@ -1,47 +1,48 @@
 module.exports = prompts = {
   en: {
     translation: {
-      GAME_NAME: "Reindeer Trivia",
+      ASK_FOR_CATEGORY:
+        "Welcome to Free Food Trivia. Here, you can help those in need while having fun and learning. Choose a category to play. Sustainability, Movies, Science or Technology?",
+      ANSWER_CORRECT_MESSAGE: "correct. ",
+      ANSWER_IS_MESSAGE: "That answer is ",
+      ANSWER_WRONG_MESSAGE: "wrong. ",
+      ASK_MESSAGE_START: "Would you like to start playing?",
+      CANCEL_MESSAGE: "Ok, let's play again soon.",
+      CORRECT_ANSWER_MESSAGE: "The correct answer is %s: %s. ",
+      GAME_NAME: "Free Food Trivia",
+      GAME_OVER_MESSAGE:
+        "You got %s out of %s questions correct. Thank you for playing and contributing towards world hunger! The more you play, the more you help.",
       HELP_MESSAGE:
         "I will ask you %s multiple choice questions. Respond with the number of the answer. For example, say one, two, three, or four. To start a new game at any time, say, start game. ",
-      REPEAT_QUESTION_MESSAGE: "To repeat the last question, say, repeat. ",
-      ASK_MESSAGE_START: "Would you like to start playing?",
       HELP_REPROMPT:
         "To give an answer to a question, respond with the number of the answer. ",
-      STOP_MESSAGE: "Would you like to keep playing?",
-      CANCEL_MESSAGE: "Ok, let's play again soon.",
-      NO_MESSAGE: "Ok, we'll play another time. Goodbye!",
-      TRIVIA_UNHANDLED: "Try saying a number between 1 and %s",
       HELP_UNHANDLED: "Say yes to continue, or no to end the game.",
-      START_UNHANDLED: "Say start to start a new game.",
       NEW_GAME_MESSAGE: "Welcome to %s. ",
-      ASK_FOR_CATEGORY:
-        "Welcome to Free Food. Choose a category. Sustainability, Technology or Science?",
-      WELCOME_MESSAGE:
-        "I will ask you %s questions, try to get as many right as you can. Just say the number of the answer. Let's begin. ",
-      ANSWER_CORRECT_MESSAGE: "correct. ",
-      ANSWER_WRONG_MESSAGE: "wrong. ",
-      CORRECT_ANSWER_MESSAGE: "The correct answer is %s: %s. ",
-      ANSWER_IS_MESSAGE: "That answer is ",
+      NO_MESSAGE:
+        "Ok, we'll play another time. Thank you for playing and contributing towards world hunger! The more you play, the more you help. Goodbye!",
+      REPEAT_QUESTION_MESSAGE: "To repeat the last question, say, repeat. ",
+      SCORE_IS_MESSAGE: "Your score is %s. ",
+      STOP_MESSAGE: "Would you like to keep playing?",
+      START_UNHANDLED: "Say start to start a new game.",
       TELL_QUESTION_MESSAGE: "Question %s. %s ",
-      GAME_OVER_MESSAGE:
-        "You got %s out of %s questions correct. Thank you for playing!",
-      SCORE_IS_MESSAGE: "Your score is %s. "
+      TRIVIA_UNHANDLED: "Try saying a number between 1 and %s",
+      WELCOME_MESSAGE:
+        "I will ask you %s questions, try to get as many right as you can. Just say the number of the answer. Let's begin. "
     }
   },
   "en-US": {
     translation: {
-      GAME_NAME: "American Free Food Trivia"
+      GAME_NAME: "Free Food Trivia"
     }
   },
   "en-GB": {
     translation: {
-      GAME_NAME: "British Free Food Trivia"
+      GAME_NAME: "Free Food Trivia"
     }
   },
   de: {
     translation: {
-      GAME_NAME: "Wissenswertes über Rentiere in Deutsch",
+      GAME_NAME: "kostenloses Essen Trivia",
       HELP_MESSAGE:
         "Ich stelle dir %s Multiple-Choice-Fragen. Antworte mit der Zahl, die zur richtigen Antwort gehört. Sage beispielsweise eins, zwei, drei oder vier. Du kannst jederzeit ein neues Spiel beginnen, sage einfach „Spiel starten“. ",
       REPEAT_QUESTION_MESSAGE:
