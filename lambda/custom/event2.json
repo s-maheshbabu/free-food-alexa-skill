@@ -37,7 +37,7 @@
       "slots": {
         "game_category": {
           "name": "game_category",
-          "value": "science",
+          "value": "movies",
           "resolutions": {
             "resolutionsPerAuthority": [
               {

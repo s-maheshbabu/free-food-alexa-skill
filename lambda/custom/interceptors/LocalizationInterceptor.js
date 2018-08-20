@@ -26,8 +26,5 @@ module.exports = LocalizationInterceptor = {
     ) {
       localizationClient.addResourceBundle(lng, ns, resources, deep, overwrite);
     };
-    attributes.getResourceBundle = function(lng, ns) {
-      return localizationClient.getResourceBundle(lng, ns);
-    };
   }
 };

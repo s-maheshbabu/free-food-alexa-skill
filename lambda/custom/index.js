@@ -206,22 +206,12 @@ function startGame(newGame, handlerInput) {
 
   const { requestEnvelope } = handlerInput;
   const { intent } = requestEnvelope.request;
-  const questions = questionBank.getQuestions(intent.slots.game_category.value);
+  const questions = questionBank.getQuestions(
+    intent.slots.game_category.value,
+    handlerInput.requestEnvelope.request.locale
+  );
 
-  requestAttributes.addResourceBundle(
-    handlerInput.requestEnvelope.request.locale,
-    "translation",
-    {
-      QUESTIONS: questions.QUESTIONS_EN_US,
-      GAME_NAME: "test game name"
-    }
-  );
-  console.log(
-    requestAttributes.getResourceBundle(
-      handlerInput.requestEnvelope.request.locale
-    )
-  );
-  const translatedQuestions = requestAttributes.t("QUESTIONS");
+  const translatedQuestions = questions;
   const gameQuestions = populateGameQuestions(translatedQuestions);
   const correctAnswerIndex = Math.floor(Math.random() * ANSWER_COUNT);
 

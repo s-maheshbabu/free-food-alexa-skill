@@ -1,9 +1,6 @@
-const questions = require("./defaultQuestions");
-
 module.exports = prompts = {
   en: {
     translation: {
-      //QUESTIONS: questions.QUESTIONS_EN_US,
       GAME_NAME: "Reindeer Trivia",
       HELP_MESSAGE:
         "I will ask you %s multiple choice questions. Respond with the number of the answer. For example, say one, two, three, or four. To start a new game at any time, say, start game. ",
@@ -34,19 +31,16 @@ module.exports = prompts = {
   },
   "en-US": {
     translation: {
-      //QUESTIONS: questions.QUESTIONS_EN_US,
-      GAME_NAME: "American Reindeer Trivia"
+      GAME_NAME: "American Free Food Trivia"
     }
   },
   "en-GB": {
     translation: {
-      //QUESTIONS: questions.QUESTIONS_EN_GB,
-      GAME_NAME: "British Reindeer Trivia"
+      GAME_NAME: "British Free Food Trivia"
     }
   },
   de: {
     translation: {
-      //QUESTIONS: questions.QUESTIONS_DE_DE,
       GAME_NAME: "Wissenswertes über Rentiere in Deutsch",
       HELP_MESSAGE:
         "Ich stelle dir %s Multiple-Choice-Fragen. Antworte mit der Zahl, die zur richtigen Antwort gehört. Sage beispielsweise eins, zwei, drei oder vier. Du kannst jederzeit ein neues Spiel beginnen, sage einfach „Spiel starten“. ",
