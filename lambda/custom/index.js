@@ -113,7 +113,11 @@ function handleUserGuess(userGaveUp, handlerInput) {
   );
   const { correctAnswerText } = sessionAttributes;
   const requestAttributes = attributesManager.getRequestAttributes();
-  const translatedQuestions = requestAttributes.t("QUESTIONS");
+
+  const translatedQuestions = questionBank.getQuestions(
+    sessionAttributes.category,
+    handlerInput.requestEnvelope.request.locale
+  );
 
   if (
     answerSlotValid &&
@@ -206,12 +210,13 @@ function startGame(newGame, handlerInput) {
 
   const { requestEnvelope } = handlerInput;
   const { intent } = requestEnvelope.request;
-  const questions = questionBank.getQuestions(
-    intent.slots.game_category.value,
+
+  const category = intent.slots.game_category.value;
+  const translatedQuestions = questionBank.getQuestions(
+    category,
     handlerInput.requestEnvelope.request.locale
   );
 
-  const translatedQuestions = questions;
   const gameQuestions = populateGameQuestions(translatedQuestions);
   const correctAnswerIndex = Math.floor(Math.random() * ANSWER_COUNT);
 
@@ -246,6 +251,7 @@ function startGame(newGame, handlerInput) {
     currentQuestionIndex,
     correctAnswerIndex: correctAnswerIndex + 1,
     questions: gameQuestions,
+    category: category,
     score: 0,
     correctAnswerText: translatedQuestion[Object.keys(translatedQuestion)[0]][0]
   });
