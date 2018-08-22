@@ -1,30 +1,7 @@
-const i18n = require("i18next");
-const sprintf = require("i18next-sprintf-postprocessor");
-
-const prompts = require("../resources/prompts");
+const interactions = require("../interactions");
 
 module.exports = LocalizationInterceptor = {
   process(handlerInput) {
-    const localizationClient = i18n.use(sprintf).init({
-      lng: handlerInput.requestEnvelope.request.locale,
-      overloadTranslationOptionHandler:
-        sprintf.overloadTranslationOptionHandler,
-      resources: prompts,
-      returnObjects: true
-    });
-
-    const attributes = handlerInput.attributesManager.getRequestAttributes();
-    attributes.t = function(...args) {
-      return localizationClient.t(...args);
-    };
-    attributes.addResourceBundle = function(
-      lng,
-      ns,
-      resources,
-      deep,
-      overwrite
-    ) {
-      localizationClient.addResourceBundle(lng, ns, resources, deep, overwrite);
-    };
+    interactions.init(handlerInput.requestEnvelope.request.locale);
   }
 };

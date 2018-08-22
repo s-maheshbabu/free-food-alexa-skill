@@ -1,6 +1,7 @@
 const Alexa = require("ask-sdk-core");
 
 const questionBank = require("./questionBank");
+const interactions = require("./interactions");
 
 const LaunchRequestHandler = require("./requesthandlers/LaunchRequestHandler");
 const SessionEndedRequestHandler = require("./requesthandlers/SessionEndedRequestHandler");
@@ -112,7 +113,6 @@ function handleUserGuess(userGaveUp, handlerInput) {
     10
   );
   const { correctAnswerText } = sessionAttributes;
-  const requestAttributes = attributesManager.getRequestAttributes();
 
   const translatedQuestions = questionBank.getQuestions(
     sessionAttributes.category,
@@ -125,13 +125,13 @@ function handleUserGuess(userGaveUp, handlerInput) {
       sessionAttributes.correctAnswerIndex
   ) {
     currentScore += 1;
-    speechOutputAnalysis = requestAttributes.t("ANSWER_CORRECT_MESSAGE");
+    speechOutputAnalysis = interactions.t("ANSWER_CORRECT_MESSAGE");
   } else {
     if (!userGaveUp) {
-      speechOutputAnalysis = requestAttributes.t("ANSWER_WRONG_MESSAGE");
+      speechOutputAnalysis = interactions.t("ANSWER_WRONG_MESSAGE");
     }
 
-    speechOutputAnalysis += requestAttributes.t(
+    speechOutputAnalysis += interactions.t(
       "CORRECT_ANSWER_MESSAGE",
       correctAnswerIndex,
       correctAnswerText
@@ -140,19 +140,19 @@ function handleUserGuess(userGaveUp, handlerInput) {
 
   // Check if we can exit the game session after GAME_LENGTH questions (zero-indexed)
   if (sessionAttributes.currentQuestionIndex === GAME_LENGTH - 1) {
-    speechOutput = userGaveUp ? "" : requestAttributes.t("ANSWER_IS_MESSAGE");
+    speechOutput = userGaveUp ? "" : interactions.t("ANSWER_IS_MESSAGE");
 
     const isGameWon = currentScore / GAME_LENGTH >= 0.3;
     speechOutput +=
       speechOutputAnalysis +
-      requestAttributes.t(
+      interactions.t(
         "FINAL_SCORE_MESSAGE",
         currentScore.toString(),
         GAME_LENGTH.toString()
       ) +
       (isGameWon
-        ? requestAttributes.t("GAME_WON_MESSAGE")
-        : requestAttributes.t("GAME_LOST_MESSAGE"));
+        ? interactions.t("GAME_WON_MESSAGE")
+        : interactions.t("GAME_LOST_MESSAGE"));
 
     return responseBuilder.speak(speechOutput).getResponse();
   }
@@ -168,7 +168,7 @@ function handleUserGuess(userGaveUp, handlerInput) {
     translatedQuestions
   );
   const questionIndexForSpeech = currentQuestionIndex + 1;
-  let repromptText = requestAttributes.t(
+  let repromptText = interactions.t(
     "TELL_QUESTION_MESSAGE",
     questionIndexForSpeech.toString(),
     spokenQuestion
@@ -178,10 +178,10 @@ function handleUserGuess(userGaveUp, handlerInput) {
     repromptText += `${i + 1}. ${roundAnswers[i]}. `;
   }
 
-  speechOutput += userGaveUp ? "" : requestAttributes.t("ANSWER_IS_MESSAGE");
+  speechOutput += userGaveUp ? "" : interactions.t("ANSWER_IS_MESSAGE");
   speechOutput +=
     speechOutputAnalysis +
-    requestAttributes.t("SCORE_IS_MESSAGE", currentScore.toString()) +
+    interactions.t("SCORE_IS_MESSAGE", currentScore.toString()) +
     repromptText;
 
   const translatedQuestion =
@@ -200,14 +200,13 @@ function handleUserGuess(userGaveUp, handlerInput) {
   return responseBuilder
     .speak(speechOutput)
     .reprompt(repromptText)
-    .withSimpleCard(requestAttributes.t("GAME_NAME"), repromptText)
+    .withSimpleCard(interactions.t("GAME_NAME"), repromptText)
     .getResponse();
 }
 
 function startGame(newGame, handlerInput) {
-  const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
   let speechOutput = newGame
-    ? requestAttributes.t("WELCOME_MESSAGE", GAME_LENGTH.toString())
+    ? interactions.t("WELCOME_MESSAGE", GAME_LENGTH.toString())
     : "";
 
   const { requestEnvelope } = handlerInput;
@@ -232,7 +231,7 @@ function startGame(newGame, handlerInput) {
   const spokenQuestion = Object.keys(
     translatedQuestions[gameQuestions[currentQuestionIndex]]
   )[0];
-  let repromptText = requestAttributes.t(
+  let repromptText = interactions.t(
     "TELL_QUESTION_MESSAGE",
     "1",
     spokenQuestion
@@ -263,7 +262,7 @@ function startGame(newGame, handlerInput) {
   return handlerInput.responseBuilder
     .speak(speechOutput)
     .reprompt(repromptText)
-    .withSimpleCard(requestAttributes.t("GAME_NAME"), repromptText)
+    .withSimpleCard(interactions.t("GAME_NAME"), repromptText)
     .getResponse();
 }
 

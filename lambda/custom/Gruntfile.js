@@ -6,7 +6,7 @@ grunt.initConfig({
     default: {
       options: {
         file_name: "index.js",
-        event: "event2.json"
+        event: "event.json"
       }
     }
   },
