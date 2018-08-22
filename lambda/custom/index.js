@@ -141,13 +141,18 @@ function handleUserGuess(userGaveUp, handlerInput) {
   // Check if we can exit the game session after GAME_LENGTH questions (zero-indexed)
   if (sessionAttributes.currentQuestionIndex === GAME_LENGTH - 1) {
     speechOutput = userGaveUp ? "" : requestAttributes.t("ANSWER_IS_MESSAGE");
+
+    const isGameWon = currentScore / GAME_LENGTH >= 0.3;
     speechOutput +=
       speechOutputAnalysis +
       requestAttributes.t(
-        "GAME_OVER_MESSAGE",
+        "FINAL_SCORE_MESSAGE",
         currentScore.toString(),
         GAME_LENGTH.toString()
-      );
+      ) +
+      (isGameWon
+        ? requestAttributes.t("GAME_WON_MESSAGE")
+        : requestAttributes.t("GAME_LOST_MESSAGE"));
 
     return responseBuilder.speak(speechOutput).getResponse();
   }
@@ -202,10 +207,7 @@ function handleUserGuess(userGaveUp, handlerInput) {
 function startGame(newGame, handlerInput) {
   const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
   let speechOutput = newGame
-    ? requestAttributes.t(
-        "NEW_GAME_MESSAGE",
-        requestAttributes.t("GAME_NAME")
-      ) + requestAttributes.t("WELCOME_MESSAGE", GAME_LENGTH.toString())
+    ? requestAttributes.t("WELCOME_MESSAGE", GAME_LENGTH.toString())
     : "";
 
   const { requestEnvelope } = handlerInput;
