@@ -276,7 +276,12 @@ const StartGameIntent = {
     );
   },
   handle(handlerInput) {
-    return startGame(true, handlerInput);
+    const { request } = handlerInput.requestEnvelope;
+    if (request.dialogState !== "COMPLETED") {
+      return handlerInput.responseBuilder.addDelegateDirective().getResponse();
+    } else {
+      return startGame(true, handlerInput);
+    }
   }
 };
 
