@@ -1,0 +1,40 @@
+The process to format questions found at https://github.com/uberspot/OpenTriviaQA/tree/master/categories to work with this skill.
+
+// Remove all true/false questions.
+// ^#.*\n\^ True\n.*\n.*\n\n
+// ^#.*\n\^ False\n.*\n.*\n\n
+// ^#.*\n\^ No\n.*\n.*\n\n
+// ^#.*\n\^ Yes\n.*\n.*\n\n
+
+// Remove all carets, As, Bs, Cs and Ds
+// ^\^
+// ^A (.*\nB ) --- replace with $1
+// ^B
+// ^C
+// ^D
+
+// First option correct answer
+// (^#Q.*\n)(^.*\n)\2(^.*\n)
+// $1$2$3
+
+// Second option correct answer
+// (^#Q.*\n)(^.*\n)(^.*\n)\2(^.*\n)
+// $1$2$3$4
+
+// Third option correct answer
+// (^#Q.*\n)(^.*\n)(^.*\n)(^.*\n)\2(^.*\n)
+// $1$2$3$4$5
+
+// Last option correct answer
+// (^#Q.*\n)(^.*\n)(^.*\n)(^.*\n)(^.*\n)\2(^.*\n)
+// $1$2$3$4$5$6
+
+// Replace % with %%
+
+// JSON-ify the file
+// ^(#Q.*)\n(.*)\n(.*)\n(.*)\n(.*)\n
+// {"$1":[\n"$2",\n"$3",\n"$4",\n"$5"]\n},
+
+// Remove the comma at end and add the QUESTIONS key
+
+// Save and format the doc
