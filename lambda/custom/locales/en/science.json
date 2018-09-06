@@ -801,7 +801,7 @@
       ]
     },
     {
-      "This terrible disease killed as much as 5% of the worlds population and affected almost 20% in just six months.": [
+      "This terrible disease killed as much as 5%% of the worlds population and affected almost 20%% in just six months.": [
         "Spanish Flu",
         "Measles",
         "Bubonic plague",
@@ -3650,10 +3650,10 @@
     },
     {
       "Of all the microbes on Earth, only about this many have been identified.": [
-        "5 %",
-        "1 %",
-        "2 %",
-        "10 %"
+        "5%%",
+        "1%%",
+        "2%%",
+        "10%%"
       ]
     },
     {
@@ -4578,17 +4578,17 @@
     },
     {
       "Approximately what percentage of humans have blood of the type Rh +?": [
-        "85 %",
-        "33 %",
-        "35 %",
-        "74 %"
+        "85%%",
+        "33%%",
+        "35%%",
+        "74%%"
       ]
     },
     {
       "What percentage of humans have type O blood?": [
-        "45 %",
-        "33 %",
-        "25%",
+        "45%%",
+        "33%%",
+        "25%%",
         "There is no way to tell."
       ]
     },
@@ -5066,10 +5066,10 @@
     },
     {
       "Rain forests are home to approximately what percentage of all the living animal and plant species on the planet?": [
-        "65%",
-        "12%",
-        "24%",
-        "80%"
+        "65%%",
+        "12%%",
+        "24%%",
+        "80%%"
       ]
     },
     {
@@ -5306,10 +5306,10 @@
     },
     {
       "Despite the fierce image movies have attributed to dinosaurs, approximately this percent of dinosaurs fed on plants and were quite peaceful.": [
-        "65 %",
-        "20 %",
-        "52 %",
-        "90 %"
+        "65%%",
+        "20%%",
+        "52%%",
+        "90%%"
       ]
     },
     {
@@ -5378,10 +5378,10 @@
     },
     {
       "About how much of an adult humans body is water?": [
-        "60%",
-        "40%",
-        "30%",
-        "70%"
+        "60%%",
+        "40%%",
+        "30%%",
+        "70%%"
       ]
     },
     {
@@ -5689,7 +5689,7 @@
       ]
     },
     {
-      "Which of these regions is most affected by AIDS, as about 60% of all the HIV-infected people in the world live there?": [
+      "Which of these regions is most affected by AIDS, as about 60%% of all the HIV-infected people in the world live there?": [
         "Sub-Saharan Africa",
         "Latin America",
         "East Asia",
@@ -5786,10 +5786,10 @@
     },
     {
       "What percentage of the Earths surface is covered by water?": [
-        "Roughly 70%",
-        "Exactly 50%",
-        "Roughly 25%",
-        "Roughly 50%"
+        "Roughly 70%%",
+        "Exactly 50%%",
+        "Roughly 25%%",
+        "Roughly 50%%"
       ]
     },
     {
@@ -6649,7 +6649,7 @@
       ]
     },
     {
-      "This three million year old skeleton known as “Lucy” was discovered in 1974 and is almost 40% complete. Lucy was a small, chimp-like hominid but walked upright like modern humans. She is a member of this species.": [
+      "This three million year old skeleton known as “Lucy” was discovered in 1974 and is almost 40%% complete. Lucy was a small, chimp-like hominid but walked upright like modern humans. She is a member of this species.": [
         "Australopithecus Afarensis",
         "Homo Floresiensis",
         "Peking Woman",
@@ -7114,10 +7114,10 @@
     },
     {
       "Ice caps and glaciers are the second largest water reservoirs on Earth after oceans. What percent of the planet’s water do they hold?": [
-        "2 %",
-        "18 %",
-        "10 %",
-        "5 %"
+        "2%%",
+        "18%%",
+        "10%%",
+        "5%%"
       ]
     },
     {
@@ -8162,10 +8162,10 @@
     },
     {
       "The muscular system composes what percent of total body weight?": [
-        "35% - 50%",
-        "25% - 35%",
-        "10% - 15%",
-        "60% - 70%"
+        "35%% - 50%%",
+        "25%% - 35%%",
+        "10%% - 15%%",
+        "60%% - 70%%"
       ]
     },
     {
@@ -8809,7 +8809,7 @@
       ]
     },
     {
-      "What makes almost 99% of the visible universe?": [
+      "What makes almost 99%% of the visible universe?": [
         "Plasma",
         "Nitrogen",
         "Quasars",
@@ -8986,7 +8986,7 @@
     },
     {
       "Select the incorrect statement.": [
-        "Over 80 % of an elephants tusk is visible-the rest lies inside the gums.",
+        "Over 80%% of an elephants tusk is visible-the rest lies inside the gums.",
         "Aside from the elephant, the walrus has the largest tusks.",
         "The tusks of a male elephant grow about 18 cm a year.",
         "Biologists have found that the tooths weight and its need for muscular development has greatly influenced the development of the mammalian skull."
@@ -9036,7 +9036,7 @@
       "Which of the following is not true about the bird eggshell?": [
         "The eggshell does not contain protein.",
         "The normal bird eggshell is porous.",
-        "The eggshell consists of roughly 95% calcium carbonate crystals.",
+        "The eggshell consists of roughly 95%% calcium carbonate crystals.",
         "The bird eggshell is covered by a structure called cuticle."
       ]
     },
@@ -9066,10 +9066,10 @@
     },
     {
       "Which of the following is not true about the egg yolk?": [
-        "It contains 75% of the protein of the egg.",
+        "It contains 75%% of the protein of the egg.",
         "It is placed in a yolk sac.",
         "Its usual color varies from pale yellow to deep orange.",
-        "It contains almost 100% of total amount of fat and cholesterol in the egg."
+        "It contains almost 100%% of total amount of fat and cholesterol in the egg."
       ]
     },
     {
@@ -9266,14 +9266,14 @@
     },
     {
       "All planets, comets and asteroids orbit around the Sun.  What percentage of the Solar Systems mass does the Sun account for?": [
-        "99.8%",
+        "99.8%%",
         "around one-half",
-        "86.2%",
-        "around 10%"
+        "86.2%%",
+        "around 10%%"
       ]
     },
     {
-      "This tasteless, colorless and odorless chemical element makes up most of the Suns volume (approx. 92%).": [
+      "This tasteless, colorless and odorless chemical element makes up most of the Suns volume (approx. 92%%).": [
         "Hydrogen",
         "Chromium",
         "Magnesium",
@@ -9297,7 +9297,7 @@
       ]
     },
     {
-      "This commercially available non-toxic gas makes up 25% of the Suns mass.  It is used in deep diving to reduce the effects of narcosis.": [
+      "This commercially available non-toxic gas makes up 25%% of the Suns mass.  It is used in deep diving to reduce the effects of narcosis.": [
         "helium",
         "nitrogen",
         "hydrogen",
@@ -9849,7 +9849,7 @@
       ]
     },
     {
-      "About 95% of fresh water in the USA is underground. What is the name of the biggest source of fresh water in the USA?": [
+      "About 95%% of fresh water in the USA is underground. What is the name of the biggest source of fresh water in the USA?": [
         "The Ogallala Aquifer",
         "The Lake Superior Aquifer",
         "The Tampa Aquifer",
@@ -10161,7 +10161,7 @@
       ]
     },
     {
-      "The Earths atmosphere is about 78.8 % nitrogen and almost 21 % oxygen. This element is the third most abundant comprising about 0.93 % of the atmosphere.": [
+      "The Earths atmosphere is about 78.8 %% nitrogen and almost 21 %% oxygen. This element is the third most abundant comprising about 0.93 %% of the atmosphere.": [
         "Argon",
         "Helium",
         "Krypton",
@@ -10786,10 +10786,10 @@
     },
     {
       "Approximately what percentage of Americas waste is paper?": [
-        "39 %",
-        "14 %",
-        "8 %",
-        "24 %"
+        "39%%",
+        "14%%",
+        "8%%",
+        "24%%"
       ]
     },
     {
@@ -12218,10 +12218,10 @@
     },
     {
       "What part of the atoms mass is concentrated in its nucleus?": [
-        "99.9 %",
-        "90 %",
-        "70 %",
-        "0,01 %"
+        "99.9%%",
+        "90%%",
+        "70%%",
+        "0,01%%"
       ]
     },
     {
@@ -14413,7 +14413,7 @@
         "No more than 3 grams per serving",
         "Less than 1 gram per serving",
         "Less than 5 grams per serving",
-        "No more than 15% of the servings calories from fat"
+        "No more than 15%% of the servings calories from fat"
       ]
     },
     {
@@ -15698,10 +15698,10 @@
     },
     {
       "The Sun contains about what percentage of the entire solar systems mass?": [
-        "98%",
-        "28%",
-        "78%",
-        "58%"
+        "98%%",
+        "28%%",
+        "78%%",
+        "58%%"
       ]
     },
     {
@@ -15746,10 +15746,10 @@
     },
     {
       "On average, how much of a persons body weight is muscle?": [
-        "40%",
-        "15%",
-        "65%",
-        "90%"
+        "40%%",
+        "15%%",
+        "65%%",
+        "90%%"
       ]
     },
     {
@@ -15970,10 +15970,10 @@
     },
     {
       "Which of these statements is true about the human blood plasma?": [
-        "It comprises 55% of the blood content.",
+        "It comprises 55%% of the blood content.",
         "It is colorless.",
         "All of these",
-        "It contains 60% water."
+        "It contains 60%% water."
       ]
     },
     {
