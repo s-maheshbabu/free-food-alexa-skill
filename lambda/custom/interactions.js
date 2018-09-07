@@ -19,7 +19,7 @@ module.exports.init = locale => {
         .init({
           lng: locale,
           initImmediate: false,
-          ns: ["prompts"],
+          ns: ["prompts", "categories"],
           defaultNS: "prompts",
           load: "all",
           backend: {

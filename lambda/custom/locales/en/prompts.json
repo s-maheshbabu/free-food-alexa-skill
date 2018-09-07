@@ -1,5 +1,5 @@
 {
-  "ASK_FOR_CATEGORY": "Welcome to Free Food Trivia. Help those in need while having fun and learning. For every game you win, 50 grains of rice is donated. Choose a category to play. Sustainability, Movies, Science or Technology?",
+  "ASK_FOR_CATEGORY": "Welcome to Free Food Trivia. Help those in need while having fun and learning. For every game you win, 50 grains of rice is donated. Choose a category to play. %s, %s, %s, %s or %s?",
   "ANSWER_CORRECT_MESSAGE": "correct. ",
   "ANSWER_IS_MESSAGE": "That answer is ",
   "ANSWER_WRONG_MESSAGE": "wrong. ",

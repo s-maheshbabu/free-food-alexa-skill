@@ -1,7 +1,7 @@
 {
   "QUESTIONS": [
     {
-      "Movie Question 1?": [
+      "Sustainability Question 1?": [
         "13,000",
         "1,200",
         "5,000",
@@ -11,7 +11,7 @@
       ]
     },
     {
-      "Movie Question 2? ": [
+      "Sustainability Question 2? ": [
         "Japan",
         "United States",
         "Finland",
@@ -22,7 +22,7 @@
       ]
     },
     {
-      "Movie Question 3?": [
+      "Sustainability Question 3?": [
         "Wunorse Openslae",
         "Alabaster Snowball",
         "Bushy Evergreen",
@@ -30,7 +30,7 @@
       ]
     },
     {
-      "Movie Question 4? ": [
+      "Sustainability Question 4? ": [
         "Girls",
         "Boys",
         "Girls and boys",
@@ -38,7 +38,7 @@
       ]
     },
     {
-      "Movie Question 5?": ["Lichen", "Grasses", "Leaves", "Berries"]
+      "Sustainability Question 5?": ["Lichen", "Grasses", "Leaves", "Berries"]
     }
   ]
 }

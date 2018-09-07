@@ -2,7 +2,7 @@ module.exports = prompts = {
   en: {
     translation: {
       ASK_FOR_CATEGORY:
-        "Welcome to Free Food Trivia. Help those in need while having fun and learning. For every game you win, 50 grains of rice is donated. Choose a category to play. Sustainability, Movies, Science or Technology?",
+        "Welcome to Free Food Trivia. Help those in need while having fun and learning. For every game you win, 50 grains of rice is donated. Choose a category to play. %s, %s, %s or %s?",
       ANSWER_CORRECT_MESSAGE: "correct. ",
       ANSWER_IS_MESSAGE: "That answer is ",
       ANSWER_WRONG_MESSAGE: "wrong. ",
@@ -44,6 +44,8 @@ module.exports = prompts = {
   },
   de: {
     translation: {
+      ASK_FOR_CATEGORY:
+        "Willkommen bei Free Food Trivia. Helfen Sie denen, die Spaß haben und lernen. Für jedes gewonnene Spiel werden 50 Reiskörner gespendet. Wählen Sie eine Kategorie zum Spielen. %s, %s, %s or %s?",
       GAME_NAME: "kostenloses Essen Trivia",
       HELP_MESSAGE:
         "Ich stelle dir %s Multiple-Choice-Fragen. Antworte mit der Zahl, die zur richtigen Antwort gehört. Sage beispielsweise eins, zwei, drei oder vier. Du kannst jederzeit ein neues Spiel beginnen, sage einfach „Spiel starten“. ",
@@ -61,8 +63,6 @@ module.exports = prompts = {
       START_UNHANDLED:
         "Du kannst jederzeit ein neues Spiel beginnen, sage einfach „Spiel starten“.",
       NEW_GAME_MESSAGE: "Willkommen bei %s. ",
-      ASK_FOR_CATEGORY:
-        "Willkommen bei Gratis Essen. Wähle eine Kategorie. Nachhaltigkeit, Technologie or Wissenschaft?",
       WELCOME_MESSAGE:
         "Ich stelle dir %s Fragen und du versuchst, so viele wie möglich richtig zu beantworten. Sage einfach die Zahl, die zur richtigen Antwort passt. Fangen wir an. ",
       ANSWER_CORRECT_MESSAGE: "Richtig. ",

@@ -1,4 +1,5 @@
 const interactions = require("../interactions");
+const CATEGORIES_NAMESPACE = "categories";
 
 module.exports = LaunchRequest = {
   canHandle(handlerInput) {
@@ -14,7 +15,12 @@ module.exports = LaunchRequest = {
     const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
 
     return handlerInput.responseBuilder
-      .speak(interactions.t("ASK_FOR_CATEGORY"))
+      .speak(
+        interactions.t("ASK_FOR_CATEGORY", {
+          postProcess: "sprintf",
+          sprintf: interactions.t(CATEGORIES_NAMESPACE + ":CATEGORIES")
+        })
+      )
       .withShouldEndSession(false)
       .getResponse();
   }
