@@ -1,3 +1,9 @@
+const gameManager = require("../gameManager");
+const interactions = require("../interactions");
+
+// TODO: Defined at two places in the code. Refactor.
+const CATEGORIES_NAMESPACE = "categories";
+
 module.exports = YesIntentHandler = {
   canHandle(handlerInput) {
     return (
@@ -13,6 +19,14 @@ module.exports = YesIntentHandler = {
         .reprompt(sessionAttributes.repromptText)
         .getResponse();
     }
-    return startGame(false, handlerInput);
+    return handlerInput.responseBuilder
+      .speak(
+        interactions.t("ASK_FOR_CATEGORY", {
+          postProcess: "sprintf",
+          sprintf: interactions.t(CATEGORIES_NAMESPACE + ":CATEGORIES")
+        })
+      )
+      .withShouldEndSession(false)
+      .getResponse();
   }
 };

@@ -1,3 +1,5 @@
+const HelpIntentHandler = require("./HelpIntentHandler");
+
 module.exports = RepeatIntentHandler = {
   canHandle(handlerInput) {
     return (
@@ -7,9 +9,15 @@ module.exports = RepeatIntentHandler = {
   },
   handle(handlerInput) {
     const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-    return handlerInput.responseBuilder
-      .speak(sessionAttributes.speechOutput)
-      .reprompt(sessionAttributes.repromptText)
-      .getResponse();
+    // If we are in the midst of a game, just repeat the question.
+    if (sessionAttributes.questions) {
+      return handlerInput.responseBuilder
+        .speak(sessionAttributes.speechOutput)
+        .reprompt(sessionAttributes.repromptText)
+        .getResponse();
+    } else {
+      // Otherwise, tell the user that there is nothing to repeat and ask if they would like to continue playing.
+      return HelpIntentHandler.handle(handlerInput);
+    }
   }
 };

@@ -1,3 +1,5 @@
+const interactions = require("../interactions");
+
 module.exports = NoIntentHandler = {
   canHandle(handlerInput) {
     return (
@@ -7,7 +9,7 @@ module.exports = NoIntentHandler = {
   },
   handle(handlerInput) {
     const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
-    const speechOutput = requestAttributes.t("NO_MESSAGE");
+    const speechOutput = interactions.t("NO_MESSAGE");
     return handlerInput.responseBuilder.speak(speechOutput).getResponse();
   }
 };

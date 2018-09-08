@@ -1,3 +1,8 @@
+const interactions = require("../interactions");
+
+// TODO: This is repeated in index.js as well. Should refactor to a single place.
+const GAME_LENGTH = 5;
+
 module.exports = HelpIntentHandler = {
   canHandle(handlerInput) {
     const { request } = handlerInput.requestEnvelope;
@@ -16,14 +21,12 @@ module.exports = HelpIntentHandler = {
 };
 
 function helpTheUser(newGame, handlerInput) {
-  const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
   const askMessage = newGame
-    ? requestAttributes.t("ASK_MESSAGE_START")
-    : requestAttributes.t("REPEAT_QUESTION_MESSAGE") +
-      requestAttributes.t("STOP_MESSAGE");
-  const speechOutput =
-    requestAttributes.t("HELP_MESSAGE", GAME_LENGTH) + askMessage;
-  const repromptText = requestAttributes.t("HELP_REPROMPT") + askMessage;
+    ? interactions.t("ASK_MESSAGE_START")
+    : interactions.t("REPEAT_QUESTION_MESSAGE") +
+      interactions.t("STOP_MESSAGE");
+  const speechOutput = interactions.t("HELP_MESSAGE", GAME_LENGTH) + askMessage;
+  const repromptText = interactions.t("HELP_REPROMPT") + askMessage;
 
   return handlerInput.responseBuilder
     .speak(speechOutput)

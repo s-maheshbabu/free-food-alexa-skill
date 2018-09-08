@@ -2,7 +2,7 @@ const i18n = require("i18next");
 const sprintf = require("i18next-sprintf-postprocessor");
 const SyncBackend = require("i18next-sync-fs-backend");
 
-const DEFAULT_GAME_CATEGORY = "default";
+const DEFAULT_GAME_CATEGORY = "general";
 const categories = ["movies", "science", "technology", DEFAULT_GAME_CATEGORY];
 
 let localizationClient;
