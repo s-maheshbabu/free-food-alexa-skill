@@ -42,7 +42,7 @@ module.exports = {
       Object.keys(translatedQuestion)[0]
     ].slice();
     let index = answersCopy.length;
-
+    console.log(translatedQuestions);
     if (index < ANSWER_COUNT) {
       throw new Error("Not enough answers for question.");
     }
