@@ -1,44 +1,196 @@
 {
   "QUESTIONS": [
     {
-      "Sustainability Question 1?": [
-        "13,000",
-        "1,200",
-        "5,000",
-        "700",
-        "1,000",
-        "120,000"
+      "How much did Americans spend on organic food in 2016?": [
+        "43.3 billion dollars",
+        "723 million  dollars",
+        "100000 dollars",
+        "50 million dollars",
+        "70 dollars"
       ]
     },
     {
-      "Sustainability Question 2? ": [
-        "Japan",
-        "United States",
-        "Finland",
-        "Germany",
-        "Canada",
-        "Norway",
-        "France"
+      "What is earth’s warmest year on record? ": [
+        "2016",
+        "2012",
+        "1994",
+        "1772",
+        "1334",
+        "2002",
+        "1999"
       ]
     },
     {
-      "Sustainability Question 3?": [
-        "Wunorse Openslae",
-        "Alabaster Snowball",
-        "Bushy Evergreen",
-        "Pepper Minstix"
+      "How many pounds of garbage does the average American produce each day?": [
+        "4.4",
+        "20.1",
+        "0.75",
+        "Americans don't produce garbage",
+        "2.2"
       ]
     },
     {
-      "Sustainability Question 4? ": [
-        "Girls",
-        "Boys",
-        "Girls and boys",
-        "No way to tell"
+      "What is the ozone layer? ": [
+        "The layer of protective gases that shields the earth from harmful radiation.",
+        "The layer of gases surrounding earth that absorbs pollutants in the atmosphere.",
+        "A layer used as a filter on Instagram photos.",
+        "No way to tell.",
+        "A layer that forms on water in cold climates."
       ]
     },
     {
-      "Sustainability Question 5?": ["Lichen", "Grasses", "Leaves", "Berries"]
+      "What percent of homes built before 1940 are estimated to have lead paint? ": [
+        "87",
+        "0",
+        "100",
+        "20",
+        "5"
+      ]
+    },
+    {
+      "How much are scientists predicting the seas will rise by the end of this century? ": [
+        "2 to six feet",
+        "1 to 3 feet",
+        "one inch",
+        "seas won't rise",
+        "20 to 30 feet"
+      ]
+    },
+    {
+      "What use does white vinegar have around the home? ": [
+        "Natural cleanser and disinfectant",
+        "Natural toothpaste",
+        "Cat litter",
+        "Healthy natural beverage",
+        "Dog food",
+        "Natural paint remover"
+      ]
+    },
+    {
+      "Which statement is false? ": [
+        "The heat of summer occurs when the earth orbits closer to the sun.",
+        "Trees breathe in carbon dioxide and emit oxygen.",
+        "The Black Rhino is not an endangered species.",
+        "The world population is now more than 7.4 billion."
+      ]
+    },
+    {
+      "When was the first Earth Day? ": [
+        "1970",
+        "1750",
+        "1999",
+        "2007",
+        "2012",
+        "2004"
+      ]
+    },
+    {
+      "What American river caught fire in 1969, prompting multiple pollution control measures? ": [
+        "The Cuyahoga River",
+        "The Calumet River",
+        "The Fox River",
+        "The Scioto River"
+      ]
+    },
+    {
+      "In which state did the disastrous Exxon Valdez oil spill occur? ": [
+        "Alaska",
+        "Washington",
+        "Maine",
+        "California"
+      ]
+    },
+    {
+      "Who is considered the founder of Earth Day? ": [
+        "Senator Gaylord Nelson",
+        "President John F. Kennedy",
+        "President Jimmy Carter",
+        "Vice President Al Gore",
+        "Lady Gaga",
+        "Kim Kardashian",
+        "Singer Miley Cyrus"
+      ]
+    },
+    {
+      "What are the three R's of waste management? ": [
+        "Reduce, Reuse, and Recycle",
+        "Refuse, Refrain, and Redeem",
+        "Remove, Return, and Relocate",
+        "Remix, Reinvent, and Redistribute",
+        "Rocking, Rolling, and Revving"
+      ]
+    },
+    {
+      "Which of the following help reduce air pollution? ": [
+        "All of the above",
+        "Fluorescent lights",
+        "Cruise control",
+        "Using water based products"
+      ]
+    },
+    {
+      "How much of our air pollution comes from motor vehicles, like cars and trucks? ": [
+        "50%",
+        "100%",
+        "0%",
+        "70%",
+        "5%",
+        "90%",
+        "20%"
+      ]
+    },
+    {
+      "What iconic bird was removed from the endangered species list in 2007, after reaching near-extinction? ": [
+        "The bald eagle",
+        "The blue jay",
+        "The cardinal",
+        "The passenger pegion"
+      ]
+    },
+    {
+      "The melting of the Greenland ice sheet poses an immediate threat to the survival of which animal? ": [
+        "Polar Bears",
+        "Humans",
+        "Pengiuns",
+        "Killer Whales",
+        "Cows",
+        "Ants",
+        "Rats"
+      ]
+    },
+    {
+      "Which Soviet nuclear plant exploded, causing what is widely considered the worst nuclear disaster in history? ": [
+        "Chernobyl",
+        "Beloyarsk",
+        "Rostov",
+        "Greifswald"
+      ]
+    },
+    {
+      "What international agreement set the groundwork for phasing out chlorofluorocarbons (CFCs) and other substances known to deplete the ozone layer? ": [
+        "Montreal Protocol",
+        "Geneva Protocol",
+        "Multi-effect Protocol",
+        "EMEP Protocol"
+      ]
+    },
+    {
+      "What 1997 global agreement to reduce greenhouse gases was signed by virtually every country in the world except for the United States? ": [
+        "Kyoto Protocol",
+        "Millennium Summit",
+        "Reykjavik Summit",
+        "Oslo Accords"
+      ]
+    },
+    {
+      "How much water does the average American use every day?": [
+        "100 gallons",
+        "20 gallons",
+        "2 gallons",
+        "Americans don't use water",
+        "1 gallon",
+        "1000 gallons"
+      ]
     }
   ]
 }
