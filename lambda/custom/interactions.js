@@ -6,12 +6,12 @@ let interactionsLocalizationClient;
 
 module.exports.init = locale => {
   {
-    if (!interactionsLocalizationClient) {
-      if (!locale)
-        throw new Error(
-          "A valid locale must be provided to instantiate interactions localization client"
-        );
+    if (!locale)
+      throw new Error(
+        "A valid locale must be provided to instantiate interactions localization client"
+      );
 
+    if (!interactionsLocalizationClient) {
       interactionsLocalizationClient = i18n.createInstance();
       interactionsLocalizationClient
         .use(sprintf)
@@ -29,6 +29,11 @@ module.exports.init = locale => {
             sprintf.overloadTranslationOptionHandler,
           returnObjects: true
         });
+    } else {
+      // This is needed so we don't keep using 'en' when a customer with 'de' locale is being served.
+      // TODO: Does this mean, we lose the previously loaded translations thereby adding to latency or
+      // does it just append?
+      interactionsLocalizationClient.changeLanguage(locale);
     }
   }
 };
