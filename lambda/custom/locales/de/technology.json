@@ -1,3 +1,84 @@
 {
-  "title": "this in deutsch"
+  "QUESTIONS": [
+    {
+      "Which planet has the most moons?": [
+        "Jupiter",
+        "Earth",
+        "Mars",
+        "Uranus",
+        "Venus",
+        "Pluto",
+        "Sun",
+        "Mercury",
+        "Saturn",
+        "Neptune"
+      ]
+    },
+    {
+      "An octopus can fit through any hole larger than its what?": [
+        "Beak",
+        "Head",
+        "Legs",
+        "Torso",
+        "Arms",
+        "Eyes"
+      ]
+    },
+    {
+      "Oncology focuses on what disease?": [
+        "Cancer",
+        "Heart Disease",
+        "Asthma",
+        "Tuberculosis",
+        "Coma",
+        "Diabetes",
+        "Mental Health"
+      ]
+    },
+    {
+      "How long is an eon in geology?": [
+        "A billion years",
+        "A thousand years",
+        "A million years",
+        "A trillion years",
+        "Hundred thousand years",
+        "Two years"
+      ]
+    },
+    {
+      "What is the first organisms to grow back after fire?": [
+        "Moss",
+        "Mold",
+        "Grass",
+        "Trees",
+        "Lions",
+        "Humans",
+        "Shrubs"
+      ]
+    },
+    {
+      "Clouds are made up of these.": [
+        "Water droplets and ice crystals",
+        "Carbon atoms",
+        "Oxygen ions",
+        "Dust mites"
+      ]
+    },
+    {
+      "This formation is a conical hill or mountain. It is formed by mantle material being pressed through an opening in the Earths crust.": [
+        "A volcano",
+        "A hill",
+        "An earthquake",
+        "A geyser"
+      ]
+    },
+    {
+      "Japan suffers from this event very often. It is the sudden, light or violent movement of the earths surface caused by the release of energy in the earths crust.": [
+        "Earthquake",
+        "Volcano",
+        "Tide",
+        "Tsunami"
+      ]
+    }
+  ]
 }

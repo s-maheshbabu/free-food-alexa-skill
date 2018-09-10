@@ -2,12 +2,12 @@ const i18n = require("i18next");
 const sprintf = require("i18next-sprintf-postprocessor");
 const SyncBackend = require("i18next-sync-fs-backend");
 
-const DEFAULT_GAME_CATEGORY = "general";
+const DEFAULT_GAME_CATEGORY = "GENERAL";
 const categories = [
-  "animals",
-  "sustainability",
-  "science",
-  "technology",
+  "ANIMALS",
+  "SUSTAINABILITY",
+  "SCIENCE",
+  "TECHNOLOGY",
   DEFAULT_GAME_CATEGORY
 ];
 
@@ -34,6 +34,7 @@ module.exports.getQuestions = (category, locale) => {
       });
   }
 
+  console.log(category);
   if (categories.includes(category)) {
     return localizationClient.t(category + ":QUESTIONS");
   }

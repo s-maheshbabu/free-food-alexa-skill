@@ -42,7 +42,7 @@ module.exports = {
       Object.keys(translatedQuestion)[0]
     ].slice();
     let index = answersCopy.length;
-    console.log(translatedQuestions);
+
     if (index < ANSWER_COUNT) {
       throw new Error("Not enough answers for question.");
     }
@@ -205,7 +205,9 @@ module.exports = {
     const { requestEnvelope } = handlerInput;
     const { intent } = requestEnvelope.request;
 
-    const category = intent.slots.game_category.value;
+    const category =
+      intent.slots.game_category.resolutions.resolutionsPerAuthority[0]
+        .values[0].value.id;
 
     const translatedQuestions = questionBank.getQuestions(
       category,
