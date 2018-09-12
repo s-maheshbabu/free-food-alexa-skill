@@ -12,8 +12,6 @@ module.exports = LaunchRequest = {
     );
   },
   handle(handlerInput) {
-    const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
-
     return handlerInput.responseBuilder
       .speak(
         interactions.t("ASK_FOR_CATEGORY", {
