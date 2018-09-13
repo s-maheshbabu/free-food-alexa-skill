@@ -35,8 +35,6 @@
           "name": "DontKnowIntent",
           "slots": [],
           "samples": [
-            "am not sure",
-            "not sure",
             "i don't know",
             "don't know",
             "i don't know that one",
@@ -49,15 +47,7 @@
         },
         {
           "name": "AMAZON.StartOverIntent",
-          "samples": [
-            "end this game and start a new one",
-            "quit this game and start a new one",
-            "start over",
-            "start game",
-            "new game",
-            "start",
-            "start new game"
-          ]
+          "samples": ["start game", "new game", "start", "start new game"]
         },
         {
           "name": "AMAZON.RepeatIntent",
@@ -116,8 +106,7 @@
             {
               "id": "SUSTAINABILITY",
               "name": {
-                "value": "sustainability",
-                "synonyms": ["environment"]
+                "value": "sustainability"
               }
             },
             {
@@ -129,31 +118,19 @@
             {
               "id": "GENERAL",
               "name": {
-                "value": "general",
-                "synonyms": [
-                  "any category",
-                  "you pick",
-                  "default",
-                  "any thing",
-                  "surprise me",
-                  "surprise",
-                  "whatever",
-                  "anything"
-                ]
+                "value": "general"
               }
             },
             {
               "id": "ANIMALS",
               "name": {
-                "value": "animals",
-                "synonyms": ["zoology", "biology"]
+                "value": "animals"
               }
             },
             {
               "id": "TECHNOLOGY",
               "name": {
-                "value": "technology",
-                "synonyms": ["technical", "tech"]
+                "value": "technology"
               }
             }
           ]
@@ -173,7 +150,7 @@
               "confirmationRequired": false,
               "elicitationRequired": true,
               "prompts": {
-                "elicitation": "Elicit.Slot.1120169787673.879922482993"
+                "elicitation": "Elicit.Slot.218169126000.996521185959"
               }
             }
           ]
@@ -182,7 +159,7 @@
     },
     "prompts": [
       {
-        "id": "Elicit.Slot.1120169787673.879922482993",
+        "id": "Elicit.Slot.218169126000.996521185959",
         "variations": [
           {
             "type": "PlainText",

@@ -1,8 +1,20 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "free food",
+      "invocationName": "free food trivia",
       "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
         {
           "name": "AnswerIntent",
           "slots": [
@@ -21,15 +33,16 @@
         },
         {
           "name": "DontKnowIntent",
+          "slots": [],
           "samples": [
             "i don't know",
             "don't know",
+            "i don't know that one",
+            "dunno",
             "skip",
             "i don't know that",
             "who knows",
-            "i don't know this question",
-            "i don't know that one",
-            "dunno"
+            "i don't know this question"
           ]
         },
         {
@@ -37,24 +50,143 @@
           "samples": ["start game", "new game", "start", "start new game"]
         },
         {
-          "name": "AMAZON.RepeatIntent"
+          "name": "AMAZON.RepeatIntent",
+          "samples": []
         },
         {
-          "name": "AMAZON.HelpIntent"
+          "name": "AMAZON.YesIntent",
+          "samples": []
         },
         {
-          "name": "AMAZON.YesIntent"
+          "name": "AMAZON.NoIntent",
+          "samples": []
         },
         {
-          "name": "AMAZON.NoIntent"
+          "name": "StartGameIntent",
+          "slots": [
+            {
+              "name": "game_category",
+              "type": "GAME_CATEGORY",
+              "samples": [
+                "I want to try {game_category}",
+                "Lets do {game_category}",
+                "How about {game_category}",
+                "Ask me {game_category}",
+                "Ask me {game_category} questions",
+                "I want to play {game_category} questions",
+                "I want to play {game_category}",
+                "Let's play {game_category}",
+                "Let us play {game_category}",
+                "{game_category}"
+              ]
+            }
+          ],
+          "samples": [
+            "ask me {game_category} questions",
+            "play {game_category} trivia",
+            "ask me {game_category} trivia",
+            "play a trivia game",
+            "play a game",
+            "play",
+            "{game_category}",
+            "{game_category} questions",
+            "play {game_category}",
+            "play {game_category} questions"
+          ]
         },
         {
-          "name": "AMAZON.StopIntent"
-        },
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        }
+      ],
+      "types": [
         {
-          "name": "AMAZON.CancelIntent"
+          "name": "GAME_CATEGORY",
+          "values": [
+            {
+              "id": "SUSTAINABILITY",
+              "name": {
+                "value": "sustainability"
+              }
+            },
+            {
+              "id": "SCIENCE",
+              "name": {
+                "value": "science"
+              }
+            },
+            {
+              "id": "GENERAL",
+              "name": {
+                "value": "general"
+              }
+            },
+            {
+              "id": "ANIMALS",
+              "name": {
+                "value": "animals"
+              }
+            },
+            {
+              "id": "TECHNOLOGY",
+              "name": {
+                "value": "technology"
+              }
+            }
+          ]
         }
       ]
-    }
+    },
+    "dialog": {
+      "intents": [
+        {
+          "name": "StartGameIntent",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": [
+            {
+              "name": "game_category",
+              "type": "GAME_CATEGORY",
+              "confirmationRequired": false,
+              "elicitationRequired": true,
+              "prompts": {
+                "elicitation": "Elicit.Slot.1130149349320.1225624131861"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "prompts": [
+      {
+        "id": "Elicit.Slot.1130149349320.1225624131861",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Pick a topic. Sustainability, Science, Animals or Technology."
+          },
+          {
+            "type": "PlainText",
+            "value": "Select a topic. Sustainability, Science, Animals or Technology."
+          },
+          {
+            "type": "PlainText",
+            "value": "Tell me the topic you want to play. Sustainability, Science, Animals or Technology."
+          },
+          {
+            "type": "PlainText",
+            "value": "You can choose from Sustainability, Science, Animals or Technology. So, what do you want to play?"
+          },
+          {
+            "type": "PlainText",
+            "value": "You can select from Sustainability, Science, Animals or Technology. So, what do you want to play?"
+          },
+          {
+            "type": "PlainText",
+            "value": "Choose a topic. Sustainability, Science, Animals or Technology."
+          }
+        ]
+      }
+    ]
   }
 }
