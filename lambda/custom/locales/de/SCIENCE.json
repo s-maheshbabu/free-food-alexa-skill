@@ -1,0 +1,444 @@
+{
+  "QUESTIONS": [
+    {
+      "Welcher Planet hat die meisten Monde?": [
+        "Jupiter",
+        "Erde",
+        "Mars",
+        "Uranus",
+        "Venus",
+        "Pluto",
+        "Sonne",
+        "Quecksilber",
+        "Saturn",
+        "Neptun"
+      ]
+    },
+    {
+      "Ein Tintenfisch passt durch jedes Loch, das größer ist als das was?": [
+        "Schnabel",
+        "Kopf",
+        "Beine",
+        "Torso",
+        "Waffen",
+        "Augen"
+      ]
+    },
+    {
+      "Onkologie konzentriert sich auf welche Krankheit?": [
+        "Krebs",
+        "Herzkrankheit",
+        "Asthma",
+        "Tuberkulose",
+        "Koma",
+        "Diabetes",
+        "Psychische Gesundheit"
+      ]
+    },
+    {
+      "Wie lange ist ein Äon in der Geologie?": [
+        "Eine Milliarde Jahre",
+        "Eintausend Jahre",
+        "Eine Million Jahre",
+        "Eine Billion Jahre",
+        "Hunderttausend Jahre",
+        "2 Jahre"
+      ]
+    },
+    {
+      "Was sind die ersten Organismen, die nach dem Feuer zurückwachsen?": [
+        "Moos",
+        "Schimmel",
+        "Gras",
+        "Bäume",
+        "Löwen",
+        "Menschen",
+        "Sträucher"
+      ]
+    },
+    {
+      "Wolken bestehen aus diesen.": [
+        "Wassertröpfchen und Eiskristalle",
+        "Kohlenstoffatome",
+        "Sauerstoffionen",
+        "Staubmilben"
+      ]
+    },
+    {
+      "Diese Formation ist ein kegelförmiger Hügel oder Berg. Sie wird gebildet, indem Mantelmaterial durch eine Öffnung in der Erdkruste gedrückt wird.": [
+        "Ein Vulkan",
+        "Ein Hügel",
+        "Ein Erdbeben",
+        "Ein Geysir"
+      ]
+    },
+    {
+      "Japan leidet sehr oft an diesem Ereignis. Es ist die plötzliche, leichte oder heftige Bewegung der Erdoberfläche, die durch die Freisetzung von Energie in der Erdkruste verursacht wird.": [
+        "Erdbeben",
+        "Vulkan",
+        "Tide",
+        "Tsunami"
+      ]
+    },
+    {
+      "Es ist der einzige Kontinent, der keine Landflächen unterhalb des Meeresspiegels hat.": [
+        "Antarktis",
+        "Australien",
+        "Südamerika",
+        "Arctica"
+      ]
+    },
+    {
+      "Es ist der längste Fluss der Welt": [
+        "Der Nil",
+        "Themen",
+        "Die Amazone",
+        "Donau"
+      ]
+    },
+    {
+      "Warum werden Reisende nach La Paz, Bolivien, oft schon bei ihrer Ankunft krank?": [
+        "Wegen der Höhe",
+        "Wegen der hohen Temperatur",
+        "Wegen der Feuchtigkeit",
+        "Wegen der Bodenqualität"
+      ]
+    },
+    {
+      "Warum ändern wir unsere Uhren an den Sommerzeitdaten im April und Oktober in den USA?": [
+        "Um Energie zu sparen",
+        "Um die Stunden des Tages zu erhöhen",
+        "Um den Arbeitstag zu verlängern",
+        "Weil die Reisezeit in den meisten Ländern im Mai beginnt"
+      ]
+    },
+    {
+      "Dies sind Orte von trockenem Land mit sehr geringen Niederschlägen und hohen Temperaturschwankungen. Ihre Vegetation ist unbedeutend und die Bevölkerung von Menschen und Tieren ist sehr begrenzt.": [
+        "Wüsten",
+        "Ozeane",
+        "Raiforests",
+        "Der Equator"
+      ]
+    },
+    {
+      "Dies ist ein Edelstein aus fossilem Baumsaft, der mindestens 30 Millionen Jahre alt ist.": [
+        "Bernstein",
+        "Obsidian",
+        "Turmalin",
+        "Malachit"
+      ]
+    },
+    {
+      "Dies ist die größte Insel der Erde und ein Drittel davon ist ein Nationalpark.": [
+        "Grönland",
+        "Madagaskar",
+        "Australien",
+        "Alaska"
+      ]
+    },
+    {
+      "Welches dieser Organe hat keine bekannte Funktion im menschlichen Körper?": [
+        "Blinddarm",
+        "Mandeln",
+        "Uvula",
+        "Zirbeldrüse"
+      ]
+    },
+    {
+      "Die Hauptfunktion dieses Atmungsorgans besteht darin, Sauerstoff aus der Atmosphäre in den Blutkreislauf zu transportieren.": [
+        "Lunge",
+        "Bauch",
+        "Membran",
+        "Luftröhre"
+      ]
+    },
+    {
+      "Diese Drüse ist wie ein Schmetterling geformt und hilft, Energie im Körper zu regulieren.": [
+        "Schilddrüse",
+        "Nebenschilddrüse",
+        "Nebenniere",
+        "Thymusdrüse"
+      ]
+    },
+    {
+      "Diese Organe sind sehr empfindlich und versagen oft bei Menschen mit sehr hohem Blutdruck oder Diabetes.": [
+        "Nieren",
+        "Pankreas",
+        "Eierstöcke",
+        "Lunge"
+      ]
+    },
+    {
+      "Dies ist eines der ersten Anzeichen einer Schwangerschaft.": [
+        "Verpasste Periode",
+        "Geschwollene Füße",
+        "Haarausfall",
+        "Watscheln"
+      ]
+    },
+    {
+      "Dieser Arzt kümmert sich während der Schwangerschaft um dich und dein Baby.": [
+        "Geburtshelfer",
+        "Psychologe",
+        "Parodontologe",
+        "Kinderarzt"
+      ]
+    },
+    {
+      "Was ist die häufigste Methode der Geburt eines Kindes?": [
+        "Vaginal",
+        "Kaiserschnitt",
+        "Wassergeburt",
+        "In-vitro-Fertilisation"
+      ]
+    },
+    {
+      "Was sind häufige Nebenwirkungen der Schwangerschaft?": [
+        "All diese",
+        "Dehnungsstreifen",
+        "Morgenkrankheit",
+        "Gewichtszunahme"
+      ]
+    },
+    {
+      "Wie weit sind Sie ungefähr, wenn Sie fühlen, wie sich das Baby zum ersten Mal bewegt?": [
+        "20 Wochen",
+        "10 Wochen",
+        "35 Wochen",
+        "2 Wochen"
+      ]
+    },
+    {
+      "Was ist vorgeschlagen, dass Sie nicht mehrere Stunden machen, bevor Sie in die Wehen gehen? Es könnte Sie peinlich werden.": [
+        "Essen essen",
+        "Fisch essen",
+        "Sex haben",
+        "Telefonieren"
+      ]
+    },
+    {
+      "Was wird auch mit dem Baby oder unmittelbar nach seiner Geburt geliefert?": [
+        "Plazenta",
+        "Füße",
+        "Schultern",
+        "Handbuch"
+      ]
+    },
+    {
+      "Diese kleinen Körper gelten vor etwa 4,6 Milliarden Jahren als Reste von der Entstehung des Sonnensystems.": [
+        "Asteroiden",
+        "Kometen",
+        "Sterne",
+        "Planeten"
+      ]
+    },
+    {
+      "Das sind Klumpen aus Eis und Staub. Wenn sie der Sonne nahe kommen, verdampfen sie allmählich. Jets aus Gas und Staub erzeugen lange Schwänze, die die Menschen von der Erde aus sehen können.": [
+        "Kometen",
+        "Asteroiden",
+        "UFOs",
+        "Sterne"
+      ]
+    },
+    {
+      "Dieser Planet ist etwas kleiner als die Erde und ihr nächster Nachbar (außer dem Mond).": [
+        "Venus",
+        "Uranus",
+        "Mars",
+        "Saturn"
+      ]
+    },
+    {
+      "Dieser Planet hat die größte Gruppe von Monden - 31, aber er ist am besten für sein Ringsystem bekannt.": [
+        "Saturn",
+        "Neptun",
+        "Mars",
+        "Venus"
+      ]
+    },
+    {
+      "Dieser Planet des Sonnensystems wurde nach einem griechischen Gott des Meeres und der Erdbeben benannt. Der Name ist eigentlich die römische Übersetzung des Namens der Götter.": [
+        "Neptun",
+        "Quecksilber",
+        "Pluto",
+        "Uranus"
+      ]
+    },
+    {
+      "Da dies der Planet ist, der der Sonne am nächsten ist, liegen seine Temperaturen an der Oberfläche zwischen -300 und 800 F (heiß genug, um zu schmelzen).": [
+        "Quecksilber",
+        "Neptun",
+        "Pluto",
+        "Venus"
+      ]
+    },
+    {
+      "Die Oberfläche dieses Planeten ist einzigartig, es ist der einzige, der Wasser in großen Mengen hat.": [
+        "Erde",
+        "Saturn",
+        "Pluto",
+        "Mars"
+      ]
+    },
+    {
+      "Welche Sonnensystem-Himmelskörper umkreisen die Sonne um 248 Jahre?": [
+        "Pluto",
+        "Saturn",
+        "Neptun",
+        "Uranus"
+      ]
+    },
+    {
+      "Welches Essen ist eine reiche Quelle von Vitamin B6?": [
+        "Alle von denen",
+        "Fleisch",
+        "Gemüse",
+        "Nüsse"
+      ]
+    },
+    {
+      "Eine Überdosis von welchem ​​Vitamin kann Durchfall, Übelkeit und Sodbrennen verursachen?": [
+        "Vitamin B5",
+        "Vitamin A",
+        "Vitamin K",
+        "Vitamin C"
+      ]
+    },
+    {
+      "Niacin ist der Name dieses B-Vitamins.": [
+        "Vitamin B3",
+        "Vitamin B12",
+        "Vitamin B5",
+        "Vitamin B9"
+      ]
+    },
+    {
+      "Aus welcher Art von Struktur wachsen Tulpen?": [
+        "Birne",
+        "Rhizome",
+        "Wurzel",
+        "Knolle"
+      ]
+    },
+    {
+      "Narzissen Pflanzen, allgemein Narzissen genannt, enthalten das Toxin Lycorin in welcher Struktur?": [
+        "Birne und Blätter",
+        "Blühen",
+        "Staubblatt",
+        "Alle von denen"
+      ]
+    },
+    {
+      "Was symbolisiert die Mohnblüte in vielen Kulturen sowie in der Kunst?": [
+        "Tod",
+        "Schlaf",
+        "Vergessenheit",
+        "Alle von denen"
+      ]
+    },
+    {
+      "Viola-Pflanzen, die gemeinhin als Veilchen, Stiefmütterchen oder Herzbeutel bezeichnet werden, werden als Nahrungsmittel und in der Medizin verwendet, da sie reich an diesen Nährstoffen sind.": [
+        "Vitamine A und C",
+        "Alle von denen",
+        "Eisen und Magnesium",
+        "Lycopin und Tannin"
+      ]
+    },
+    {
+      "Die Nelke ist die Nationalblume dieses europäischen Landes.": [
+        "Spanien",
+        "Frankreich",
+        "Schottland",
+        "Deutschland"
+      ]
+    },
+    {
+      "Auf welchem ​​Kontinent sind gewöhnliche Gänseblümchen heimisch?": [
+        "Europa",
+        "Alle von denen",
+        "Nordamerika",
+        "Asien"
+      ]
+    },
+    {
+      "Die Lilium-Pflanzen, allgemein bekannt als Lilien, sind extrem giftig für dieses Tier.": [
+        "Katze",
+        "Hund",
+        "Alle von denen",
+        "Schaf"
+      ]
+    },
+    {
+      "Welche Frucht wird für den höchsten Vitamin C-Gehalt gehalten?": [
+        "Kakadu Pflaume",
+        "Zitrone",
+        "Kiwi",
+        "Hagebutte"
+      ]
+    },
+    {
+      "Die höchste Konzentration von Vitamin C in Tierkörpern ist in der Leber. Welches dieser Tiere hat die größte Menge an Vitamin C in seiner Leber?": [
+        "Kalb",
+        "Schwein",
+        "Hähnchen",
+        "Keine von diesen"
+      ]
+    },
+    {
+      "Welches der B-Vitamine ist als Thiamin bekannt?": [
+        "Vitamin B1",
+        "Vitamin B3",
+        "Vitamin B2",
+        "Vitamin B12"
+      ]
+    },
+    {
+      "In welcher Substanz ist Vitamin K löslich?": [
+        "Fett",
+        "Wasser",
+        "Alle von denen",
+        "Eiweiß"
+      ]
+    },
+    {
+      "Welche chemische Verbindung ist allgemein als Vitamin C bekannt?": [
+        "Askorbinsäure",
+        "Acetylsalicylsäure",
+        "Aminobenzoesäure",
+        "Hyaluronsäure"
+      ]
+    },
+    {
+      "Der Mangel an Vitamin Rachitis und Osteomalazie bei Menschen verursacht?": [
+        "Vitamin-D",
+        "Vitamin B5",
+        "Vitamin A",
+        "Vitamin E"
+      ]
+    },
+    {
+      "Welche dieser Erkrankungen ist mit Vitamin-A-Mangel verbunden?": [
+        "Nacht Blindheit",
+        "Pellagra",
+        "Skorbut",
+        "Alle von denen"
+      ]
+    },
+    {
+      "Welches der B-Vitamine wird auch als Folsäure bezeichnet?": [
+        "Vitamin B9",
+        "Vitamin B1",
+        "Vitamin B12",
+        "Vitamin B5"
+      ]
+    },
+    {
+      "Vitamin E ist in dieser Substanz natürlich löslich.": [
+        "Fett",
+        "Alle von denen",
+        "Lactase",
+        "Wasser"
+      ]
+    }
+  ]
+}
