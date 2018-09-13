@@ -1,3 +1,5 @@
+const interactions = require("../interactions");
+
 module.exports = StopIntentHandler = {
   canHandle(handlerInput) {
     return (
@@ -6,8 +8,7 @@ module.exports = StopIntentHandler = {
     );
   },
   handle(handlerInput) {
-    const requestAttributes = handlerInput.attributesManager.getRequestAttributes();
-    const speechOutput = requestAttributes.t("STOP_MESSAGE");
+    const speechOutput = interactions.t("STOP_MESSAGE");
 
     return handlerInput.responseBuilder
       .speak(speechOutput)
