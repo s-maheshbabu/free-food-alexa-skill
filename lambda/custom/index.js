@@ -34,8 +34,8 @@ const StartGameIntent = {
     if (request.dialogState !== "COMPLETED") {
       return handlerInput.responseBuilder.addDelegateDirective().getResponse();
     } else if (
-      intent.slots.game_category.resolutions.resolutionsPerAuthority[0]
-        .status != "ER_SUCCESS_MATCH"
+      intent.slots.game_category.resolutions.resolutionsPerAuthority[0].status
+        .code != "ER_SUCCESS_MATCH"
     ) {
       return handlerInput.responseBuilder
         .speak(interactions.t("CATEGORY_NOT_SUPPORTED"))
