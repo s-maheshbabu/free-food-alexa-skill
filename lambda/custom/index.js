@@ -1,4 +1,5 @@
 const Alexa = require("ask-sdk-core");
+const interactions = require("./interactions");
 
 const gameManager = require("./gameManager");
 
@@ -28,8 +29,17 @@ const StartGameIntent = {
   },
   handle(handlerInput) {
     const { request } = handlerInput.requestEnvelope;
+    const { intent } = handlerInput.requestEnvelope.request;
+
     if (request.dialogState !== "COMPLETED") {
       return handlerInput.responseBuilder.addDelegateDirective().getResponse();
+    } else if (
+      intent.slots.game_category.resolutions.resolutionsPerAuthority[0]
+        .status != "ER_SUCCESS_MATCH"
+    ) {
+      return handlerInput.responseBuilder
+        .speak(interactions.t("CATEGORY_NOT_SUPPORTED"))
+        .getResponse();
     } else {
       return gameManager.startGame(true, handlerInput);
     }

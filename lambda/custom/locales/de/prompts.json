@@ -5,6 +5,7 @@
   "ANSWER_WRONG_MESSAGE": "falsch. ",
   "ASK_MESSAGE_START": "Möchtest du anfangen zu spielen? ",
   "CANCEL_MESSAGE": "Ok, lass uns bald wieder spielen. ",
+  "CATEGORY_NOT_SUPPORTED": "Es tut mir leid, diese Kategorie wird nicht unterstützt. Danke für das Spiel. ",
   "CORRECT_ANSWER_MESSAGE": "Die richtige Antwort ist %s: %s. ",
   "FINAL_SCORE_MESSAGE": "Du hast %s von %s Fragen richtig beantwortet. ",
   "GAME_LOST_MESSAGE": "Leider hast du dieses Spiel nicht gewonnen. Danke, dass Sie für den Welthunger spielen und dazu beitragen! Je mehr Sie spielen, desto mehr helfen Sie. ",
