@@ -1,4 +1,4 @@
-const interactions = require("./interactions");
+const interactions = require("../interactions");
 
 module.exports = NoIntentHandler = {
   canHandle(handlerInput) {

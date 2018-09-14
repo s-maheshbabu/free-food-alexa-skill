@@ -31,7 +31,7 @@ module.exports.getQuestions = (category, locale) => {
         defaultNS: DEFAULT_GAME_CATEGORY,
         load: "all",
         backend: {
-          loadPath: "locales/{{lng}}/{{ns}}.json"
+          loadPath: "src/locales/{{lng}}/{{ns}}.json"
         },
         overloadTranslationOptionHandler:
           sprintf.overloadTranslationOptionHandler,

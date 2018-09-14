@@ -23,7 +23,7 @@ module.exports.init = locale => {
           defaultNS: "prompts",
           load: "all",
           backend: {
-            loadPath: "locales/{{lng}}/{{ns}}.json"
+            loadPath: "src/locales/{{lng}}/{{ns}}.json"
           },
           overloadTranslationOptionHandler:
             sprintf.overloadTranslationOptionHandler,

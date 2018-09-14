@@ -5,8 +5,8 @@ grunt.initConfig({
   lambda_invoke: {
     default: {
       options: {
-        file_name: "index.js",
-        event: "event.json"
+        file_name: "src/index.js",
+        event: "test-data/event.json"
       }
     }
   },

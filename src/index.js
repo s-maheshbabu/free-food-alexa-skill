@@ -1,7 +1,7 @@
 const Alexa = require("ask-sdk-core");
-const interactions = require("./interactions");
 
 const gameManager = require("./gameManager");
+const interactions = require("./interactions");
 
 const LaunchRequestHandler = require("./requesthandlers/LaunchRequestHandler");
 const SessionEndedRequestHandler = require("./requesthandlers/SessionEndedRequestHandler");
