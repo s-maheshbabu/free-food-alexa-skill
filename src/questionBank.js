@@ -45,7 +45,17 @@ module.exports.getQuestions = (category, locale) => {
   }
 
   if (categories.includes(category)) {
-    return localizationClient.t(category + ":QUESTIONS");
+    const key = category + ":QUESTIONS";
+    if (!localizationClient.exists(key)) {
+      throw new Error(
+        "Requested question set: " +
+          key +
+          " for " +
+          locale +
+          " locale does not exist."
+      );
+    }
+    return localizationClient.t(key);
   }
   return localizationClient.t(DEFAULT_GAME_CATEGORY);
 };

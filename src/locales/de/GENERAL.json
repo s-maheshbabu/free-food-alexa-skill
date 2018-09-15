@@ -287,69 +287,62 @@
         "Himmel",
         "Holz"
       ]
-    },{
-            "Der Mann auf dem Mond, Amadeus und One flog über das Kuckucksnest sind alle Filme von ihm gerichtet.": [
-              "Miloš Forman",
-              "Stanley Kubrick",
-              "Pedro Almodóvar",
-              "Martin Scorsese"
-            ]
-          },
-          {
-            "Überall in der Halle arbeiten" Friends Like Us "," Insomnia Café "und" Six of One "in einer der berühmten US-Fernsehserien. Nenne die Serie.": [
-              "Freunde",
-              "Sex and the City",
-              "ALF",
-              "Ein Baum Hügel"
-            ]
-          },
-          {
-            "Drei der folgenden Filme werden von 20th Century Fox produziert. Welche ist die ungerade?": [
-              "Wachshaus",
-              "Ich, ich Irene",
-              "Dr. Dolittle 2",
-              "Verschollen"
-            ]
-          },
-          {
-            "Tom Cruise hatte eine Hauptrolle in allem, aber einer dieser Filme. Welcher?": [
-              "Endlose Liebe",
-              "Regenmann",
-              "Die Firma",
-              "Magnolie"
-            ]
-          },
-          {
-            "Alle außer einer dieser Aussagen stellen eine gemeinsame Verbindung zwischen den Filmen, dem Terminal und Catch Me, wenn du kannst.": [
-              "Leonardo DiCaprio spielt in beiden mit.",
-              "Sie können beide als Dramen eingestuft werden.",
-              "Beide werden von Spielberg produziert.",
-              "Tom Hanks spielt in beiden mit."
-            ]
-          },
-          {
-            "Brad Pitt spielte die Hauptrolle in all diesen Filmen, außer einem. Kannst du es erkennen?": [
-              "Der Strand",
-              "Triff Joe Black",
-              "Herr Frau Smith",
-              "Ozeane Elf"
-            ]
-          },
-          {
-            "Robin Williams spielte in Mrs. Doubtfire. Ein weiterer großartiger Schauspieler, Dustin Hoffman spielte in Tootsie. Beide Charaktere gaben vor, dies zu sein.": [
-              "Frau",
-              "Tot",
-              "Wahnsinnig",
-              "Bettgeplagt und krank"
-            ]
-          },
-          {
-            "Es gibt etwas Spezifisches an Anne Boleyns Geist. Was ist das?": [
-              "Ihr Geist ist ohne Kopf.",
-              "Sie hat keinen Geist.",
-              "Ihr Geist ist männlich.",
-              "Ihr Geist ist ohne Hände."
-            ]
-          }
+    },
+    {
+      "Der Mann auf dem Mond, Amadeus und One flog über das Kuckucksnest sind alle Filme von ihm gerichtet.": [
+        "Miloš Forman",
+        "Stanley Kubrick",
+        "Pedro Almodóvar",
+        "Martin Scorsese"
+      ]
+    },
+    {
+      "Drei der folgenden Filme werden von 20th Century Fox produziert. Welche ist die ungerade?": [
+        "Wachshaus",
+        "Ich, ich Irene",
+        "Dr. Dolittle 2",
+        "Verschollen"
+      ]
+    },
+    {
+      "Tom Cruise hatte eine Hauptrolle in allem, aber einer dieser Filme. Welcher?": [
+        "Endlose Liebe",
+        "Regenmann",
+        "Die Firma",
+        "Magnolie"
+      ]
+    },
+    {
+      "Alle außer einer dieser Aussagen stellen eine gemeinsame Verbindung zwischen den Filmen, dem Terminal und Catch Me, wenn du kannst.": [
+        "Leonardo DiCaprio spielt in beiden mit.",
+        "Sie können beide als Dramen eingestuft werden.",
+        "Beide werden von Spielberg produziert.",
+        "Tom Hanks spielt in beiden mit."
+      ]
+    },
+    {
+      "Brad Pitt spielte die Hauptrolle in all diesen Filmen, außer einem. Kannst du es erkennen?": [
+        "Der Strand",
+        "Triff Joe Black",
+        "Herr Frau Smith",
+        "Ozeane Elf"
+      ]
+    },
+    {
+      "Robin Williams spielte in Mrs. Doubtfire. Ein weiterer großartiger Schauspieler, Dustin Hoffman spielte in Tootsie. Beide Charaktere gaben vor, dies zu sein.": [
+        "Frau",
+        "Tot",
+        "Wahnsinnig",
+        "Bettgeplagt und krank"
+      ]
+    },
+    {
+      "Es gibt etwas Spezifisches an Anne Boleyns Geist. Was ist das?": [
+        "Ihr Geist ist ohne Kopf.",
+        "Sie hat keinen Geist.",
+        "Ihr Geist ist männlich.",
+        "Ihr Geist ist ohne Hände."
+      ]
+    }
   ]
 }
