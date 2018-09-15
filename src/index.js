@@ -11,7 +11,6 @@ const ErrorHandler = require("./errors/ErrorHandler");
 const YesIntentHandler = require("./intenthandlers/YesIntentHandler");
 const StopIntentHandler = require("./intenthandlers/StopIntentHandler");
 const NoIntentHandler = require("./intenthandlers/NoIntentHandler");
-const CancelIntentHandler = require("./intenthandlers/CancelIntentHandler");
 const RepeatIntentHandler = require("./intenthandlers/RepeatIntentHandler");
 const HelpIntentHandler = require("./intenthandlers/HelpIntentHandler");
 const UnhandledIntentHandler = require("./intenthandlers/UnhandledIntentHandler");
@@ -72,7 +71,6 @@ exports.handler = skillBuilder
     RepeatIntentHandler,
     YesIntentHandler,
     StopIntentHandler,
-    CancelIntentHandler,
     NoIntentHandler,
     SessionEndedRequestHandler,
     UnhandledIntentHandler
