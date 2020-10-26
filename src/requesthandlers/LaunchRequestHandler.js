@@ -1,24 +1,25 @@
+const Alexa = require('ask-sdk-core');
+const utilities = require("../utilities");
+
 const interactions = require("../interactions");
 const CATEGORIES_NAMESPACE = "categories";
 
 module.exports = LaunchRequest = {
   canHandle(handlerInput) {
-    const { request } = handlerInput.requestEnvelope;
-
-    return (
-      request.type === "LaunchRequest" ||
-      (request.type === "IntentRequest" &&
-        request.intent.name === "AMAZON.StartOverIntent")
-    );
+    return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest' ||
+      utilities.isIntent(handlerInput, 'AMAZON.StartOverIntent');
   },
   handle(handlerInput) {
-    return handlerInput.responseBuilder
-      .speak(
-        interactions.t("ASK_FOR_CATEGORY", {
-          postProcess: "sprintf",
-          sprintf: interactions.t(CATEGORIES_NAMESPACE + ":CATEGORIES")
-        })
-      )
+    const { responseBuilder } = handlerInput;
+
+    const welcomeMessage = interactions.t("ASK_FOR_CATEGORY", {
+      postProcess: "sprintf",
+      sprintf: interactions.t(CATEGORIES_NAMESPACE + ":CATEGORIES")
+    });
+
+    return responseBuilder
+      .speak(welcomeMessage)
+      .reprompt(welcomeMessage)
       .withShouldEndSession(false)
       .getResponse();
   }

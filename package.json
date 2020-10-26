@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "watch": {
+    "test": "{src,test}/*.js"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "find ./test | xargs ./node_modules/.bin/mocha --require node_modules/ts-node/register/index.js -R spec",
+    "watch": "npm-watch"
   },
   "author": "Mahesh Sabbavarapu",
   "license": "ISC",
@@ -18,7 +22,20 @@
     "immutable": "^4.0.0-rc.12"
   },
   "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.6.8",
+    "@types/sinon": "^7.0.13",
+    "ask-sdk-test": "^2.5.0",
+    "chai": "^4.2.0",
+    "grunt-aws-lambda": "^0.13.0",
     "grunt": "^1.0.4",
-    "grunt-aws-lambda": "^0.13.0"
+    "import-fresh": "^3.2.1",
+    "mocha": "^6.2.0",
+    "sinon": "^7.4.1",
+    "ts-node": "^8.10.1",
+    "tslint": "^6.1.2",
+    "typedoc": "^0.17.7",
+    "typescript": "^3.9.3"
   }
 }
