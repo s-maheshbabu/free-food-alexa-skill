@@ -4,8 +4,11 @@ const interactions = require("./interactions");
 const ANSWER_COUNT = 4;
 const GAME_LENGTH = 5;
 
+const quesionDataSource = require("./apl/data/QuestionDatasource");
+const quesionDocument = require("./apl/document/QuestionDocument");
+
 module.exports = {
-  populateGameQuestions: function(translatedQuestions) {
+  populateGameQuestions: function (translatedQuestions) {
     const gameQuestions = [];
     const indexList = [];
     let index = translatedQuestions.length;
@@ -29,7 +32,7 @@ module.exports = {
     return gameQuestions;
   },
 
-  populateRoundAnswers: function(
+  populateRoundAnswers: function (
     gameQuestionIndexes,
     correctAnswerIndex,
     correctAnswerTargetLocation,
@@ -67,7 +70,7 @@ module.exports = {
     return answers;
   },
 
-  isAnswerSlotValid: function(intent) {
+  isAnswerSlotValid: function (intent) {
     const answerSlotFilled =
       intent &&
       intent.slots &&
@@ -83,7 +86,124 @@ module.exports = {
     );
   },
 
-  handleUserGuess: function(userGaveUp, handlerInput) {
+  handleUserGuess_ForEvent: function (usersAnswer, handlerInput) {
+    const {
+      requestEnvelope,
+      attributesManager,
+      responseBuilder
+    } = handlerInput;
+
+    userGaveUp = false;
+    let speechOutput = "";
+    let speechOutputAnalysis = "";
+
+    const sessionAttributes = attributesManager.getSessionAttributes();
+    const gameQuestions = sessionAttributes.questions;
+    let correctAnswerTargetIndex = parseInt(sessionAttributes.correctAnswerIndex, 10);
+    let currentScore = parseInt(sessionAttributes.score, 10);
+    let currentQuestionIndex = parseInt(
+      sessionAttributes.currentQuestionIndex,
+      10
+    );
+    const { correctAnswerText } = sessionAttributes;
+
+    const translatedQuestions = questionBank.getQuestions(
+      sessionAttributes.category,
+      handlerInput.requestEnvelope.request.locale
+    );
+
+    if (
+      usersAnswer ===
+      sessionAttributes.correctAnswerIndex
+    ) {
+      currentScore += 1;
+      speechOutputAnalysis = interactions.t("ANSWER_CORRECT_MESSAGE");
+    } else {
+      if (!userGaveUp) {
+        speechOutputAnalysis = interactions.t("ANSWER_WRONG_MESSAGE");
+      }
+
+      speechOutputAnalysis += interactions.t(
+        "CORRECT_ANSWER_MESSAGE",
+        correctAnswerTargetIndex,
+        correctAnswerText
+      );
+    }
+
+    // Check if we can exit the game session after GAME_LENGTH questions (zero-indexed)
+    if (sessionAttributes.currentQuestionIndex === GAME_LENGTH - 1) {
+      speechOutput = userGaveUp ? "" : interactions.t("ANSWER_IS_MESSAGE");
+
+      const isGameWon = currentScore / GAME_LENGTH >= 0.3;
+      speechOutput +=
+        speechOutputAnalysis +
+        interactions.t(
+          "FINAL_SCORE_MESSAGE",
+          currentScore.toString(),
+          GAME_LENGTH.toString()
+        ) +
+        (isGameWon
+          ? interactions.t("GAME_WON_MESSAGE")
+          : interactions.t("GAME_LOST_MESSAGE"));
+
+      return responseBuilder.speak(speechOutput).getResponse();
+    }
+    currentQuestionIndex += 1;
+    correctAnswerTargetIndex = Math.floor(Math.random() * ANSWER_COUNT);
+    const spokenQuestion = Object.keys(
+      translatedQuestions[gameQuestions[currentQuestionIndex]]
+    )[0];
+    const roundAnswers = module.exports.populateRoundAnswers(
+      gameQuestions,
+      currentQuestionIndex,
+      correctAnswerTargetIndex,
+      translatedQuestions
+    );
+    const questionIndexForSpeech = currentQuestionIndex + 1;
+    let repromptText = interactions.t(
+      "TELL_QUESTION_MESSAGE",
+      questionIndexForSpeech.toString(),
+      spokenQuestion
+    );
+
+    for (let i = 0; i < ANSWER_COUNT; i += 1) {
+      repromptText += `${i + 1}. ${roundAnswers[i]}. `;
+    }
+
+    speechOutput += userGaveUp ? "" : interactions.t("ANSWER_IS_MESSAGE");
+    speechOutput +=
+      speechOutputAnalysis +
+      interactions.t("SCORE_IS_MESSAGE", currentScore.toString()) +
+      repromptText;
+
+    const translatedQuestion =
+      translatedQuestions[gameQuestions[currentQuestionIndex]];
+
+    Object.assign(sessionAttributes, {
+      speechOutput: repromptText,
+      repromptText,
+      currentQuestionIndex,
+      correctAnswerIndex: correctAnswerTargetIndex + 1,
+      questions: gameQuestions,
+      score: currentScore,
+      correctAnswerText:
+        translatedQuestion[Object.keys(translatedQuestion)[0]][0]
+    });
+
+    return responseBuilder
+      .addDirective({
+        type: 'Alexa.Presentation.APL.RenderDocument',
+        version: '1.0',
+        document: quesionDocument,
+        datasources: quesionDataSource(roundAnswers, correctAnswerTargetIndex)
+      })
+      .speak(speechOutput)
+      .reprompt(repromptText)
+      .withSimpleCard(interactions.t("GAME_NAME"), repromptText)
+      .getResponse();
+  },
+
+  handleUserGuess: function (userGaveUp, handlerInput) {
     const {
       requestEnvelope,
       attributesManager,
@@ -114,7 +234,7 @@ module.exports = {
     if (
       answerSlotValid &&
       parseInt(intent.slots.Answer.value, 10) ===
-        sessionAttributes.correctAnswerIndex
+      sessionAttributes.correctAnswerIndex
     ) {
       currentScore += 1;
       speechOutputAnalysis = interactions.t("ANSWER_CORRECT_MESSAGE");
@@ -190,14 +310,36 @@ module.exports = {
         translatedQuestion[Object.keys(translatedQuestion)[0]][0]
     });
 
+    const sendEventCommand = {
+      type: "SendEvent",
+      delay: 3000,
+      arguments: [
+        0,
+        'whatever',
+        `USER_VOICE_INITIATED`,
+      ]
+    };
+
     return responseBuilder
       .speak(speechOutput)
       .reprompt(repromptText)
       .withSimpleCard(interactions.t("GAME_NAME"), repromptText)
+      // Add this to render APL document
+      .addDirective({
+        type: 'Alexa.Presentation.APL.RenderDocument',
+        version: '1.0',
+        token: "answertoken",
+        document: quesionDocument, // Import button APL document
+        datasources: quesionDataSource(roundAnswers, correctAnswerIndex)
+      }).addDirective({
+        type: 'Alexa.Presentation.APL.ExecuteCommands',
+        token: "answertoken",
+        commands: [sendEventCommand]
+      })
       .getResponse();
   },
 
-  startGame: function(newGame, handlerInput) {
+  startGame: function (newGame, handlerInput) {
     let speechOutput = newGame
       ? interactions.t("WELCOME_MESSAGE", GAME_LENGTH.toString())
       : "";
@@ -217,18 +359,19 @@ module.exports = {
     const gameQuestions = module.exports.populateGameQuestions(
       translatedQuestions
     );
-    const correctAnswerIndex = Math.floor(Math.random() * ANSWER_COUNT);
+    const correctAnswerTargetIndex = Math.floor(Math.random() * ANSWER_COUNT);
 
     const roundAnswers = module.exports.populateRoundAnswers(
       gameQuestions,
       0,
-      correctAnswerIndex,
+      correctAnswerTargetIndex,
       translatedQuestions
     );
     const currentQuestionIndex = 0;
     const spokenQuestion = Object.keys(
       translatedQuestions[gameQuestions[currentQuestionIndex]]
     )[0];
+
     let repromptText = interactions.t(
       "TELL_QUESTION_MESSAGE",
       "1",
@@ -248,7 +391,7 @@ module.exports = {
       speechOutput: repromptText,
       repromptText,
       currentQuestionIndex,
-      correctAnswerIndex: correctAnswerIndex + 1,
+      correctAnswerIndex: correctAnswerTargetIndex + 1,
       questions: gameQuestions,
       category: category,
       score: 0,
@@ -262,6 +405,13 @@ module.exports = {
       .speak(speechOutput)
       .reprompt(repromptText)
       .withSimpleCard(interactions.t("GAME_NAME"), repromptText)
+      // Add this to render APL document
+      .addDirective({
+        type: 'Alexa.Presentation.APL.RenderDocument',
+        version: '1.0',
+        document: quesionDocument, // Import button APL document
+        datasources: quesionDataSource(roundAnswers, correctAnswerTargetIndex)
+      })
       .getResponse();
   }
 };

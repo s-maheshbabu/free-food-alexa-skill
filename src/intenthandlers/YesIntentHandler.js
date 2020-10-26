@@ -1,4 +1,3 @@
-const gameManager = require("../gameManager");
 const interactions = require("../interactions");
 
 // TODO: Defined at two places in the code. Refactor.
