@@ -10,52 +10,68 @@ const categories = [
   "TECHNOLOGY",
   DEFAULT_GAME_CATEGORY
 ];
+const questionsDefaultRepoPath = "src/locales/{{lng}}/{{ns}}.json";
 
 let localizationClient;
 
-module.exports.getQuestions = (category, locale) => {
-  if (!locale)
-    throw new Error(
-      "A valid locale must be provided to instantiate interactions localization client"
-    );
-
-  if (!localizationClient) {
-    localizationClient = i18n.createInstance();
-    localizationClient
-      .use(sprintf)
-      .use(SyncBackend)
-      .init({
-        lng: locale,
-        initImmediate: false,
-        ns: categories,
-        defaultNS: DEFAULT_GAME_CATEGORY,
-        load: "all",
-        backend: {
-          loadPath: "src/locales/{{lng}}/{{ns}}.json"
-        },
-        overloadTranslationOptionHandler:
-          sprintf.overloadTranslationOptionHandler,
-        returnObjects: true
-      });
-  } else {
-    // This is needed so we don't keep using 'en' when a customer with 'de' locale is being served.
-    // TODO: Does this mean, we lose the previously loaded translations thereby adding to latency or
-    // does it just append?
-    localizationClient.changeLanguage(locale);
-  }
+const getQuestions = (category, locale) => {
+  if (!localizationClient) init(locale);
+  // This is needed so we don't keep using 'en' when a customer with 'de' locale is being served.
+  // TODO: Does this mean, we lose the previously loaded translations thereby adding to latency or
+  // does it just append?
+  localizationClient.changeLanguage(locale);
 
   if (categories.includes(category)) {
     const key = category + ":QUESTIONS";
     if (!localizationClient.exists(key)) {
-      throw new Error(
-        "Requested question set: " +
-          key +
-          " for " +
-          locale +
-          " locale does not exist."
-      );
+      throw new Error(`Requested question set: ${key} for ${locale} locale does not exist`);
     }
     return localizationClient.t(key);
   }
   return localizationClient.t(DEFAULT_GAME_CATEGORY);
+};
+
+/**
+ * Initializes the question bank.
+ * 
+ * @param {*} locale Locale to be loaded. This is a mandatory field.
+ * will be used if path is not provided.
+ * @param {*} questionsRepoOverridePath Path to the question bank. Default repo
+ * will be used if path is not provided.
+ */
+const init = (locale, questionsRepoOverridePath) => {
+  if (!locale)
+    throw new Error("A valid locale must be provided to instantiate interactions localization client");
+
+  return new Promise((resolve, reject) => {
+    if (!localizationClient) {
+      const path = questionsRepoOverridePath ? questionsRepoOverridePath : questionsDefaultRepoPath;
+
+      localizationClient = i18n.createInstance();
+      localizationClient
+        .use(sprintf)
+        .use(SyncBackend)
+        .init({
+          lng: locale,
+          initImmediate: false,
+          ns: categories,
+          defaultNS: DEFAULT_GAME_CATEGORY,
+          load: "all",
+          backend: {
+            loadPath: path
+          },
+          overloadTranslationOptionHandler:
+            sprintf.overloadTranslationOptionHandler,
+          returnObjects: true
+        });
+      resolve();
+    } else {
+      resolve();
+    }
+  });
+};
+
+module.exports = {
+  init: init,
+  getQuestions: getQuestions,
 };

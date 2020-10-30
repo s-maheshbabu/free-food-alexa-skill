@@ -21,5 +21,5 @@
   "START_UNHANDLED": "Say start to start a new game. ",
   "TELL_QUESTION_MESSAGE": "Question %s. %s ",
   "TRIVIA_UNHANDLED": "Try saying a number between 1 and %s",
-  "WELCOME_MESSAGE": "Okay. I will ask you %s questions, try to get as many right as you can. Just say the number of the answer. Let's begin. "
+  "WELCOME_MESSAGE": "Okay. I will ask you %s questions. Try to get as many right as you can. Just say the number of the answer. Let's begin. "
 }
