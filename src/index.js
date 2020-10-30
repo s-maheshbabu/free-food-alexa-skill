@@ -144,32 +144,6 @@ const SendEventIntentHandler = {
   }
 };
 
-async function callDirectiveService(handlerInput) {
-  // Call Alexa Directive Service.
-  const requestEnvelope = handlerInput.requestEnvelope;
-  const directiveServiceClient = handlerInput.serviceClientFactory.getDirectiveServiceClient();
-
-  const requestId = requestEnvelope.request.requestId;
-  const endpoint = requestEnvelope.context.System.apiEndpoint;
-  const token = requestEnvelope.context.System.apiAccessToken;
-
-  console.log(`Request:${requestId}} Token: ${token}`);
-
-  // build the progressive response directive
-  const directive = {
-    header: {
-      requestId,
-    },
-    directive: {
-      type: 'VoicePlayer.Speak',
-      speech: `Interim response. A really long one to see if APL changes in the meantime. Weird if it did. How would it even know?`,
-    },
-  };
-
-  // send directive
-  return await directiveServiceClient.enqueue(directive, endpoint, token);
-}
-
 const LogRequestInterceptor = {
   process(handlerInput) {
     console.log(`REQUEST ENVELOPE = ${JSON.stringify(handlerInput.requestEnvelope)}`);
