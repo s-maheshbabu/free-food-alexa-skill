@@ -53,7 +53,7 @@ describe("Starting the skill", () => {
   });
 });
 
-describe("Playing a game", () => {
+describe("Playing a game completely.", () => {
   before(async () => {
     mockRandomForEach([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99]);
     await questionBank.init('en_US', 'test-data/questions/{{lng}}/{{ns}}.json');
@@ -64,19 +64,33 @@ describe("Playing a game", () => {
   });
 
   describe('should be able to track the score and play a game that the user wins.', () => {
-    alexaTest.test(buildGameSequence(getQuestionIndices(), getCorrectAnswerIndices(), [true, true, true, false, false]));
+    alexaTest.test(buildGameSequence(getGameQuestionsIndices(), getCorrectAnswerIndices(), [true, true, true, false, false]));
   });
 
   describe('should be able to track the score and play a game where user answers all questions right.', () => {
-    alexaTest.test(buildGameSequence(getQuestionIndices(), getCorrectAnswerIndices(), [true, true, true, true, true]));
+    alexaTest.test(buildGameSequence(getGameQuestionsIndices(), getCorrectAnswerIndices(), [true, true, true, true, true]));
   });
 
   describe('should be able to track the score and play a game that the user loses.', () => {
-    alexaTest.test(buildGameSequence(getQuestionIndices(), getCorrectAnswerIndices(), [false, false, true, false, false]));
+    alexaTest.test(buildGameSequence(getGameQuestionsIndices(), getCorrectAnswerIndices(), [false, false, true, false, false]));
   });
 
   describe('should be able to track the score and play a game where user answers all questions wrong.', () => {
-    alexaTest.test(buildGameSequence(getQuestionIndices(), getCorrectAnswerIndices(), [false, false, false, false, false]));
+    alexaTest.test(buildGameSequence(getGameQuestionsIndices(), getCorrectAnswerIndices(), [false, false, false, false, false]));
+  });
+});
+
+describe("Playing a game partially.", () => {
+  before(async () => {
+    mockRandomForEach([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99]);
+    await questionBank.init('en_US', 'test-data/questions/{{lng}}/{{ns}}.json');
+  });
+
+  after(function () {
+    resetMockRandom();
+  });
+
+  describe.skip('should be able to track the score and play a game that the user wins.', () => {
   });
 });
 
@@ -93,7 +107,7 @@ function buildAnswerIntent(answer) {
     withSlotResolution(ANSWER_SLOT, answer.toString(), ANSWER_SLOT_TYPE, answer).build();
 }
 
-function getQuestionIndices() {
+function getGameQuestionsIndices() {
   return [80, 99, 118, 137, 156];
 }
 
@@ -101,8 +115,8 @@ function getCorrectAnswerIndices() {
   return [4, 3, 2, 4, 3];
 }
 
-function buildGameSequence(questions, correctAnswers, customerAnswers) {
-  assert(questions.length == GAME_LENGTH && correctAnswers.length == GAME_LENGTH && customerAnswers.length == GAME_LENGTH);
+function buildGameSequence(gameQuestionsIndices, correctAnswers, customerAnswers) {
+  assert(gameQuestionsIndices.length == GAME_LENGTH && correctAnswers.length == GAME_LENGTH && customerAnswers.length == GAME_LENGTH);
   let score = 0;
 
   const gameSequence = [];
@@ -115,9 +129,9 @@ function buildGameSequence(questions, correctAnswers, customerAnswers) {
     hasAttributes: {
       category: SCIENCE_CATEGORY,
       correctAnswerIndex: correctAnswers[0],
-      correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${questions[0] + 1} / Correct Answer`,
-      currentQuestionIndex: 0,
-      questions: questions,
+      correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[0] + 1} / Correct Answer`,
+      questionIndex: 0,
+      gameQuestionsIndices: gameQuestionsIndices,
       score: score,
     },
   });
@@ -133,25 +147,25 @@ function buildGameSequence(questions, correctAnswers, customerAnswers) {
         hasAttributes: {
           category: SCIENCE_CATEGORY,
           correctAnswerIndex: correctAnswers[index + 1],
-          correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${questions[index + 1] + 1} / Correct Answer`,
-          currentQuestionIndex: index + 1,
-          questions: questions,
+          correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index + 1] + 1} / Correct Answer`,
+          questionIndex: index + 1,
+          gameQuestionsIndices: gameQuestionsIndices,
           score: score,
         },
       });
     else
       gameSequence.push({
         request: buildAnswerIntent(correctAnswers[index] + 1),
-        saysLike: `That answer is wrong. The correct answer is ${correctAnswers[index]}: ${SCIENCE_CATEGORY} Question Number ${questions[index] + 1} / Correct Answer. Your score is ${score}. Question ${index + 2}. ${SCIENCE_CATEGORY} Question `,
+        saysLike: `That answer is wrong. The correct answer is ${correctAnswers[index]}: ${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer. Your score is ${score}. Question ${index + 2}. ${SCIENCE_CATEGORY} Question `,
         repromptsLike: `Question ${index + 2}. ${SCIENCE_CATEGORY} Question `,
         shouldEndSession: false,
         ignoreQuestionCheck: true,
         hasAttributes: {
           category: SCIENCE_CATEGORY,
           correctAnswerIndex: correctAnswers[index + 1],
-          correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${questions[index + 1] + 1} / Correct Answer`,
-          currentQuestionIndex: index + 1,
-          questions: questions,
+          correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index + 1] + 1} / Correct Answer`,
+          questionIndex: index + 1,
+          gameQuestionsIndices: gameQuestionsIndices,
           score: score,
         },
       });
@@ -171,7 +185,7 @@ function buildGameSequence(questions, correctAnswers, customerAnswers) {
     gameSequence.push(
       {
         request: buildAnswerIntent(correctAnswers[correctAnswers.length - 1] + 1),
-        says: `That answer is wrong. The correct answer is ${correctAnswers[correctAnswers.length - 1]}: ${SCIENCE_CATEGORY} Question Number ${questions[correctAnswers.length - 1] + 1} / Correct Answer. You got ${score} out of ${GAME_LENGTH} questions correct. Unfortunately, you did not win this game. Thank you for playing!`,
+        says: `That answer is wrong. The correct answer is ${correctAnswers[correctAnswers.length - 1]}: ${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[correctAnswers.length - 1] + 1} / Correct Answer. You got ${score} out of ${GAME_LENGTH} questions correct. Unfortunately, you did not win this game. Thank you for playing!`,
         repromptsNothing: true,
         shouldEndSession: true,
         ignoreQuestionCheck: true,
