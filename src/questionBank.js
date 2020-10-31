@@ -22,7 +22,7 @@ const getQuestions = (category, locale) => {
   localizationClient.changeLanguage(locale);
 
   if (categories.includes(category)) {
-    const key = category + ":QUESTIONS";
+    const key = category + "||QUESTIONS";
     if (!localizationClient.exists(key)) {
       throw new Error(`Requested question set: ${key} for ${locale} locale does not exist`);
     }
@@ -52,14 +52,15 @@ const init = (locale, questionsRepoOverridePath) => {
         .use(sprintf)
         .use(SyncBackend)
         .init({
-          lng: locale,
-          initImmediate: false,
-          ns: categories,
-          defaultNS: DEFAULT_GAME_CATEGORY,
-          load: "all",
           backend: {
             loadPath: path
           },
+          defaultNS: DEFAULT_GAME_CATEGORY,
+          initImmediate: false,
+          lng: locale,
+          load: "all",
+          ns: categories,
+          nsSeparator: '||', //TODO: Write a test to ensure question bank doesn't contain ||
           overloadTranslationOptionHandler:
             sprintf.overloadTranslationOptionHandler,
           returnObjects: true
