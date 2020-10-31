@@ -78,6 +78,14 @@ describe("Playing a game completely.", () => {
   describe('should be able to track the score and play a game where user answers all questions wrong.', () => {
     alexaTest.test(buildGameSequence(getGameQuestionsIndices(), getCorrectAnswerIndices(), [false, false, false, false, false]));
   });
+
+  describe('should be able to handle the case where user gives up on some questions but wins the game.', () => {
+    alexaTest.test(buildGameSequence(getGameQuestionsIndices(), getCorrectAnswerIndices(), [true, false, false, true, null]));
+  });
+
+  describe('should be able to handle the case where user gives up on the last question and also loses the game.', () => {
+    alexaTest.test(buildGameSequence(getGameQuestionsIndices(), getCorrectAnswerIndices(), [true, null, true, false, null]));
+  });
 });
 
 describe("Playing a game partially.", () => {
@@ -105,6 +113,10 @@ function buildStartGameIntent() {
 function buildAnswerIntent(answer) {
   return new IntentRequestBuilder(skillSettings, 'AnswerIntent').
     withSlotResolution(ANSWER_SLOT, answer.toString(), ANSWER_SLOT_TYPE, answer).build();
+}
+
+function buildDontKnowIntent() {
+  return new IntentRequestBuilder(skillSettings, 'DontKnowIntent').build();
 }
 
 function getGameQuestionsIndices() {
@@ -155,8 +167,8 @@ function buildGameSequence(gameQuestionsIndices, correctAnswers, customerAnswers
       });
     else
       gameSequence.push({
-        request: buildAnswerIntent(correctAnswers[index] + 1),
-        saysLike: `That answer is wrong. The correct answer is ${correctAnswers[index]}: ${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer. Your score is ${score}. Question ${index + 2}. ${SCIENCE_CATEGORY} Question `,
+        request: customerAnswers[index] === null ? buildDontKnowIntent() : buildAnswerIntent(correctAnswers[index] + 1), //+1 to simulate a wrong answer
+        saysLike: `${customerAnswers[index] === null ? `` : `That answer is wrong. `}The correct answer is ${correctAnswers[index]}: ${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer. Your score is ${score}. Question ${index + 2}. ${SCIENCE_CATEGORY} Question `,
         repromptsLike: `Question ${index + 2}. ${SCIENCE_CATEGORY} Question `,
         shouldEndSession: false,
         ignoreQuestionCheck: true,
@@ -171,21 +183,23 @@ function buildGameSequence(gameQuestionsIndices, correctAnswers, customerAnswers
       });
   }
 
+  const customersLastAnswer = customerAnswers[correctAnswers.length - 1];
   const isWinning = isWinningGame(customerAnswers);
-  if (isWinning)
+  if (customersLastAnswer) {
     gameSequence.push(
       {
         request: buildAnswerIntent(correctAnswers[correctAnswers.length - 1]),
-        says: `That answer is correct. You got ${++score} out of ${GAME_LENGTH} questions correct. You won the game. Thank you for playing!`,
+        says: `That answer is correct. You got ${++score} out of ${GAME_LENGTH} questions correct. ${isWinning ? `You won the game. Thank you for playing!` : `Unfortunately, you did not win this game. Thank you for playing!`}`,
         repromptsNothing: true,
         shouldEndSession: true,
         ignoreQuestionCheck: true,
       });
+  }
   else {
     gameSequence.push(
       {
-        request: buildAnswerIntent(correctAnswers[correctAnswers.length - 1] + 1),
-        says: `That answer is wrong. The correct answer is ${correctAnswers[correctAnswers.length - 1]}: ${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[correctAnswers.length - 1] + 1} / Correct Answer. You got ${score} out of ${GAME_LENGTH} questions correct. Unfortunately, you did not win this game. Thank you for playing!`,
+        request: customersLastAnswer === null ? buildDontKnowIntent() : buildAnswerIntent(correctAnswers[correctAnswers.length - 1] + 1), //+1 to simulate a wrong answer
+        says: `${customersLastAnswer === null ? `` : `That answer is wrong. `}The correct answer is ${correctAnswers[correctAnswers.length - 1]}: ${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[correctAnswers.length - 1] + 1} / Correct Answer. You got ${score} out of ${GAME_LENGTH} questions correct. ${isWinning ? `You won the game. Thank you for playing!` : `Unfortunately, you did not win this game. Thank you for playing!`}`,
         repromptsNothing: true,
         shouldEndSession: true,
         ignoreQuestionCheck: true,
@@ -201,5 +215,5 @@ function isWinningGame(customerAnswers) {
   let correctAnswers = 0;
   customerAnswers.forEach(customerAnswer => { if (customerAnswer) correctAnswers++; })
 
-  return correctAnswers / customerAnswers.length >= 0.3
+  return correctAnswers / customerAnswers.length >= 0.5
 }

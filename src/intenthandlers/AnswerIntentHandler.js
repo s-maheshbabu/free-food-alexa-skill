@@ -9,7 +9,7 @@ const ANSWER_COUNT = 4;
 const questionDataSource = require("../apl/data/QuestionDatasource");
 const questionDocument = require("../apl/document/QuestionDocument");
 
-const GAME_WINNING_THRESHOLD_PERCENTAGE = 0.3;
+const GAME_WINNING_THRESHOLD_PERCENTAGE = 0.5;
 
 module.exports = AnswerIntent = {
   canHandle(handlerInput) {
