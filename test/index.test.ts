@@ -29,7 +29,16 @@ const SCIENCE_CATEGORY = "SCIENCE";
 
 const GAME_LENGTH = 5;
 
-describe("Starting the skill", () => {
+before(async () => {
+  mockRandomForEach([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99]);
+  await questionBank.init('en_US', 'test-data/questions/{{lng}}/{{ns}}.json');
+});
+
+after(function () {
+  resetMockRandom();
+});
+
+describe("Starting a game", () => {
   describe('should be able to launch the skill and offer the list of supported trivia categories.', () => {
     alexaTest.test([
       {
@@ -51,18 +60,35 @@ describe("Starting the skill", () => {
       },
     ]);
   });
+
+  describe('should be able to start a game and then half way through, start over a new game.', () => {
+    alexaTest.test(
+      [
+        {
+          request: new LaunchRequestBuilder(skillSettings).build(),
+          says: 'Welcome to Trivia Challenge. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
+          reprompts: 'Welcome to Trivia Challenge. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
+          shouldEndSession: false,
+          ignoreQuestionCheck: true,
+        },
+        {
+          request: buildAnswerIntent(3),
+          shouldEndSession: false,
+          ignoreQuestionCheck: true,
+        },
+        {
+          request: new IntentRequestBuilder(skillSettings, 'AMAZON.StartOverIntent').build(),
+          says: 'Welcome to Trivia Challenge. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
+          reprompts: 'Welcome to Trivia Challenge. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
+          shouldEndSession: false,
+          ignoreQuestionCheck: true,
+        },
+      ]
+    );
+  });
 });
 
 describe("Playing a game completely.", () => {
-  before(async () => {
-    mockRandomForEach([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99]);
-    await questionBank.init('en_US', 'test-data/questions/{{lng}}/{{ns}}.json');
-  });
-
-  after(function () {
-    resetMockRandom();
-  });
-
   describe('should be able to track the score and play a game that the user wins.', () => {
     alexaTest.test(buildGameSequence(getGameQuestionsIndices(), getCorrectAnswerIndices(), [true, true, true, false, false]));
   });
@@ -89,15 +115,6 @@ describe("Playing a game completely.", () => {
 });
 
 describe("Playing a game partially.", () => {
-  before(async () => {
-    mockRandomForEach([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99]);
-    await questionBank.init('en_US', 'test-data/questions/{{lng}}/{{ns}}.json');
-  });
-
-  after(function () {
-    resetMockRandom();
-  });
-
   describe.skip('should be able to track the score and play a game that the user wins.', () => {
   });
 });
