@@ -13,6 +13,7 @@
   "author": "Mahesh Sabbavarapu",
   "license": "ISC",
   "dependencies": {
+    "app-module-path": "^2.2.0",
     "ask-sdk-core": "^2.9.0",
     "ask-sdk-model": "^1.29.0",
     "i18next": "^19.8.3",

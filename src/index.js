@@ -1,3 +1,5 @@
+require("app-module-path").addPath(__dirname);
+
 const Alexa = require("ask-sdk-core");
 
 const gameManager = require("./gameManager");
@@ -137,7 +139,7 @@ exports.handler = async function (event, context) {
         LocalizationInterceptor,
       )
       .addResponseInterceptors(
-        //ResponseSanitizationInterceptor,
+        ResponseSanitizationInterceptor,
         LogResponseInterceptor,
       )
       .addErrorHandlers(ErrorHandler)
