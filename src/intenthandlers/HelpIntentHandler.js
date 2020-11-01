@@ -1,4 +1,4 @@
-const interactions = require("../interactions");
+const interactions = require("interactions");
 
 // TODO: This is repeated in index.js as well. Should refactor to a single place.
 const GAME_LENGTH = 5;
@@ -24,7 +24,7 @@ function helpTheUser(newGame, handlerInput) {
   const askMessage = newGame
     ? interactions.t("ASK_MESSAGE_START")
     : interactions.t("REPEAT_QUESTION_MESSAGE") +
-      interactions.t("CONTINUE_PLAYING_MESSAGE");
+    interactions.t("CONTINUE_PLAYING_MESSAGE");
   const speechOutput = interactions.t("HELP_MESSAGE", GAME_LENGTH) + askMessage;
   const repromptText = interactions.t("HELP_REPROMPT") + askMessage;
 

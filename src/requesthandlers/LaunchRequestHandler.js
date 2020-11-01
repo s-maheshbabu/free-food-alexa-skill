@@ -1,7 +1,7 @@
 const Alexa = require('ask-sdk-core');
-const utilities = require("../utilities");
+const utilities = require("utilities");
 
-const interactions = require("../interactions");
+const interactions = require("interactions");
 const CATEGORIES_NAMESPACE = "categories";
 
 module.exports = LaunchRequest = {

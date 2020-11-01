@@ -1,4 +1,4 @@
-const interactions = require("../interactions");
+const interactions = require("interactions");
 
 module.exports = StopIntentHandler = {
   canHandle(handlerInput) {
@@ -7,7 +7,7 @@ module.exports = StopIntentHandler = {
       (handlerInput.requestEnvelope.request.intent.name ===
         "AMAZON.StopIntent" ||
         handlerInput.requestEnvelope.request.intent.name ===
-          "AMAZON.CancelIntent")
+        "AMAZON.CancelIntent")
     );
   },
   handle(handlerInput) {

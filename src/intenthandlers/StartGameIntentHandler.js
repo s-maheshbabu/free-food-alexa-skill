@@ -1,14 +1,14 @@
-const fetchRandomGameQuestions = require("../gameManager").fetchRandomGameQuestions;
-const randomizeAnswers = require("../gameManager").randomizeAnswers;
+const fetchRandomGameQuestions = require("gameManager").fetchRandomGameQuestions;
+const randomizeAnswers = require("gameManager").randomizeAnswers;
 
-const interactions = require("../interactions");
-const questionBank = require("../questionBank");
+const interactions = require("interactions");
+const questionBank = require("questionBank");
 
 const GAME_LENGTH = 5;
 const ANSWER_COUNT = 4;
 
-const questionDataSource = require("../apl/data/QuestionDatasource");
-const questionDocument = require("../apl/document/QuestionDocument");
+const questionDataSource = require("apl/data/QuestionDatasource");
+const questionDocument = require("apl/document/QuestionDocument");
 
 module.exports = StartGameIntentHandler = {
   canHandle(handlerInput) {

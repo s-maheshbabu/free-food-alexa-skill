@@ -1,4 +1,4 @@
-const interactions = require("../interactions");
+const interactions = require("interactions");
 
 // TODO: Defined at two places in the code. Refactor.
 const CATEGORIES_NAMESPACE = "categories";

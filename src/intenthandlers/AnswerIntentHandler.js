@@ -1,13 +1,13 @@
-const randomizeAnswers = require("../gameManager").randomizeAnswers;
+const randomizeAnswers = require("gameManager").randomizeAnswers;
 
-const interactions = require("../interactions");
-const questionBank = require("../questionBank");
+const interactions = require("interactions");
+const questionBank = require("questionBank");
 
 const GAME_LENGTH = 5;
 const ANSWER_COUNT = 4;
 
-const questionDataSource = require("../apl/data/QuestionDatasource");
-const questionDocument = require("../apl/document/QuestionDocument");
+const questionDataSource = require("apl/data/QuestionDatasource");
+const questionDocument = require("apl/document/QuestionDocument");
 
 const GAME_WINNING_THRESHOLD_PERCENTAGE = 0.5;
 

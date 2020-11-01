@@ -1,4 +1,4 @@
-const HelpIntentHandler = require("./HelpIntentHandler");
+const HelpIntentHandler = require("intenthandlers/HelpIntentHandler");
 
 module.exports = RepeatIntentHandler = {
   canHandle(handlerInput) {

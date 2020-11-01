@@ -1,10 +1,10 @@
-const questionBank = require("./questionBank");
-const interactions = require("./interactions");
+const questionBank = require("questionBank");
+const interactions = require("interactions");
 
 const GAME_LENGTH = 5;
 
-const quesionDataSource = require("./apl/data/QuestionDatasource");
-const quesionDocument = require("./apl/document/QuestionDocument");
+const quesionDataSource = require("apl/data/QuestionDatasource");
+const quesionDocument = require("apl/document/QuestionDocument");
 
 /**
  * Fetches the requested number of random questions from the given set of

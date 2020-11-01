@@ -1,4 +1,4 @@
-const interactions = require("../interactions");
+const interactions = require("interactions");
 const util = require("util");
 
 module.exports = LocalizationInterceptor = {
