@@ -112,49 +112,49 @@ describe("Starting a game", () => {
 
 describe("Playing a game completely.", () => {
   describe('should be able to track the score and play a game that the user wins.', () => {
-    alexaTest.test(buildGameSequenceVoiceInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [true, true, true, false, false]));
+    alexaTest.test(buildGameSequence_VoiceInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [true, true, true, false, false]));
   });
 
   describe('should be able to track the score and play a game where user answers all questions right.', () => {
-    alexaTest.test(buildGameSequenceVoiceInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [true, true, true, true, true]));
+    alexaTest.test(buildGameSequence_VoiceInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [true, true, true, true, true]));
   });
 
   describe('should be able to track the score and play a game that the user loses.', () => {
-    alexaTest.test(buildGameSequenceVoiceInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [false, false, true, false, false]));
+    alexaTest.test(buildGameSequence_VoiceInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [false, false, true, false, false]));
   });
 
   describe('should be able to track the score and play a game where user answers all questions wrong.', () => {
-    alexaTest.test(buildGameSequenceVoiceInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [false, false, false, false, false]));
+    alexaTest.test(buildGameSequence_VoiceInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [false, false, false, false, false]));
   });
 
   describe('should be able to handle the case where user gives up on some questions but wins the game.', () => {
-    alexaTest.test(buildGameSequenceVoiceInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [true, false, false, true, null]));
+    alexaTest.test(buildGameSequence_VoiceInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [true, false, false, true, null]));
   });
 
   describe('should be able to handle the case where user gives up on the last question and also loses the game.', () => {
-    alexaTest.test(buildGameSequenceVoiceInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [true, null, true, false, null]));
+    alexaTest.test(buildGameSequence_VoiceInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [true, null, true, false, null]));
   });
 });
 
 describe("Interactions through touch / APL", () => {
   describe('should be able to play a winning game completely through APL based touch interactions', () => {
-    alexaTest.test(buildGameSequenceWithUIInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [true, true, true, false, false]));
+    alexaTest.test(buildGameSequence_UIInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [true, true, true, false, false]));
   });
 
   describe('should be able to play a game where all responses are correct', () => {
-    alexaTest.test(buildGameSequenceWithUIInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [true, true, true, true, true]));
+    alexaTest.test(buildGameSequence_UIInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [true, true, true, true, true]));
   });
 
   describe('should be able to play a losing game completely through APL based touch interactions', () => {
-    alexaTest.test(buildGameSequenceWithUIInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [false, true, true, false, false]));
+    alexaTest.test(buildGameSequence_UIInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [false, true, true, false, false]));
   });
 
   describe('should be able to play a game where all responses are incorrect', () => {
-    alexaTest.test(buildGameSequenceWithUIInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [false, false, false, false, false]));
+    alexaTest.test(buildGameSequence_UIInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [false, false, false, false, false]));
   });
 });
 
-function buildGameSequenceWithUIInteraction(gameQuestionsIndices, correctAnswers, customerAnswers) {
+function buildGameSequence_UIInteraction(gameQuestionsIndices, correctAnswers, customerAnswers) {
   assert(gameQuestionsIndices.length == GAME_LENGTH && correctAnswers.length == GAME_LENGTH && customerAnswers.length == GAME_LENGTH);
   let score = 0;
 
@@ -184,7 +184,7 @@ function buildGameSequenceWithUIInteraction(gameQuestionsIndices, correctAnswers
   return gameSequence;
 }
 
-function buildGameSequenceVoiceInteraction(gameQuestionsIndices, correctAnswers, customerAnswers) {
+function buildGameSequence_VoiceInteraction(gameQuestionsIndices, correctAnswers, customerAnswers) {
   assert(gameQuestionsIndices.length == GAME_LENGTH && correctAnswers.length == GAME_LENGTH && customerAnswers.length == GAME_LENGTH);
   let score = 0;
 
