@@ -21,7 +21,7 @@ module.exports = ResponseSanitizationInterceptor = {
       ]) && Array.isArray(response.directives)
     ) {
       console.log(`Stripping APL directives.`);
-      response.directives = response.directives.filter(directive => directive.type !== APL_CONSTANTS.APL_DOCUMENT_TYPE)
+      response.directives = response.directives.filter(directive => directive.type !== APL_CONSTANTS.APL_DOCUMENT_TYPE && directive.type !== APL_CONSTANTS.APL_COMMANDS_TYPE)
     }
 
     return Promise.resolve();

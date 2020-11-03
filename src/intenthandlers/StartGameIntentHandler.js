@@ -1,5 +1,9 @@
+require('app-module-path/register');
+
 const fetchRandomGameQuestions = require("gameManager").fetchRandomGameQuestions;
 const randomizeAnswers = require("gameManager").randomizeAnswers;
+
+const { getQuestionAndAnswersViewDirective } = require("APLManager");
 
 const interactions = require("interactions");
 const questionBank = require("questionBank");
@@ -7,9 +11,9 @@ const questionBank = require("questionBank");
 const GAME_LENGTH = 5;
 const ANSWER_COUNT = 4;
 
-const questionDataSource = require("apl/data/QuestionDatasource");
-const questionDocument = require("apl/document/QuestionDocument");
+const { random } = require("Random");
 
+// TODO Refactor to delegate logic to game manager.
 module.exports = StartGameIntentHandler = {
   canHandle(handlerInput) {
     const { request } = handlerInput.requestEnvelope;
@@ -54,7 +58,8 @@ const startGame = (isNewGame, handlerInput) => {
   const gameQuestionsIndices = fetchRandomGameQuestions(
     allQuestions, GAME_LENGTH
   );
-  const correctAnswerTargetIndex = Math.floor(Math.random() * ANSWER_COUNT);
+
+  const correctAnswerTargetIndex = Math.floor(random() * ANSWER_COUNT);
 
   const nextQuestionIndex = 0;
   const nextQuestion =
@@ -72,8 +77,7 @@ const startGame = (isNewGame, handlerInput) => {
     questionAndAnswersText += `${i + 1}. ${nextQuestionRandomizedAnswers[i]}. `;
   }
 
-  const sessionAttributes = {};
-  Object.assign(sessionAttributes, {
+  const sessionAttributes = Object.assign({}, {
     category: category,
     correctAnswerIndex: correctAnswerTargetIndex + 1,
     correctAnswerText: nextQuestionRandomizedAnswers[correctAnswerTargetIndex],
@@ -83,16 +87,11 @@ const startGame = (isNewGame, handlerInput) => {
   });
   handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
+  const aplDirective = getQuestionAndAnswersViewDirective(spokenQuestion, nextQuestionRandomizedAnswers, sessionAttributes);
   return handlerInput.responseBuilder
     .speak(`${isNewGame ? `${interactions.t("WELCOME_MESSAGE", GAME_LENGTH.toString())}` : ``}${questionAndAnswersText}`)
     .reprompt(questionAndAnswersText)
     .withSimpleCard(interactions.t("GAME_NAME"), questionAndAnswersText)
-    // Add this to render APL document
-    .addDirective({
-      type: 'Alexa.Presentation.APL.RenderDocument',
-      version: '1.0',
-      document: questionDocument, // Import button APL document
-      datasources: questionDataSource(nextQuestionRandomizedAnswers, correctAnswerTargetIndex)
-    })
+    .addDirective(aplDirective)
     .getResponse();
 }

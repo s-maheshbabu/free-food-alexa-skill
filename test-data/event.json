@@ -2,35 +2,295 @@
   "version": "1.0",
   "session": {
     "new": true,
-    "sessionId": "amzn1.echo-api.session.3b270ad7-0bb1-4d07-afff-0f217bf52d53",
+    "sessionId": "amzn1.echo-api.session.a3a03803-090d-4cd0-b142-e998bdc47578",
     "application": {
       "applicationId": "amzn1.ask.skill.69741aa6-368a-4799-9281-d87d7df51ad5"
     },
     "user": {
-      "userId": "amzn1.ask.account.AH33B2ZGFIEESFIHRPJKWY2BMKJLVXB2GFSKNQFAGOESVYFSWXPNZBI3UIVYTSIY4UTLPX3DNOLS6W3VYEIUKQPVJAITFCYQC4C4FQ4BBDEQTHQ3XOQRPQBUV3LLS5FJRPCPI5IOVS6225NLDBMIF2YMDWYRBZBKLALZEL7PS2VMCG4CYU62YN5IMWICWNLF3MB7A5EQFXAW2RA"
+      "userId": "amzn1.ask.account.AG6DVJ7JT6ZWG5L62IID4LK5R7EQTUVQTHRLMNVFXNWAQLIBTWVJS4OH3OPNYDYC6Y57ABGWD4EK5BB5ZM5BFPIR2MMSTW7NJRMRU7ZWYUWEOPDTC4KZJZO6XBBLMVDKJMCHDPXMMYZTBPFKDI7SXQA3CVMYBLMETRNLJXUTWYOP6YXKMTXEWGUXOHOTKTMB5YKH362NXXGVA5I"
     }
   },
   "context": {
+    "Viewports": [
+      {
+        "type": "APL",
+        "id": "main",
+        "shape": "RECTANGLE",
+        "dpi": 213,
+        "presentationType": "STANDARD",
+        "canRotate": false,
+        "configuration": {
+          "current": {
+            "mode": "HUB",
+            "video": {
+              "codecs": [
+                "H_264_42",
+                "H_264_41"
+              ]
+            },
+            "size": {
+              "type": "DISCRETE",
+              "pixelWidth": 1363,
+              "pixelHeight": 799
+            }
+          }
+        }
+      }
+    ],
+    "Viewport": {
+      "experiences": [
+        {
+          "arcMinuteWidth": 346,
+          "arcMinuteHeight": 216,
+          "canRotate": false,
+          "canResize": false
+        }
+      ],
+      "mode": "HUB",
+      "shape": "RECTANGLE",
+      "pixelWidth": 1363,
+      "pixelHeight": 799,
+      "dpi": 213,
+      "currentPixelWidth": 1363,
+      "currentPixelHeight": 799,
+      "touch": [
+        "SINGLE"
+      ],
+      "video": {
+        "codecs": [
+          "H_264_42",
+          "H_264_41"
+        ]
+      }
+    },
+    "Extensions": {
+      "available": {
+        "aplext:backstack:10": {}
+      }
+    },
     "System": {
       "application": {
         "applicationId": "amzn1.ask.skill.69741aa6-368a-4799-9281-d87d7df51ad5"
       },
       "user": {
-        "userId": "amzn1.ask.account.AH33B2ZGFIEESFIHRPJKWY2BMKJLVXB2GFSKNQFAGOESVYFSWXPNZBI3UIVYTSIY4UTLPX3DNOLS6W3VYEIUKQPVJAITFCYQC4C4FQ4BBDEQTHQ3XOQRPQBUV3LLS5FJRPCPI5IOVS6225NLDBMIF2YMDWYRBZBKLALZEL7PS2VMCG4CYU62YN5IMWICWNLF3MB7A5EQFXAW2RA"
+        "userId": "amzn1.ask.account.AG6DVJ7JT6ZWG5L62IID4LK5R7EQTUVQTHRLMNVFXNWAQLIBTWVJS4OH3OPNYDYC6Y57ABGWD4EK5BB5ZM5BFPIR2MMSTW7NJRMRU7ZWYUWEOPDTC4KZJZO6XBBLMVDKJMCHDPXMMYZTBPFKDI7SXQA3CVMYBLMETRNLJXUTWYOP6YXKMTXEWGUXOHOTKTMB5YKH362NXXGVA5I"
       },
       "device": {
-        "deviceId": "amzn1.ask.device.AE2IJQBFRRZUETOF7AUATS6XCBGFZAA2K337VJHPEKQAOXME277CELLILVOSO7EQ2DYCNKR7WDHZBVZFMWIVLM65YML3CR556BZUPN3OHJMQS2STL64TMYPQYRBN7SJ2V33IIZU7FJP4WXZCPB3NV3RN4OUA",
-        "supportedInterfaces": {}
+        "deviceId": "amzn1.ask.device.AHJZOZXWBCJ5NZGJFS4WAGV64SDUZMEY6PAAIW3EF77RSTP3TYYW2UHH2EXOJ5DJTDWCQMK4BLP6PWJWFUDCQHJLDCEZ7DJ2RMK4SB7XXNTW6BSCJCQAXQTNYIX2W4ZEJXDHJ2NOGJQUI66NUMCCUH7EPENA",
+        "supportedInterfaces": {
+          "Alexa.Presentation.APL": {
+            "runtime": {
+              "maxVersion": "1.5"
+            }
+          }
+        }
       },
       "apiEndpoint": "https://api.amazonalexa.com",
-      "apiAccessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IjEifQ.eyJhdWQiOiJodHRwczovL2FwaS5hbWF6b25hbGV4YS5jb20iLCJpc3MiOiJBbGV4YVNraWxsS2l0Iiwic3ViIjoiYW16bjEuYXNrLnNraWxsLjY5NzQxYWE2LTM2OGEtNDc5OS05MjgxLWQ4N2Q3ZGY1MWFkNSIsImV4cCI6MTUzNDMxOTgwNywiaWF0IjoxNTM0MzE2MjA3LCJuYmYiOjE1MzQzMTYyMDcsInByaXZhdGVDbGFpbXMiOnsiY29uc2VudFRva2VuIjpudWxsLCJkZXZpY2VJZCI6ImFtem4xLmFzay5kZXZpY2UuQUUySUpRQkZSUlpVRVRPRjdBVUFUUzZYQ0JHRlpBQTJLMzM3VkpIUEVLUUFPWE1FMjc3Q0VMTElMVk9TTzdFUTJEWUNOS1I3V0RIWkJWWkZNV0lWTE02NVlNTDNDUjU1NkJaVVBOM09ISk1RUzJTVEw2NFRNWVBRWVJCTjdTSjJWMzNJSVpVN0ZKUDRXWFpDUEIzTlYzUk40T1VBIiwidXNlcklkIjoiYW16bjEuYXNrLmFjY291bnQuQUgzM0IyWkdGSUVFU0ZJSFJQSktXWTJCTUtKTFZYQjJHRlNLTlFGQUdPRVNWWUZTV1hQTlpCSTNVSVZZVFNJWTRVVExQWDNETk9MUzZXM1ZZRUlVS1FQVkpBSVRGQ1lRQzRDNEZRNEJCREVRVEhRM1hPUVJQUUJVVjNMTFM1RkpSUENQSTVJT1ZTNjIyNU5MREJNSUYyWU1EV1lSQlpCS0xBTFpFTDdQUzJWTUNHNENZVTYyWU41SU1XSUNXTkxGM01CN0E1RVFGWEFXMlJBIn19.TFe7Cm7soN0RSM3F9wAVnPg6p7SEpWur1SLxwUdruNaVGpoklWds3Borj91LPFW5_4kbvs3Q3XxeCwpRAvbTdLOQnk2fuIf6T0YhFuGLMgAwL2DssRxozw6KVb22TuftAwSPqoAtTvg_jx2ZMaymn9CFKhx_iT9W5HR1ZsvsPlqzHhCE9bu-5xTvR3yGbWdamFa6-OhF5CQEPm9WvXZaXCcuAjvsn9l09GqwqpKzXLdYnGn7NfqAYsuutXSw60D97KH5zlF8N0YiXFzm9hJRqKErfDucRfVYI7CtieAI7rQ-r128xGNDh-IAnuKNreIlmimttz3zMTiXc6wPTT9bNQ"
+      "apiAccessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IjEifQ.eyJhdWQiOiJodHRwczovL2FwaS5hbWF6b25hbGV4YS5jb20iLCJpc3MiOiJBbGV4YVNraWxsS2l0Iiwic3ViIjoiYW16bjEuYXNrLnNraWxsLjY5NzQxYWE2LTM2OGEtNDc5OS05MjgxLWQ4N2Q3ZGY1MWFkNSIsImV4cCI6MTYwNDM5MDQ0NywiaWF0IjoxNjA0MzkwMTQ3LCJuYmYiOjE2MDQzOTAxNDcsInByaXZhdGVDbGFpbXMiOnsiY29udGV4dCI6IkFBQUFBQUFBQUFDNGI0V1RaU3pBVm0zaFM1SDlMV0RUSkFFQUFBQUFBQUN1MEFHYjFoYzJQSzF0bllXZnlXWmZlSHZuRG5FUWFnaU1PUGhmdXRVc3V6MSs5ZzFHU291OXhrNnFYUmd2Yis1a2swMkpiSnVYWmpHaGxuVHdPMyt0WjVkVWp4YzFMbUh1SXdWNzZOUThmb3NSMTc0NHhUNEllTmk4OFNnajdRMVpHcFgya2NrUmMwcWZDTTJ1LzE0WGR6akNES2psWkFlZU9vNGpiVXR5a2dMeUlOMUhGbkJTTVJCZER0aU5PaWJxVGxSdldsdnRNZWI3UDhrSHRBVUoxc3lkZm9ndDdwY2dKOGxRVkF0QkRldFUxTXQwS0x3eE93YmI4M2wwbVpmL1YxREdsNy9VTjVsQVRNdkVQWU1SbERmakFLUGp1aUJmYkx3RGhZcnlUOVVmNW04VGhncU9BL3lDT3V0QlVFMVUrbVIzUG0ySGFJMHNJS05zcmNkcXNxVXVLeE41MEFaZnlUK2w3NkR4aDdweEhscERQMVFNcC9PNDlXeXFrTjc4MFlHbSIsImNvbnNlbnRUb2tlbiI6bnVsbCwiZGV2aWNlSWQiOiJhbXpuMS5hc2suZGV2aWNlLkFISlpPWlhXQkNKNU5aR0pGUzRXQUdWNjRTRFVaTUVZNlBBQUlXM0VGNzdSU1RQM1RZWVcyVUhIMkVYT0o1REpURFdDUU1LNEJMUDZQV0pXRlVEQ1FISkxEQ0VaN0RKMlJNSzRTQjdYWE5UVzZCU0NKQ1FBWFFUTllJWDJXNFpFSlhESEoyTk9HSlFVSTY2TlVNQ0NVSDdFUEVOQSIsInVzZXJJZCI6ImFtem4xLmFzay5hY2NvdW50LkFHNkRWSjdKVDZaV0c1TDYySUlENExLNVI3RVFUVVZRVEhSTE1OVkZYTldBUUxJQlRXVkpTNE9IM09QTllEWUM2WTU3QUJHV0Q0RUs1QkI1Wk01QkZQSVIyTU1TVFc3TkpSTVJVN1pXWVVXRU9QRFRDNEtaSlpPNlhCQkxNVkRLSk1DSERQWE1NWVpUQlBGS0RJN1NYUUEzQ1ZNWUJMTUVUUk5MSlhVVFdZT1A2WVhLTVRYRVdHVVhPSE9US1RNQjVZS0gzNjJOWFhHVkE1SSJ9fQ.jkrhNmszZrFfQuebaqaQ2d6QN1ejaA_Xyjih0WSbKeaT1LNE8eCadMSFTEMbcJa4RHWkuuSxQ5EcBv-fhKv27XGxvxZ9RG-AdUgyWALK6LupBgBMbCRw2RBpLYNAcdmIGYGnBV7rXmiUz3lcki1kyAWgBIvfyNInLJhCLGeG-HBXnK4t1bYTW2dhmdWBxUDm8A3ugbsUyeXkcNNcAqZPKCgk9z2whnkrVP-yzcjfqdRkWWQ8KnnPohGgdHPpo9qm9ZZGgH-1QePCqph4GRp0A0RD5zXwSRs6v99WuPMy4pBm5MNyHe3Ec9rfvVtpPzcjZUMOkOpFyV89XlfNw50hXg"
+    },
+    "Alexa.Presentation.APL": {
+      "token": "",
+      "version": "APL_WEB_RENDERER_GANDALF",
+      "componentsVisibleOnScreen": [
+        {
+          "id": "answersList",
+          "uid": ":1635",
+          "position": "1023x600+0+0:0",
+          "type": "mixed",
+          "tags": {
+            "viewport": {}
+          },
+          "children": [
+            {
+              "uid": ":1636",
+              "position": "1023x600+0+0:0",
+              "type": "graphic",
+              "tags": {},
+              "visibility": 0.9992662668228149,
+              "entities": []
+            },
+            {
+              "uid": ":1640",
+              "position": "1023x100+0+0:1",
+              "type": "mixed",
+              "tags": {},
+              "entities": []
+            },
+            {
+              "uid": ":1650",
+              "position": "1023x499+0+100:1",
+              "type": "mixed",
+              "tags": {
+                "focused": false,
+                "list": {
+                  "itemCount": 4,
+                  "lowestIndexSeen": 0,
+                  "highestIndexSeen": 3,
+                  "lowestOrdinalSeen": 1,
+                  "highestOrdinalSeen": 4
+                },
+                "scrollable": {
+                  "direction": "vertical",
+                  "allowForward": true,
+                  "allowBackwards": false
+                }
+              },
+              "children": [
+                {
+                  "uid": ":1652",
+                  "position": "1023x161+0+100:1",
+                  "type": "mixed",
+                  "tags": {
+                    "focused": false,
+                    "clickable": true
+                  },
+                  "children": [
+                    {
+                      "uid": ":1658",
+                      "position": "51x52+63+154:1",
+                      "type": "mixed",
+                      "tags": {},
+                      "entities": []
+                    },
+                    {
+                      "uid": ":1663",
+                      "position": "895x1+63+260:1",
+                      "type": "empty",
+                      "tags": {},
+                      "entities": []
+                    }
+                  ],
+                  "entities": []
+                },
+                {
+                  "uid": ":1666",
+                  "position": "1023x160+0+261:1",
+                  "type": "mixed",
+                  "tags": {
+                    "focused": false,
+                    "clickable": true
+                  },
+                  "children": [
+                    {
+                      "uid": ":1672",
+                      "position": "51x51+63+315:1",
+                      "type": "mixed",
+                      "tags": {},
+                      "entities": []
+                    },
+                    {
+                      "uid": ":1677",
+                      "position": "895x0+63+421:1",
+                      "type": "empty",
+                      "tags": {},
+                      "entities": []
+                    }
+                  ],
+                  "entities": []
+                },
+                {
+                  "uid": ":1680",
+                  "position": "1023x160+0+422:1",
+                  "type": "mixed",
+                  "tags": {
+                    "focused": false,
+                    "clickable": true
+                  },
+                  "children": [
+                    {
+                      "uid": ":1686",
+                      "position": "51x51+63+476:1",
+                      "type": "mixed",
+                      "tags": {},
+                      "entities": []
+                    },
+                    {
+                      "uid": ":1691",
+                      "position": "895x0+63+582:1",
+                      "type": "empty",
+                      "tags": {},
+                      "entities": []
+                    }
+                  ],
+                  "entities": []
+                },
+                {
+                  "uid": ":1694",
+                  "position": "1023x161+0+583:1",
+                  "type": "mixed",
+                  "tags": {
+                    "focused": false,
+                    "clickable": true
+                  },
+                  "visibility": 0.10232553631067276,
+                  "entities": []
+                }
+              ],
+              "entities": []
+            }
+          ],
+          "entities": []
+        }
+      ]
     }
   },
   "request": {
-    "type": "LaunchRequest",
-    "requestId": "amzn1.echo-api.request.6e1f5e86-af84-4479-87f1-faa2dee5e333",
-    "timestamp": "2018-08-15T06:56:47Z",
+    "type": "IntentRequest",
+    "requestId": "amzn1.echo-api.request.cf39ca1b-75ad-4d74-831f-392b794b00b1",
     "locale": "en-US",
-    "shouldLinkResultBeReturned": false
+    "timestamp": "2020-11-03T07:55:47Z",
+    "intent": {
+      "name": "StartGameIntent",
+      "confirmationStatus": "NONE",
+      "slots": {
+        "game_category": {
+          "name": "game_category",
+          "value": "science",
+          "resolutions": {
+            "resolutionsPerAuthority": [
+              {
+                "authority": "amzn1.er-authority.echo-sdk.amzn1.ask.skill.69741aa6-368a-4799-9281-d87d7df51ad5.GAME_CATEGORY",
+                "status": {
+                  "code": "ER_SUCCESS_MATCH"
+                },
+                "values": [
+                  {
+                    "value": {
+                      "name": "science",
+                      "id": "SCIENCE"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "confirmationStatus": "NONE",
+          "source": "USER",
+          "slotValue": {
+            "type": "Simple",
+            "value": "science",
+            "resolutions": {
+              "resolutionsPerAuthority": [
+                {
+                  "authority": "amzn1.er-authority.echo-sdk.amzn1.ask.skill.69741aa6-368a-4799-9281-d87d7df51ad5.GAME_CATEGORY",
+                  "status": {
+                    "code": "ER_SUCCESS_MATCH"
+                  },
+                  "values": [
+                    {
+                      "value": {
+                        "name": "science",
+                        "id": "SCIENCE"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "dialogState": "STARTED"
   }
 }

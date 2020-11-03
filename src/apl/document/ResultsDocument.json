@@ -1,0 +1,29 @@
+{
+    "type": "APL",
+    "version": "1.4",
+    "settings": {},
+    "theme": "dark",
+    "import": [
+        {
+            "name": "alexa-layouts",
+            "version": "1.2.0"
+        }
+    ],
+    "resources": [],
+    "styles": {},
+    "onMount": [],
+    "graphics": {},
+    "commands": {},
+    "layouts": {},
+    "mainTemplate": {
+        "parameters": [
+            "resultsDataSource"
+        ],
+        "items": [
+            {
+                "type": "Text",
+                "text": "The answer is ${resultsDataSource.isCorrect} and the score is ${resultsDataSource.score}"
+            }
+        ]
+    }
+}

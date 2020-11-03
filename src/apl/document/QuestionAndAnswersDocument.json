@@ -18,20 +18,20 @@
     "mainTemplate": {
         "parameters": [
             "payload",
-            "colorDynamicSource"
+            "questionAndAnswersDataSource"
         ],
         "items": [
             {
                 "type": "AlexaTextList",
                 "id": "answersList",
-                "headerTitle": "${payload.textListData.title}",
+                "headerTitle": "${questionAndAnswersDataSource.textListData.title}",
                 "headerBackButton": false,
-                "headerAttributionImage": "${payload.textListData.logoUrl}",
-                "backgroundImageSource": "${payload.textListData.backgroundImage.sources[0].url}",
+                "headerAttributionImage": "${questionAndAnswersDataSource.textListData.logoUrl}",
+                "backgroundImageSource": "${questionAndAnswersDataSource.textListData.backgroundImage.sources[0].url}",
                 "backgroundBlur": false,
                 "backgroundColorOverlay": true,
-                "listItems": "${payload.textListData.listItems}",
-                "hintText": "${payload.textListData.hintText}"
+                "listItems": "${questionAndAnswersDataSource.textListData.listItems}",
+                "hintText": "${questionAndAnswersDataSource.textListData.hintText}"
             }
         ]
     }

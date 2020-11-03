@@ -1,4 +1,4 @@
-module.exports = (roundAnswers, correctAnswerIndex) => {
+module.exports = (data) => {
   //TODO: Input validation and testing?
   return {
     textListData: {
@@ -23,19 +23,15 @@ module.exports = (roundAnswers, correctAnswerIndex) => {
           }
         ]
       },
-      title: "<<The question should go here>>",
+      title: `${data.question}`,
       listItemsSequence: [],
       listItems: [
         {
-          primaryText: `${roundAnswers[0]}`,
+          primaryText: `${data.answers[0].answerText}`,
           primaryAction: [
             {
               type: "SendEvent",
-              arguments: [
-                1,
-                `${roundAnswers[1]}`,
-                `USER_INITIATED`,
-              ]
+              arguments: [data.answers[0], data.sessionAttributes],
             },
             {
               type: "SetValue",
@@ -45,15 +41,11 @@ module.exports = (roundAnswers, correctAnswerIndex) => {
           ]
         },
         {
-          primaryText: `${roundAnswers[1]}`,
+          primaryText: `${data.answers[1].answerText}`,
           primaryAction: [
             {
               type: "SendEvent",
-              arguments: [
-                1,
-                `${roundAnswers[1]}`,
-                `USER_INITIATED`,
-              ]
+              arguments: [data.answers[1], data.sessionAttributes],
             },
             {
               type: "SetValue",
@@ -63,15 +55,11 @@ module.exports = (roundAnswers, correctAnswerIndex) => {
           ],
         },
         {
-          primaryText: `${roundAnswers[2]}`,
+          primaryText: `${data.answers[2].answerText}`,
           primaryAction: [
             {
               type: "SendEvent",
-              arguments: [
-                2,
-                `${roundAnswers[2]}`,
-                `USER_INITIATED`,
-              ]
+              arguments: [data.answers[2], data.sessionAttributes],
             },
             {
               type: "SetValue",
@@ -81,15 +69,11 @@ module.exports = (roundAnswers, correctAnswerIndex) => {
           ],
         },
         {
-          primaryText: `${roundAnswers[3]}`,
+          primaryText: `${data.answers[3].answerText}`,
           primaryAction: [
             {
               type: "SendEvent",
-              arguments: [
-                3,
-                `${roundAnswers[3]}`,
-                `USER_INITIATED`,
-              ]
+              arguments: [data.answers[3], data.sessionAttributes],
             },
             {
               type: "SetValue",

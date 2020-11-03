@@ -2,9 +2,14 @@ const questionBank = require("questionBank");
 const interactions = require("interactions");
 
 const GAME_LENGTH = 5;
+const ANSWER_COUNT = 4;
 
-const quesionDataSource = require("apl/data/QuestionDatasource");
-const quesionDocument = require("apl/document/QuestionDocument");
+const { random } = require("Random");
+
+const quesionAndAnswersDataSource = require("apl/data/QuestionAndAnswersDatasource");
+const quesionAndAnswersDocument = require("apl/document/QuestionAndAnswersDocument");
+
+const GAME_WINNING_THRESHOLD_PERCENTAGE = 0.5;
 
 /**
  * Fetches the requested number of random questions from the given set of
@@ -24,7 +29,7 @@ const fetchRandomGameQuestions = (allQuestions, gameLength) => {
   }
 
   for (let j = 0; j < gameLength; j += 1) {
-    const rand = Math.floor(Math.random() * index);
+    const rand = Math.floor(random() * index);
     index -= 1;
 
     const temp = indexList[index];
@@ -63,7 +68,7 @@ const randomizeAnswers = (
 
   // Shuffle the answers, excluding the first element which is the correct answer.
   for (let j = 1; j < answersCopy.length; j += 1) {
-    const rand = Math.floor(Math.random() * (index - 1)) + 1;
+    const rand = Math.floor(random() * (index - 1)) + 1;
     index -= 1;
 
     const swapTemp1 = answersCopy[index];
@@ -81,9 +86,85 @@ const randomizeAnswers = (
   return answers;
 }
 
-const handleUserGuess_ForEvent = (usersAnswer, handlerInput) => {
+const determineNextQuestion = (sessionAttributes, locale) => {
+  const { category, gameQuestionsIndices } = sessionAttributes;
+
+  const allQuestions = questionBank.getQuestions(category, locale);
+
+  const alreadyAskedQuestionIndex = parseInt(sessionAttributes.questionIndex, 10);
+  const nextQuestionIndex = alreadyAskedQuestionIndex + 1;
+
+  const nextQuestion = allQuestions[gameQuestionsIndices[nextQuestionIndex]];
+
+  const nextQuestionCorrectAnswerIndex = Math.floor(random() * ANSWER_COUNT);
+  const nextQuestionRandomizedAnswers = randomizeAnswers(nextQuestion, nextQuestionCorrectAnswerIndex,);
+
+  let nextQuestionAndAnswersPrompt = interactions.t(
+    "TELL_QUESTION_MESSAGE",
+    (nextQuestionIndex + 1).toString(),
+    Object.keys(nextQuestion)[0],
+  );
+  for (let i = 0; i < ANSWER_COUNT; i += 1) {
+    nextQuestionAndAnswersPrompt += `${i + 1}. ${nextQuestionRandomizedAnswers[i]}. `;
+  }
+
+  const updatedSessionAttributes = Object.assign({}, sessionAttributes, {
+    correctAnswerIndex: nextQuestionCorrectAnswerIndex + 1,
+    correctAnswerText: nextQuestionRandomizedAnswers[nextQuestionCorrectAnswerIndex],
+    questionIndex: nextQuestionIndex,
+  });
+
+  return {
+    speak: `${nextQuestionAndAnswersPrompt}`,
+    reprompt: `${nextQuestionAndAnswersPrompt}`,
+    questionText: Object.keys(nextQuestion)[0],
+    randomizedAnswers: nextQuestionRandomizedAnswers,
+    sessionAttributes: updatedSessionAttributes,
+  }
+}
+
+const determineResults = (sessionAttributes, userAnswerIndex, userGaveUp = false) => {
+  let correctAnswerIndexOfAlreadyAskedQuestion = parseInt(sessionAttributes.correctAnswerIndex, 10);
+  const isUserAnswerCorrect = userAnswerIndex && userAnswerIndex === correctAnswerIndexOfAlreadyAskedQuestion;
+
+  let newScore = parseInt(sessionAttributes.score, 10);
+  if (isUserAnswerCorrect) newScore += 1;
+  const updatedSessionAttributes = Object.assign({}, sessionAttributes, {
+    score: newScore,
+  });
+
+  const isEndOfGame = sessionAttributes.questionIndex === GAME_LENGTH - 1;
+
+  const { correctAnswerText: answerTextOfAlreadyAskedQuestion } = sessionAttributes;
+  return {
+    isCorrect: isUserAnswerCorrect ? true : false,
+    speak: `${buildResultsPrompt(isUserAnswerCorrect, correctAnswerIndexOfAlreadyAskedQuestion, answerTextOfAlreadyAskedQuestion, userGaveUp)}${buildScorePrompt(newScore, isEndOfGame)}`,
+    sessionAttributes: updatedSessionAttributes,
+  };
+}
+
+const buildScorePrompt = (score, isEndOfGame = false) => {
+  if (isEndOfGame) return `${interactions.t("FINAL_SCORE_MESSAGE", score.toString(), GAME_LENGTH.toString())}`;
+  return `${interactions.t("SCORE_IS_MESSAGE", score.toString())}`;
+}
+
+const buildResultsPrompt = (isUserAnswerCorrect, correctAnswerIndexOfAlreadyAskedQuestion, answerTextOfAlreadyAskedQuestion, userGaveUp = false) => {
+  let results = userGaveUp ? "" : interactions.t("ANSWER_IS_MESSAGE");
+  if (isUserAnswerCorrect) {
+    results += interactions.t("ANSWER_CORRECT_MESSAGE");
+  }
+  else {
+    if (!userGaveUp) {
+      results += interactions.t("ANSWER_WRONG_MESSAGE");
+    }
+    results = `${results}${interactions.t("CORRECT_ANSWER_MESSAGE", correctAnswerIndexOfAlreadyAskedQuestion, answerTextOfAlreadyAskedQuestion)}`;
+  }
+
+  return results;
+}
+
+const __handleUserGuess_ForEvent = (usersAnswer, handlerInput) => {
   const {
-    requestEnvelope,
     attributesManager,
     responseBuilder
   } = handlerInput;
@@ -189,8 +270,8 @@ const handleUserGuess_ForEvent = (usersAnswer, handlerInput) => {
     .addDirective({
       type: 'Alexa.Presentation.APL.RenderDocument',
       version: '1.0',
-      document: quesionDocument,
-      datasources: quesionDataSource(roundAnswers, correctAnswerTargetIndex)
+      document: quesionAndAnswersDocument,
+      datasources: quesionAndAnswersDataSource(roundAnswers, correctAnswerTargetIndex)
     })
     .speak(speechOutput)
     .reprompt(repromptText)
@@ -199,7 +280,11 @@ const handleUserGuess_ForEvent = (usersAnswer, handlerInput) => {
 }
 
 module.exports = {
-  handleUserGuess_ForEvent: handleUserGuess_ForEvent,
+  ANSWER_COUNT: ANSWER_COUNT,
+  determineNextQuestion: determineNextQuestion,
+  determineResults: determineResults,
   fetchRandomGameQuestions: fetchRandomGameQuestions,
+  GAME_LENGTH: GAME_LENGTH,
+  GAME_WINNING_THRESHOLD_PERCENTAGE: GAME_WINNING_THRESHOLD_PERCENTAGE,
   randomizeAnswers: randomizeAnswers,
 };
