@@ -112,27 +112,27 @@ describe("Starting a game", () => {
 
 describe("Playing a game completely.", () => {
   describe('should be able to track the score and play a game that the user wins.', () => {
-    alexaTest.test(buildGameSequence(getGameQuestionsIndices(), getCorrectAnswerIndices(), [true, true, true, false, false]));
+    alexaTest.test(buildGameSequenceVoiceInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [true, true, true, false, false]));
   });
 
   describe('should be able to track the score and play a game where user answers all questions right.', () => {
-    alexaTest.test(buildGameSequence(getGameQuestionsIndices(), getCorrectAnswerIndices(), [true, true, true, true, true]));
+    alexaTest.test(buildGameSequenceVoiceInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [true, true, true, true, true]));
   });
 
   describe('should be able to track the score and play a game that the user loses.', () => {
-    alexaTest.test(buildGameSequence(getGameQuestionsIndices(), getCorrectAnswerIndices(), [false, false, true, false, false]));
+    alexaTest.test(buildGameSequenceVoiceInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [false, false, true, false, false]));
   });
 
   describe('should be able to track the score and play a game where user answers all questions wrong.', () => {
-    alexaTest.test(buildGameSequence(getGameQuestionsIndices(), getCorrectAnswerIndices(), [false, false, false, false, false]));
+    alexaTest.test(buildGameSequenceVoiceInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [false, false, false, false, false]));
   });
 
   describe('should be able to handle the case where user gives up on some questions but wins the game.', () => {
-    alexaTest.test(buildGameSequence(getGameQuestionsIndices(), getCorrectAnswerIndices(), [true, false, false, true, null]));
+    alexaTest.test(buildGameSequenceVoiceInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [true, false, false, true, null]));
   });
 
   describe('should be able to handle the case where user gives up on the last question and also loses the game.', () => {
-    alexaTest.test(buildGameSequence(getGameQuestionsIndices(), getCorrectAnswerIndices(), [true, null, true, false, null]));
+    alexaTest.test(buildGameSequenceVoiceInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [true, null, true, false, null]));
   });
 });
 
@@ -153,6 +153,63 @@ describe("Interactions through touch / APL", () => {
     alexaTest.test(buildGameSequenceWithUIInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [false, false, false, false, false]));
   });
 });
+
+function buildGameSequenceWithUIInteraction(gameQuestionsIndices, correctAnswers, customerAnswers) {
+  assert(gameQuestionsIndices.length == GAME_LENGTH && correctAnswers.length == GAME_LENGTH && customerAnswers.length == GAME_LENGTH);
+  let score = 0;
+
+  const gameSequence = [];
+
+  // User initiates the game with voice. The skill launches the game and asks the first question.
+  gameSequence.push(buildStartGameSequenceItem(gameQuestionsIndices, correctAnswers, true));
+
+  for (let index = 0; index < customerAnswers.length - 1; index++) {
+    // User taps on an answer. The skill informs the user whether they are right or wrong and kicks off an auto_generated event.
+    gameSequence.push(buildNthAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctAnswers, customerAnswers, customerAnswers[index], score, index));
+    if (customerAnswers[index]) {
+      score++;
+    }
+
+    // Auto generated event to fetch the next question. The skill fetches the next question and asks the user.
+    gameSequence.push(buildFetchNextQuestionEventGameSequenceItem(gameQuestionsIndices, correctAnswers, score, index));
+  }
+
+  const customersLastAnswer = customerAnswers[GAME_LENGTH - 1];
+  const isWinning = isWinningGame(customerAnswers);
+  // User taps on an answer for the last question in the game. The skill informs the user their final score and whether or not they won the game.
+  gameSequence.push(buildLastAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctAnswers, customersLastAnswer, score, isWinning));
+
+  console.log(`This is a ${isWinning ? 'Winning' : 'Losing'} game`);
+  console.log(`Score is ${score} out of ${GAME_LENGTH}`);
+  return gameSequence;
+}
+
+function buildGameSequenceVoiceInteraction(gameQuestionsIndices, correctAnswers, customerAnswers) {
+  assert(gameQuestionsIndices.length == GAME_LENGTH && correctAnswers.length == GAME_LENGTH && customerAnswers.length == GAME_LENGTH);
+  let score = 0;
+
+  const gameSequence = [];
+
+  // User initiates the game with voice. The skill launches the game and asks the first question.
+  gameSequence.push(buildStartGameSequenceItem(gameQuestionsIndices, correctAnswers, true));
+
+  for (let index = 0; index < customerAnswers.length - 1; index++) {
+    // User answers with voice. The skill informs the user whether they are right or wrong and asks the next question.
+    gameSequence.push(buildNthAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswers, customerAnswers, score, index));
+    if (customerAnswers[index]) {
+      score++;
+    }
+  }
+
+  const customersLastAnswer = customerAnswers[GAME_LENGTH - 1];
+  const isWinning = isWinningGame(customerAnswers);
+  // User answers the last question in the game with voice. The skill informs the user their final score and whether or not they won the game.
+  gameSequence.push(buildLastAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswers, customersLastAnswer, score, isWinning));
+
+  console.log(`This is a ${isWinning ? 'Winning' : 'Losing'} game`);
+  console.log(`Score is ${score} out of ${GAME_LENGTH}`);
+  return gameSequence;
+}
 
 function buildStartGameIntent(isAplEnabled = false) {
   const startGameIntent = new IntentRequestBuilder(skillSettings, 'StartGameIntent')
@@ -250,7 +307,7 @@ function buildStartGameSequenceItem(gameQuestionsIndices, correctAnswers, isAplE
   }
 }
 
-function buildNthQuestionResponseEventGameSequenceItem(gameQuestionsIndices, correctAnswers, customerAnswers, isCorrectAnswer, score, index) {
+function buildNthAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctAnswers, customerAnswers, isCorrectAnswer, score, index) {
   let prompt;
   if (isCorrectAnswer) {
     prompt = `That answer is correct. Your score is ${score + 1}.`;
@@ -335,7 +392,7 @@ function buildFetchNextQuestionEventGameSequenceItem(gameQuestionsIndices, corre
   }
 }
 
-function buildLastQuestionResponseEventGameSequenceItem(gameQuestionsIndices, correctAnswers, isCorrectAnswer, score, isWinning) {
+function buildLastAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctAnswers, isCorrectAnswer, score, isWinning) {
   let prompt;
   if (isCorrectAnswer) {
     prompt = `That answer is correct. You got ${score + 1} out of ${GAME_LENGTH} questions correct. ${isWinning ? `You won the game. Thank you for playing!` : `Unfortunately, you did not win this game. Thank you for playing!`}`;
@@ -381,119 +438,57 @@ function buildLastQuestionResponseEventGameSequenceItem(gameQuestionsIndices, co
   };
 }
 
-function buildGameSequenceWithUIInteraction(gameQuestionsIndices, correctAnswers, customerAnswers) {
-  assert(gameQuestionsIndices.length == GAME_LENGTH && correctAnswers.length == GAME_LENGTH && customerAnswers.length == GAME_LENGTH);
-  let score = 0;
+function buildNthAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswers, customerAnswers, score, index) {
+  const isCorrectAnswer = customerAnswers[index];
 
-  const gameSequence = [];
-
-  // User initiates the game with voice. The skill launches the game and asks the first question.
-  gameSequence.push(buildStartGameSequenceItem(gameQuestionsIndices, correctAnswers, true));
-
-  for (let index = 0; index < customerAnswers.length - 1; index++) {
-    // User taps on an answer. The skill informs the user whether they are right or wrong and kicks off an auto_generated event.
-    gameSequence.push(buildNthQuestionResponseEventGameSequenceItem(gameQuestionsIndices, correctAnswers, customerAnswers, customerAnswers[index], score, index));
-    if (customerAnswers[index]) {
-      score++;
-    }
-
-    // Auto generated event to fetch the next question. The skill fetches the next question and asks the user.
-    gameSequence.push(buildFetchNextQuestionEventGameSequenceItem(gameQuestionsIndices, correctAnswers, score, index));
+  let prompt;
+  let answerIntent;
+  if (isCorrectAnswer) {
+    answerIntent = buildAnswerIntent(correctAnswers[index]);
+    prompt = `That answer is correct. Your score is ${score + 1}. Question ${index + 2}. ${SCIENCE_CATEGORY} Question `;
+  }
+  else {
+    answerIntent = isCorrectAnswer === null ? buildDontKnowIntent() : buildAnswerIntent(correctAnswers[index] + 1); //+1 to simulate a wrong answer
+    prompt = `${isCorrectAnswer === null ? `` : `That answer is wrong. `}The correct answer is ${correctAnswers[index]}: ${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer. Your score is ${score}. Question ${index + 2}. ${SCIENCE_CATEGORY} Question `;
   }
 
-  const customersLastAnswer = customerAnswers[GAME_LENGTH - 1];
-  const isWinning = isWinningGame(customerAnswers);
-  // User taps on an answer for the last question in the game. The skill informs the user their final score and whether or not they won the game.
-  gameSequence.push(buildLastQuestionResponseEventGameSequenceItem(gameQuestionsIndices, correctAnswers, customersLastAnswer, score, isWinning));
-
-  console.log(`This is a ${isWinning ? 'Winning' : 'Losing'} game`);
-  console.log(`Score is ${score} out of ${GAME_LENGTH}`);
-  return gameSequence;
-}
-
-function buildGameSequence(gameQuestionsIndices, correctAnswers, customerAnswers) {
-  assert(gameQuestionsIndices.length == GAME_LENGTH && correctAnswers.length == GAME_LENGTH && customerAnswers.length == GAME_LENGTH);
-  let score = 0;
-
-  const gameSequence = [];
-  gameSequence.push({
-    request: buildStartGameIntent(),
-    saysLike: `Okay. I will ask you ${GAME_LENGTH} questions. Try to get as many right as you can. Just say the number of the answer. Let's begin. Question 1. ${SCIENCE_CATEGORY} Question `,
-    repromptsLike: `Question 1. ${SCIENCE_CATEGORY} Question `,
+  return {
+    request: answerIntent,
+    saysLike: prompt,
+    repromptsLike: `Question ${index + 2}. ${SCIENCE_CATEGORY} Question `,
     shouldEndSession: false,
     ignoreQuestionCheck: true,
     hasAttributes: {
       category: SCIENCE_CATEGORY,
-      correctAnswerIndex: correctAnswers[0],
-      correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[0] + 1} / Correct Answer`,
-      questionIndex: 0,
+      correctAnswerIndex: correctAnswers[index + 1],
+      correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index + 1] + 1} / Correct Answer`,
+      questionIndex: index + 1,
       gameQuestionsIndices: gameQuestionsIndices,
-      score: score,
+      score: isCorrectAnswer ? score + 1 : score,
     },
-  });
-
-  for (let index = 0; index < customerAnswers.length - 1; index++) {
-    if (customerAnswers[index])
-      gameSequence.push({
-        request: buildAnswerIntent(correctAnswers[index]),
-        saysLike: `That answer is correct. Your score is ${++score}. Question ${index + 2}. ${SCIENCE_CATEGORY} Question `,
-        repromptsLike: `Question ${index + 2}. ${SCIENCE_CATEGORY} Question `,
-        shouldEndSession: false,
-        ignoreQuestionCheck: true,
-        hasAttributes: {
-          category: SCIENCE_CATEGORY,
-          correctAnswerIndex: correctAnswers[index + 1],
-          correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index + 1] + 1} / Correct Answer`,
-          questionIndex: index + 1,
-          gameQuestionsIndices: gameQuestionsIndices,
-          score: score,
-        },
-      });
-    else
-      gameSequence.push({
-        request: customerAnswers[index] === null ? buildDontKnowIntent() : buildAnswerIntent(correctAnswers[index] + 1), //+1 to simulate a wrong answer
-        saysLike: `${customerAnswers[index] === null ? `` : `That answer is wrong. `}The correct answer is ${correctAnswers[index]}: ${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer. Your score is ${score}. Question ${index + 2}. ${SCIENCE_CATEGORY} Question `,
-        repromptsLike: `Question ${index + 2}. ${SCIENCE_CATEGORY} Question `,
-        shouldEndSession: false,
-        ignoreQuestionCheck: true,
-        hasAttributes: {
-          category: SCIENCE_CATEGORY,
-          correctAnswerIndex: correctAnswers[index + 1],
-          correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index + 1] + 1} / Correct Answer`,
-          questionIndex: index + 1,
-          gameQuestionsIndices: gameQuestionsIndices,
-          score: score,
-        },
-      });
   }
+}
 
-  const customersLastAnswer = customerAnswers[correctAnswers.length - 1];
-  const isWinning = isWinningGame(customerAnswers);
-  if (customersLastAnswer) {
-    // TODO: Why no session attributes for the following two?
-    gameSequence.push(
-      {
-        request: buildAnswerIntent(correctAnswers[correctAnswers.length - 1]),
-        says: `That answer is correct. You got ${++score} out of ${GAME_LENGTH} questions correct. ${isWinning ? `You won the game. Thank you for playing!` : `Unfortunately, you did not win this game. Thank you for playing!`}`,
-        repromptsNothing: true,
-        shouldEndSession: true,
-        ignoreQuestionCheck: true,
-      });
+function buildLastAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswers, isCorrectAnswer, score, isWinning) {
+  let prompt;
+  let answerIntent;
+
+  if (isCorrectAnswer) {
+    answerIntent = buildAnswerIntent(correctAnswers[GAME_LENGTH - 1]);
+    prompt = `That answer is correct. You got ${score + 1} out of ${GAME_LENGTH} questions correct. ${isWinning ? `You won the game. Thank you for playing!` : `Unfortunately, you did not win this game. Thank you for playing!`}`;
   }
   else {
-    gameSequence.push(
-      {
-        request: customersLastAnswer === null ? buildDontKnowIntent() : buildAnswerIntent(correctAnswers[correctAnswers.length - 1] + 1), //+1 to simulate a wrong answer
-        says: `${customersLastAnswer === null ? `` : `That answer is wrong. `}The correct answer is ${correctAnswers[correctAnswers.length - 1]}: ${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[correctAnswers.length - 1] + 1} / Correct Answer. You got ${score} out of ${GAME_LENGTH} questions correct. ${isWinning ? `You won the game. Thank you for playing!` : `Unfortunately, you did not win this game. Thank you for playing!`}`,
-        repromptsNothing: true,
-        shouldEndSession: true,
-        ignoreQuestionCheck: true,
-      });
+    answerIntent = isCorrectAnswer === null ? buildDontKnowIntent() : buildAnswerIntent(correctAnswers[GAME_LENGTH - 1] + 1); //+1 to simulate a wrong answer
+    prompt = `${isCorrectAnswer === null ? `` : `That answer is wrong. `}The correct answer is ${correctAnswers[GAME_LENGTH - 1]}: ${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[GAME_LENGTH - 1] + 1} / Correct Answer. You got ${score} out of ${GAME_LENGTH} questions correct. ${isWinning ? `You won the game. Thank you for playing!` : `Unfortunately, you did not win this game. Thank you for playing!`}`;
   }
 
-  console.log(`This is a ${isWinning ? 'Winning' : 'Losing'} game`);
-  console.log(`Score is ${score} out of ${GAME_LENGTH}`);
-  return gameSequence;
+  return {
+    request: answerIntent,
+    says: prompt,
+    repromptsNothing: true,
+    shouldEndSession: true,
+    ignoreQuestionCheck: true,
+  };
 }
 
 function isWinningGame(customerAnswers) {
