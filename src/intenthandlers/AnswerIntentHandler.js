@@ -49,7 +49,6 @@ const handleUserGuess = (handlerInput, userGaveUp = false) => {
   const nextQuestionInfo = determineNextQuestion(updatedSessionAttributes, handlerInput.requestEnvelope.request.locale);
 
   updatedSessionAttributes = nextQuestionInfo.sessionAttributes;
-  const { correctAnswerIndex: nextQuestionCorrectAnswerIndex } = updatedSessionAttributes;
   handlerInput.attributesManager.setSessionAttributes(updatedSessionAttributes);
 
   return responseBuilder
