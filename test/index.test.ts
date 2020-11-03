@@ -141,8 +141,16 @@ describe("Interactions through touch / APL", () => {
     alexaTest.test(buildGameSequenceWithUIInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [true, true, true, false, false]));
   });
 
+  describe('should be able to play a game where all responses are correct', () => {
+    alexaTest.test(buildGameSequenceWithUIInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [true, true, true, true, true]));
+  });
+
   describe('should be able to play a losing game completely through APL based touch interactions', () => {
     alexaTest.test(buildGameSequenceWithUIInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [false, true, true, false, false]));
+  });
+
+  describe('should be able to play a game where all responses are incorrect', () => {
+    alexaTest.test(buildGameSequenceWithUIInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [false, false, false, false, false]));
   });
 });
 
