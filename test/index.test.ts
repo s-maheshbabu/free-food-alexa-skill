@@ -218,13 +218,9 @@ function verifyQuestionAndAnswersDataSource(datasource, questionIndex, sessionAt
   return true;
 }
 
-function buildGameSequenceWithUIInteraction(gameQuestionsIndices, correctAnswers, customerAnswers) {
-  assert(gameQuestionsIndices.length == GAME_LENGTH && correctAnswers.length == GAME_LENGTH && customerAnswers.length == GAME_LENGTH);
-  let score = 0;
-
-  const gameSequence = [];
-  gameSequence.push({
-    request: buildStartGameIntent(true),
+function buildStartGameSequenceItem(gameQuestionsIndices, correctAnswers, isAplEnabled = false) {
+  return {
+    request: buildStartGameIntent(isAplEnabled),
     saysLike: `Okay. I will ask you ${GAME_LENGTH} questions. Try to get as many right as you can. Just say the number of the answer. Let's begin. Question 1. ${SCIENCE_CATEGORY} Question `,
     repromptsLike: `Question 1. ${SCIENCE_CATEGORY} Question `,
     shouldEndSession: false,
@@ -235,7 +231,7 @@ function buildGameSequenceWithUIInteraction(gameQuestionsIndices, correctAnswers
       correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[0] + 1} / Correct Answer`,
       questionIndex: 0,
       gameQuestionsIndices: gameQuestionsIndices,
-      score: score,
+      score: 0,
     },
     get renderDocument() {
       const attributes = this.hasAttributes;
@@ -251,207 +247,164 @@ function buildGameSequenceWithUIInteraction(gameQuestionsIndices, correctAnswers
         },
       }
     },
-  });
-
-  for (let index = 0; index < customerAnswers.length - 1; index++) {
-    if (customerAnswers[index])
-      gameSequence.push({
-        request: new AplUserEventRequestBuilder(skillSettings)
-          .withInterfaces({ apl: true })
-          .withToken(RESULTS_VIEW_TOKEN)
-          .withArguments(
-            {
-              index: correctAnswers[index],
-              type: USER_INITIATED_CLICK_EVENT,
-              answerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer`,
-            },
-            {
-              category: SCIENCE_CATEGORY,
-              correctAnswerIndex: correctAnswers[index],
-              correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer`,
-              questionIndex: index,
-              gameQuestionsIndices: gameQuestionsIndices,
-              score: score,
-            }).build(),
-        says: `That answer is correct. Your score is ${++score}.`,
-        repromptsNothing: true,
-        shouldEndSession: false,
-        ignoreQuestionCheck: true,
-        hasAttributes: {
-          category: SCIENCE_CATEGORY,
-          correctAnswerIndex: correctAnswers[index],
-          correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer`,
-          questionIndex: index,
-          gameQuestionsIndices: gameQuestionsIndices,
-          score: score,
-        },
-        get renderDocument() {
-          return {
-            token: RESULTS_VIEW_TOKEN,
-            document: (doc: any) => {
-              return deepEqual(doc, resultsDocument);
-            },
-            hasDataSources: {
-              resultsDataSource: (ds: any) => {
-                return verifyResultsDataSource(ds, true, this.hasAttributes.score);
-              },
-            },
-          }
-        },
-      });
-    else
-      gameSequence.push({
-        request: new AplUserEventRequestBuilder(skillSettings)
-          .withInterfaces({ apl: true })
-          .withToken(RESULTS_VIEW_TOKEN)
-          .withArguments(
-            {
-              userAnswer: correctAnswers[index] + 1, // +1 to simulate a wrong answer.
-              type: USER_INITIATED_CLICK_EVENT,
-              answerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer`,
-            },
-            {
-              category: SCIENCE_CATEGORY,
-              correctAnswerIndex: correctAnswers[index],
-              correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer`,
-              questionIndex: index,
-              gameQuestionsIndices: gameQuestionsIndices,
-              score: score,
-            }).build(),
-        says: `${customerAnswers[index] === null ? `` : `That answer is wrong. `}The correct answer is ${correctAnswers[index]}: ${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer. Your score is ${score}.`,
-        repromptsNothing: true,
-        shouldEndSession: false,
-        ignoreQuestionCheck: true,
-        hasAttributes: {
-          category: SCIENCE_CATEGORY,
-          correctAnswerIndex: correctAnswers[index],
-          correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer`,
-          questionIndex: index,
-          gameQuestionsIndices: gameQuestionsIndices,
-          score: score,
-        },
-        get renderDocument() {
-          return {
-            token: RESULTS_VIEW_TOKEN,
-            document: (doc: any) => {
-              return deepEqual(doc, resultsDocument);
-            },
-            hasDataSources: {
-              resultsDataSource: (ds: any) => {
-                return verifyResultsDataSource(ds, false, this.hasAttributes.score);
-              },
-            },
-          }
-        },
-      });
-
-    gameSequence.push({
-      request: new AplUserEventRequestBuilder(skillSettings)
-        .withInterfaces({ apl: true })
-        .withToken(QUESTION_AND_ANSWERS_VIEW_TOKEN)
-        .withArguments(
-          NEXT_QUESTION_AUTO_GENERATED_EVENT,
-          {
-            category: SCIENCE_CATEGORY,
-            correctAnswerIndex: correctAnswers[index],
-            correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer`,
-            questionIndex: index,
-            gameQuestionsIndices: gameQuestionsIndices,
-            score: score,
-          }).build(),
-      saysLike: `Question ${index + 2}. ${SCIENCE_CATEGORY} Question `,
-      repromptsLike: `Question ${index + 2}. ${SCIENCE_CATEGORY} Question `,
-      shouldEndSession: false,
-      ignoreQuestionCheck: true,
-      hasAttributes: {
-        category: SCIENCE_CATEGORY,
-        correctAnswerIndex: correctAnswers[index + 1],
-        correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index + 1] + 1} / Correct Answer`,
-        questionIndex: index + 1,
-        gameQuestionsIndices: gameQuestionsIndices,
-        score: score,
-      },
-    });
   }
+}
 
-  const customersLastAnswer = customerAnswers[correctAnswers.length - 1];
-  const isWinning = isWinningGame(customerAnswers);
-  if (customersLastAnswer) {
-    gameSequence.push(
-      {
-        request: new AplUserEventRequestBuilder(skillSettings)
-          .withInterfaces({ apl: true })
-          .withToken(RESULTS_VIEW_TOKEN)
-          .withArguments(
-            {
-              index: correctAnswers[GAME_LENGTH - 1],
-              type: USER_INITIATED_CLICK_EVENT,
-              answerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[GAME_LENGTH - 1] + 1} / Correct Answer`,
-            },
-            {
-              category: SCIENCE_CATEGORY,
-              correctAnswerIndex: correctAnswers[GAME_LENGTH - 2],
-              correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[GAME_LENGTH - 1] + 1} / Correct Answer`,
-              questionIndex: GAME_LENGTH - 1,
-              gameQuestionsIndices: gameQuestionsIndices,
-              score: score,
-            }).build(),
-        says: `That answer is correct. You got ${++score} out of ${GAME_LENGTH} questions correct. ${isWinning ? `You won the game. Thank you for playing!` : `Unfortunately, you did not win this game. Thank you for playing!`}`,
-        repromptsNothing: true,
-        shouldEndSession: true,
-        get renderDocument() {
-          return {
-            token: RESULTS_VIEW_TOKEN,
-            document: (doc: any) => {
-              return deepEqual(doc, resultsDocument);
-            },
-            hasDataSources: {
-              resultsDataSource: (ds: any) => {
-                return verifyResultsDataSource(ds, true, score);
-              },
-            },
-          }
-        },
-      });
+function buildNthQuestionResponseEventGameSequenceItem(gameQuestionsIndices, correctAnswers, customerAnswers, isCorrectAnswer, score, index) {
+  let prompt;
+  if (isCorrectAnswer) {
+    prompt = `That answer is correct. Your score is ${score + 1}.`;
   }
   else {
-    gameSequence.push(
-      {
-        request: new AplUserEventRequestBuilder(skillSettings)
-          .withInterfaces({ apl: true })
-          .withToken(RESULTS_VIEW_TOKEN)
-          .withArguments(
-            {
-              index: correctAnswers[GAME_LENGTH - 1] + 1, // +1 to simulate a wrong answer
-              type: USER_INITIATED_CLICK_EVENT,
-              answerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[GAME_LENGTH - 1] + 1} / Correct Answer`,
-            },
-            {
-              category: SCIENCE_CATEGORY,
-              correctAnswerIndex: correctAnswers[GAME_LENGTH - 1],
-              correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[GAME_LENGTH - 1] + 1} / Correct Answer`,
-              questionIndex: GAME_LENGTH - 1,
-              gameQuestionsIndices: gameQuestionsIndices,
-              score: score,
-            }).build(),
-        says: `That answer is wrong. The correct answer is ${correctAnswers[correctAnswers.length - 1]}: ${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[correctAnswers.length - 1] + 1} / Correct Answer. You got ${score} out of ${GAME_LENGTH} questions correct. ${isWinning ? `You won the game. Thank you for playing!` : `Unfortunately, you did not win this game. Thank you for playing!`}`,
-        repromptsNothing: true,
-        shouldEndSession: true,
-        get renderDocument() {
-          return {
-            token: RESULTS_VIEW_TOKEN,
-            document: (doc: any) => {
-              return deepEqual(doc, resultsDocument);
-            },
-            hasDataSources: {
-              resultsDataSource: (ds: any) => {
-                return verifyResultsDataSource(ds, false, score);
-              },
-            },
-          }
-        },
-      });
+    prompt = `${customerAnswers[index] === null ? `` : `That answer is wrong. `}The correct answer is ${correctAnswers[index]}: ${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer. Your score is ${score}.`;
   }
+
+  return {
+    request: new AplUserEventRequestBuilder(skillSettings)
+      .withInterfaces({ apl: true })
+      .withToken(RESULTS_VIEW_TOKEN)
+      .withArguments(
+        {
+          index: isCorrectAnswer ? correctAnswers[index] : correctAnswers[index] + 1, // +1 to simulate incorrect answer
+          type: USER_INITIATED_CLICK_EVENT,
+          answerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer`,
+        },
+        {
+          category: SCIENCE_CATEGORY,
+          correctAnswerIndex: correctAnswers[index],
+          correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer`,
+          questionIndex: index,
+          gameQuestionsIndices: gameQuestionsIndices,
+          score: score,
+        }).build(),
+    says: prompt,
+    repromptsNothing: true,
+    shouldEndSession: false,
+    ignoreQuestionCheck: true,
+    hasAttributes: {
+      category: SCIENCE_CATEGORY,
+      correctAnswerIndex: correctAnswers[index],
+      correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer`,
+      questionIndex: index,
+      gameQuestionsIndices: gameQuestionsIndices,
+      score: isCorrectAnswer ? score + 1 : score,
+    },
+    get renderDocument() {
+      return {
+        token: RESULTS_VIEW_TOKEN,
+        document: (doc: any) => {
+          return deepEqual(doc, resultsDocument);
+        },
+        hasDataSources: {
+          resultsDataSource: (ds: any) => {
+            return verifyResultsDataSource(ds, isCorrectAnswer ? true : false, this.hasAttributes.score);
+          },
+        },
+      }
+    },
+  }
+}
+
+function buildFetchNextQuestionEventGameSequenceItem(gameQuestionsIndices, correctAnswers, score, index) {
+  return {
+    request: new AplUserEventRequestBuilder(skillSettings)
+      .withInterfaces({ apl: true })
+      .withToken(QUESTION_AND_ANSWERS_VIEW_TOKEN)
+      .withArguments(
+        NEXT_QUESTION_AUTO_GENERATED_EVENT,
+        {
+          category: SCIENCE_CATEGORY,
+          correctAnswerIndex: correctAnswers[index],
+          correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer`,
+          questionIndex: index,
+          gameQuestionsIndices: gameQuestionsIndices,
+          score: score,
+        }).build(),
+    saysLike: `Question ${index + 2}. ${SCIENCE_CATEGORY} Question `,
+    repromptsLike: `Question ${index + 2}. ${SCIENCE_CATEGORY} Question `,
+    shouldEndSession: false,
+    ignoreQuestionCheck: true,
+    hasAttributes: {
+      category: SCIENCE_CATEGORY,
+      correctAnswerIndex: correctAnswers[index + 1],
+      correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index + 1] + 1} / Correct Answer`,
+      questionIndex: index + 1,
+      gameQuestionsIndices: gameQuestionsIndices,
+      score: score,
+    },
+  }
+}
+
+function buildLastQuestionResponseEventGameSequenceItem(gameQuestionsIndices, correctAnswers, isCorrectAnswer, score, isWinning) {
+  let prompt;
+  if (isCorrectAnswer) {
+    prompt = `That answer is correct. You got ${score + 1} out of ${GAME_LENGTH} questions correct. ${isWinning ? `You won the game. Thank you for playing!` : `Unfortunately, you did not win this game. Thank you for playing!`}`;
+  }
+  else {
+    prompt = `That answer is wrong. The correct answer is ${correctAnswers[GAME_LENGTH - 1]}: ${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[GAME_LENGTH - 1] + 1} / Correct Answer. You got ${score} out of ${GAME_LENGTH} questions correct. ${isWinning ? `You won the game. Thank you for playing!` : `Unfortunately, you did not win this game. Thank you for playing!`}`;
+  }
+
+  return {
+    request: new AplUserEventRequestBuilder(skillSettings)
+      .withInterfaces({ apl: true })
+      .withToken(RESULTS_VIEW_TOKEN)
+      .withArguments(
+        {
+          index: isCorrectAnswer ? correctAnswers[GAME_LENGTH - 1] : correctAnswers[GAME_LENGTH - 1] + 1, // +1 to simulate incorrect answer
+          type: USER_INITIATED_CLICK_EVENT,
+          answerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[GAME_LENGTH - 1] + 1} / Correct Answer`,
+        },
+        {
+          category: SCIENCE_CATEGORY,
+          correctAnswerIndex: correctAnswers[GAME_LENGTH - 2],
+          correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[GAME_LENGTH - 1] + 1} / Correct Answer`,
+          questionIndex: GAME_LENGTH - 1,
+          gameQuestionsIndices: gameQuestionsIndices,
+          score: score,
+        }).build(),
+    says: prompt,
+    repromptsNothing: true,
+    shouldEndSession: true,
+    get renderDocument() {
+      return {
+        token: RESULTS_VIEW_TOKEN,
+        document: (doc: any) => {
+          return deepEqual(doc, resultsDocument);
+        },
+        hasDataSources: {
+          resultsDataSource: (ds: any) => {
+            return verifyResultsDataSource(ds, isCorrectAnswer ? true : false, isCorrectAnswer ? score + 1 : score);
+          },
+        },
+      }
+    },
+  };
+}
+
+function buildGameSequenceWithUIInteraction(gameQuestionsIndices, correctAnswers, customerAnswers) {
+  assert(gameQuestionsIndices.length == GAME_LENGTH && correctAnswers.length == GAME_LENGTH && customerAnswers.length == GAME_LENGTH);
+  let score = 0;
+
+  const gameSequence = [];
+
+  // User initiates the game with voice. The skill launches the game and asks the first question.
+  gameSequence.push(buildStartGameSequenceItem(gameQuestionsIndices, correctAnswers, true));
+
+  for (let index = 0; index < customerAnswers.length - 1; index++) {
+    // User taps on an answer. The skill informs the user whether they are right or wrong and kicks off an auto_generated event.
+    gameSequence.push(buildNthQuestionResponseEventGameSequenceItem(gameQuestionsIndices, correctAnswers, customerAnswers, customerAnswers[index], score, index));
+    if (customerAnswers[index]) {
+      score++;
+    }
+
+    // Auto generated event to fetch the next question. The skill fetches the next question and asks the user.
+    gameSequence.push(buildFetchNextQuestionEventGameSequenceItem(gameQuestionsIndices, correctAnswers, score, index));
+  }
+
+  const customersLastAnswer = customerAnswers[GAME_LENGTH - 1];
+  const isWinning = isWinningGame(customerAnswers);
+  // User taps on an answer for the last question in the game. The skill informs the user their final score and whether or not they won the game.
+  gameSequence.push(buildLastQuestionResponseEventGameSequenceItem(gameQuestionsIndices, correctAnswers, customersLastAnswer, score, isWinning));
 
   console.log(`This is a ${isWinning ? 'Winning' : 'Losing'} game`);
   console.log(`Score is ${score} out of ${GAME_LENGTH}`);
