@@ -32,22 +32,32 @@ module.exports = UserEventHandler = {
 
         const sessionAttributes = handlerInput.requestEnvelope.request.arguments[1];
         const userAnswerIndex = handlerInput.requestEnvelope.request.arguments[0].index;
-        const results = determineResults(sessionAttributes, userAnswerIndex);
-        const directives = APLManager.getResultsViewDirective(results.isCorrect, results.sessionAttributes);
 
-        // Check if we can exit the game session after GAME_LENGTH questions (zero-indexed)
-        if (results.sessionAttributes.questionIndex === GAME_LENGTH - 1) {
-            return endGame(responseBuilder, results.sessionAttributes, results, directives);
-        }
-
-        handlerInput.attributesManager.setSessionAttributes(results.sessionAttributes);
-
-        return responseBuilder
-            .addDirective(directives[0]).addDirective(directives[1])
-            .speak(results.speak)
-            .withShouldEndSession(false)
-            .getResponse();
+        return deliverResults(handlerInput, sessionAttributes, userAnswerIndex);
     },
+    tempExport(handlerInput, sessionAttributes, userAnswerIndex) {
+        return deliverResults(handlerInput, sessionAttributes, userAnswerIndex);
+    }
+}
+
+const deliverResults = (handlerInput, sessionAttributes, userAnswerIndex) => {
+    const results = determineResults(sessionAttributes, userAnswerIndex);
+    const directives = APLManager.getResultsViewDirective(results.isCorrect, results.sessionAttributes);
+
+    const { responseBuilder } = handlerInput;
+    // Check if we can exit the game session after GAME_LENGTH questions (zero-indexed)
+    if (results.sessionAttributes.questionIndex === GAME_LENGTH - 1) {
+        return endGame(responseBuilder, results.sessionAttributes, results, directives);
+    }
+
+    handlerInput.attributesManager.setSessionAttributes(results.sessionAttributes);
+
+    const c = results.speak;
+    return responseBuilder
+        .addDirective(directives[0]).addDirective(directives[1])
+        .speak(results.speak)
+        .withShouldEndSession(false)
+        .getResponse();
 }
 
 const endGame = (responseBuilder, sessionAttributes, results, directives) => {

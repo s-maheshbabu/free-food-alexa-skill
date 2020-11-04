@@ -47,6 +47,8 @@ let allQuestions;
 
 const GAME_LENGTH = 5;
 
+const ResponseModes = { TOUCH: "touch", VOICE: "voice", };
+
 before(async () => {
   await questionBank.init('en_US', 'test-data/questions/{{lng}}/{{ns}}.json');
   allQuestions = questionBank.getQuestions(SCIENCE_CATEGORY, 'en-US');
@@ -136,7 +138,7 @@ describe("Playing a game completely.", () => {
   });
 });
 
-describe("Interactions through touch / APL", () => {
+describe("Interactions through touch", () => {
   describe('should be able to play a winning game completely through APL based touch interactions', () => {
     alexaTest.test(buildGameSequence_UIInteraction(getGameQuestionsIndices(), getCorrectAnswerIndices(), [true, true, true, false, false]));
   });
@@ -154,89 +156,132 @@ describe("Interactions through touch / APL", () => {
   });
 });
 
-function buildGameSequence_UIInteraction(gameQuestionsIndices, correctAnswers, customerAnswers) {
-  assert(gameQuestionsIndices.length == GAME_LENGTH && correctAnswers.length == GAME_LENGTH && customerAnswers.length == GAME_LENGTH);
-  let score = 0;
+describe("Interactions through a combination of voice and touch", () => {
+  describe('should be able to play a winning game through a combination of voice and touch responses', () => {
+    alexaTest.test(
+      buildGameSequence_MixedUIAndVoiceInteraction(
+        getGameQuestionsIndices(),
+        getCorrectAnswerIndices(),
+        [true, true, true, false, false],
+        [ResponseModes.TOUCH, ResponseModes.VOICE, ResponseModes.VOICE, ResponseModes.TOUCH, ResponseModes.VOICE],
+      ));
+  });
 
-  const gameSequence = [];
-
-  // User initiates the game with voice. The skill launches the game and asks the first question.
-  gameSequence.push(buildStartGameSequenceItem(gameQuestionsIndices, correctAnswers, true));
-
-  for (let index = 0; index < customerAnswers.length - 1; index++) {
-    // User taps on an answer. The skill informs the user whether they are right or wrong and kicks off an auto_generated event.
-    gameSequence.push(buildNthAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctAnswers, customerAnswers, customerAnswers[index], score, index));
-    if (customerAnswers[index]) {
-      score++;
-    }
-
-    // Auto generated event to fetch the next question. The skill fetches the next question and asks the user.
-    gameSequence.push(buildFetchNextQuestionEventGameSequenceItem(gameQuestionsIndices, correctAnswers, score, index));
-  }
-
-  const customersLastAnswer = customerAnswers[GAME_LENGTH - 1];
-  const isWinning = isWinningGame(customerAnswers);
-  // User taps on an answer for the last question in the game. The skill informs the user their final score and whether or not they won the game.
-  gameSequence.push(buildLastAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctAnswers, customersLastAnswer, score, isWinning));
-
-  console.log(`This is a ${isWinning ? 'Winning' : 'Losing'} game`);
-  console.log(`Score is ${score} out of ${GAME_LENGTH}`);
-  return gameSequence;
-}
+  describe('should be able to play a losing game through a combination of voice and touch responses', () => {
+    alexaTest.test(
+      buildGameSequence_MixedUIAndVoiceInteraction(
+        getGameQuestionsIndices(),
+        getCorrectAnswerIndices(),
+        [true, false, true, false, false],
+        [ResponseModes.VOICE, ResponseModes.VOICE, ResponseModes.VOICE, ResponseModes.TOUCH, ResponseModes.TOUCH],
+        true));
+  });
+});
 
 function buildGameSequence_VoiceInteraction(gameQuestionsIndices, correctAnswers, customerAnswers) {
-  assert(gameQuestionsIndices.length == GAME_LENGTH && correctAnswers.length == GAME_LENGTH && customerAnswers.length == GAME_LENGTH);
+  return buildGameSequence_MixedUIAndVoiceInteraction(
+    gameQuestionsIndices,
+    correctAnswers,
+    customerAnswers,
+    [ResponseModes.VOICE, ResponseModes.VOICE, ResponseModes.VOICE, ResponseModes.VOICE, ResponseModes.VOICE],
+    false);
+}
+
+function buildGameSequence_UIInteraction(gameQuestionsIndices, correctAnswers, customerAnswers) {
+  return buildGameSequence_MixedUIAndVoiceInteraction(
+    gameQuestionsIndices,
+    correctAnswers,
+    customerAnswers,
+    [ResponseModes.TOUCH, ResponseModes.TOUCH, ResponseModes.TOUCH, ResponseModes.TOUCH, ResponseModes.TOUCH],
+  );
+}
+
+function buildGameSequence_MixedUIAndVoiceInteraction(gameQuestionsIndices, correctAnswers, customerAnswers, responseModes, isAplDevice = true) {
+  assert(gameQuestionsIndices.length == GAME_LENGTH && correctAnswers.length == GAME_LENGTH && customerAnswers.length == GAME_LENGTH && responseModes.length == GAME_LENGTH);
   let score = 0;
 
   const gameSequence = [];
 
   // User initiates the game with voice. The skill launches the game and asks the first question.
-  gameSequence.push(buildStartGameSequenceItem(gameQuestionsIndices, correctAnswers, true));
+  if (responseModes[0] === ResponseModes.TOUCH)
+    gameSequence.push(buildStartGameSequenceItem(gameQuestionsIndices, correctAnswers, isAplDevice));
+  else if (responseModes[0] === ResponseModes.VOICE)
+    gameSequence.push(buildStartGameSequenceItem(gameQuestionsIndices, correctAnswers, isAplDevice));
+
 
   for (let index = 0; index < customerAnswers.length - 1; index++) {
-    // User answers with voice. The skill informs the user whether they are right or wrong and asks the next question.
-    gameSequence.push(buildNthAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswers, customerAnswers, score, index));
+    if (responseModes[index] === ResponseModes.TOUCH)
+      // User taps on an answer. The skill informs the user whether they are right or wrong and kicks off an auto_generated event.
+      gameSequence.push(buildNthAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctAnswers, customerAnswers, customerAnswers[index], score, index));
+    else if (responseModes[index] === ResponseModes.VOICE)
+      // User answers by voice. The skill informs the user whether they are right or wrong. If it is an APL device, it then kicks off an auto_generated event
+      // to fetch the next question. If it is not an APL device, it just fetches the next question as well and renders.
+      gameSequence.push(buildNthAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswers, customerAnswers, score, index, isAplDevice));
     if (customerAnswers[index]) {
       score++;
     }
+
+    if (isAplDevice)
+      // For APL devices, auto generated event to fetch the next question arrives. The skill fetches the next question and asks the user.
+      gameSequence.push(buildFetchNextQuestionEventGameSequenceItem(gameQuestionsIndices, correctAnswers, score, index));
   }
 
   const customersLastAnswer = customerAnswers[GAME_LENGTH - 1];
   const isWinning = isWinningGame(customerAnswers);
-  // User answers the last question in the game with voice. The skill informs the user their final score and whether or not they won the game.
-  gameSequence.push(buildLastAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswers, customersLastAnswer, score, isWinning));
+  if (responseModes[GAME_LENGTH - 1] === ResponseModes.TOUCH)
+    // User taps on an answer for the last question in the game. The skill informs the user their final score and whether or not they won the game.
+    gameSequence.push(buildLastAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctAnswers, customersLastAnswer, score, isWinning));
+  else if (responseModes[GAME_LENGTH - 1] === ResponseModes.VOICE)
+    // User answers the last question in the game with voice. The skill informs the user their final score and whether or not they won the game.
+    gameSequence.push(buildLastAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswers, customersLastAnswer, score, isWinning, isAplDevice));
 
   console.log(`This is a ${isWinning ? 'Winning' : 'Losing'} game`);
   console.log(`Score is ${score} out of ${GAME_LENGTH}`);
   return gameSequence;
 }
 
-function buildStartGameIntent(isAplEnabled = false) {
+function buildStartGameIntent(isAplDevice = false) {
   const startGameIntent = new IntentRequestBuilder(skillSettings, 'StartGameIntent')
-    .withInterfaces({ apl: isAplEnabled })
+    .withInterfaces({ apl: isAplDevice })
     .withSlotResolution(GAME_CATEGORY_SLOT, 'science related', GAME_CATEGORY_SLOT_TYPE, SCIENCE_CATEGORY).build();
   startGameIntent.request.dialogState = 'COMPLETED';
 
   return startGameIntent;
 }
 
-function buildAnswerIntent(answer) {
-  return new IntentRequestBuilder(skillSettings, 'AnswerIntent').
-    withSlotResolution(ANSWER_SLOT, answer.toString(), ANSWER_SLOT_TYPE, answer).build();
+function buildAnswerIntent(answer, isAplDevice = false) {
+  return new IntentRequestBuilder(skillSettings, 'AnswerIntent')
+    .withInterfaces({ apl: isAplDevice })
+    .withSlotResolution(ANSWER_SLOT, answer.toString(), ANSWER_SLOT_TYPE, answer).build();
 }
 
-function buildDontKnowIntent() {
-  return new IntentRequestBuilder(skillSettings, 'DontKnowIntent').build();
+function buildDontKnowIntent(isAplDevice = false) {
+  return new IntentRequestBuilder(skillSettings, 'DontKnowIntent')
+    .withInterfaces({ apl: isAplDevice })
+    .build();
 }
 
+/**
+ * For the hard-coded 'random sequence', this is the expected questions to be played. If the random sequence is changed, this also needs to be changed.
+ */
 function getGameQuestionsIndices() {
   return [162, 33, 122, 37, 86];
 }
 
+/**
+ * For the hard-coded 'random sequence', this is the correct answers. If the random sequence is changed, this also needs to be changed.
+ */
 function getCorrectAnswerIndices() {
   return [1, 3, 4, 2, 2];
 }
 
+/**
+ * Validate that the APL datasource backing the results view is correctly populated.
+ * 
+ * @param datasource The APL data source to be validated.
+ * @param isCorrect Is the result being displayed for a correct response or an incorrect response from the user
+ * @param score The current score of the user, including the question that the user just answered.
+ */
 function verifyResultsDataSource(datasource, isCorrect, score) {
   expect(datasource.isCorrect).to.equal(isCorrect);
   expect(datasource.score).to.equal(score);
@@ -244,6 +289,13 @@ function verifyResultsDataSource(datasource, isCorrect, score) {
   return true;
 }
 
+/**
+ * Validate that the APL datasource backing the question&answers view is correctly populated.
+ *
+ * @param datasource The APL data source to be validated.
+ * @param questionIndex The index of the question in the question bank that is to be displayed to the user.
+ * @param sessionAttributes The current session attributes. These are used to cross verify the contents of the data source.
+ */
 function verifyQuestionAndAnswersDataSource(datasource, questionIndex, sessionAttributes) {
   const question = allQuestions[questionIndex];
   const questionText = Object.keys(question)[0];
@@ -275,9 +327,10 @@ function verifyQuestionAndAnswersDataSource(datasource, questionIndex, sessionAt
   return true;
 }
 
-function buildStartGameSequenceItem(gameQuestionsIndices, correctAnswers, isAplEnabled = false) {
+// Simulates a StartGameIntent and verifies the expected skill responses.
+function buildStartGameSequenceItem(gameQuestionsIndices, correctAnswers, isAplDevice = false) {
   return {
-    request: buildStartGameIntent(isAplEnabled),
+    request: buildStartGameIntent(isAplDevice),
     saysLike: `Okay. I will ask you ${GAME_LENGTH} questions. Try to get as many right as you can. Just say the number of the answer. Let's begin. Question 1. ${SCIENCE_CATEGORY} Question `,
     repromptsLike: `Question 1. ${SCIENCE_CATEGORY} Question `,
     shouldEndSession: false,
@@ -291,6 +344,9 @@ function buildStartGameSequenceItem(gameQuestionsIndices, correctAnswers, isAplE
       score: 0,
     },
     get renderDocument() {
+      // No APL directives should be included for devices that don't support APL.
+      if (!isAplDevice) return undefined;
+
       const attributes = this.hasAttributes;
       return {
         token: QUESTION_AND_ANSWERS_VIEW_TOKEN,
@@ -307,6 +363,8 @@ function buildStartGameSequenceItem(gameQuestionsIndices, correctAnswers, isAplE
   }
 }
 
+// Simulates the user answering by touch one of the questions in the game (not the last question which is a special case)
+// and verifies the expected skill responses.
 function buildNthAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctAnswers, customerAnswers, isCorrectAnswer, score, index) {
   let prompt;
   if (isCorrectAnswer) {
@@ -362,6 +420,7 @@ function buildNthAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctA
   }
 }
 
+// Simulates an auto-generated event from APL devices to fetch next question and verifies the expected skill responses.
 function buildFetchNextQuestionEventGameSequenceItem(gameQuestionsIndices, correctAnswers, score, index) {
   return {
     request: new AplUserEventRequestBuilder(skillSettings)
@@ -392,6 +451,8 @@ function buildFetchNextQuestionEventGameSequenceItem(gameQuestionsIndices, corre
   }
 }
 
+// Simulates the user clicking on one of the answers for the last question in the game. It then verifies the expected skill responses
+// which includes declaring if the user won or lost the game.
 function buildLastAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctAnswers, isCorrectAnswer, score, isWinning) {
   let prompt;
   if (isCorrectAnswer) {
@@ -438,47 +499,97 @@ function buildLastAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correct
   };
 }
 
-function buildNthAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswers, customerAnswers, score, index) {
+// Simulates the user answering by voice one of the questions in the game (not the last question which is a special case).
+// Users can answer by voice both on APL and non-APL devices. So, we verify that the right responses are returned in each case.
+// For APL devices we just deliver results of the previous question and kick off an auto-generated event to fetch the next question.
+// For non-APL devices, we deliver results of the previous question and also render the next question.
+function buildNthAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswers, customerAnswers, score, index, isAplDevice) {
   const isCorrectAnswer = customerAnswers[index];
 
-  let prompt;
-  let answerIntent;
+  let prompt, answerIntent, attributes;
   if (isCorrectAnswer) {
-    answerIntent = buildAnswerIntent(correctAnswers[index]);
-    prompt = `That answer is correct. Your score is ${score + 1}. Question ${index + 2}. ${SCIENCE_CATEGORY} Question `;
+    answerIntent = buildAnswerIntent(correctAnswers[index], isAplDevice);
+
+    // We deliver the next question only on non-APL devices.
+    if (!isAplDevice) prompt = `That answer is correct. Your score is ${score + 1}. Question ${index + 2}. ${SCIENCE_CATEGORY} Question`;
+    else prompt = `That answer is correct. Your score is ${score + 1}.`;
   }
   else {
-    answerIntent = isCorrectAnswer === null ? buildDontKnowIntent() : buildAnswerIntent(correctAnswers[index] + 1); //+1 to simulate a wrong answer
-    prompt = `${isCorrectAnswer === null ? `` : `That answer is wrong. `}The correct answer is ${correctAnswers[index]}: ${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer. Your score is ${score}. Question ${index + 2}. ${SCIENCE_CATEGORY} Question `;
+    answerIntent = isCorrectAnswer === null ? buildDontKnowIntent(isAplDevice) : buildAnswerIntent(correctAnswers[index] + 1, isAplDevice); //+1 to simulate a wrong answer
+
+    // We deliver the next question only on non-APL devices.
+    if (!isAplDevice) prompt = `Question ${index + 2}. ${SCIENCE_CATEGORY} Question`;
+    else prompt = `${isCorrectAnswer === null ? `` : `That answer is wrong. `}The correct answer is ${correctAnswers[index]}: ${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer. Your score is ${score}.`;
   }
 
-  return {
-    request: answerIntent,
-    saysLike: prompt,
-    repromptsLike: `Question ${index + 2}. ${SCIENCE_CATEGORY} Question `,
-    shouldEndSession: false,
-    ignoreQuestionCheck: true,
-    hasAttributes: {
+  // On APL devices, we just deliver the results but won't render the next question. So, the session attributes like 'questionIndex' are not incremented. The
+  // indices are incremented for non-APL devices because we actually render the next question in this turn itself.
+  if (isAplDevice) {
+    attributes = {
+      category: SCIENCE_CATEGORY,
+      correctAnswerIndex: correctAnswers[index],
+      correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer`,
+      questionIndex: index,
+      gameQuestionsIndices: gameQuestionsIndices,
+      score: isCorrectAnswer ? score + 1 : score,
+    };
+  }
+  else {
+    attributes = {
       category: SCIENCE_CATEGORY,
       correctAnswerIndex: correctAnswers[index + 1],
       correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index + 1] + 1} / Correct Answer`,
       questionIndex: index + 1,
       gameQuestionsIndices: gameQuestionsIndices,
       score: isCorrectAnswer ? score + 1 : score,
+    };
+  }
+
+  return {
+    request: answerIntent,
+    get says() {
+      if (!isAplDevice) return undefined;
+      else return prompt;
+    },
+    get saysLike() {
+      if (isAplDevice) return undefined;
+      else return prompt;
+    },
+    get repromptsLike() {
+      if (isAplDevice) return undefined;
+      return `Question ${index + 2}. ${SCIENCE_CATEGORY} Question `;
+    },
+    shouldEndSession: false,
+    ignoreQuestionCheck: true,
+    hasAttributes: attributes,
+    get renderDocument() {
+      if (!isAplDevice) return undefined;
+      return {
+        token: RESULTS_VIEW_TOKEN,
+        document: (doc: any) => {
+          return deepEqual(doc, resultsDocument);
+        },
+        hasDataSources: {
+          resultsDataSource: (ds: any) => {
+            return verifyResultsDataSource(ds, isCorrectAnswer ? true : false, this.hasAttributes.score);
+          },
+        },
+      }
     },
   }
 }
 
-function buildLastAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswers, isCorrectAnswer, score, isWinning) {
-  let prompt;
-  let answerIntent;
+// Simulates the user answering by voice the last question in the game. It then verifies the expected skill responses
+// which includes declaring if the user won or lost the game.
+function buildLastAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswers, isCorrectAnswer, score, isWinning, isAplDevice) {
+  let prompt, answerIntent;
 
   if (isCorrectAnswer) {
-    answerIntent = buildAnswerIntent(correctAnswers[GAME_LENGTH - 1]);
+    answerIntent = buildAnswerIntent(correctAnswers[GAME_LENGTH - 1], isAplDevice);
     prompt = `That answer is correct. You got ${score + 1} out of ${GAME_LENGTH} questions correct. ${isWinning ? `You won the game. Thank you for playing!` : `Unfortunately, you did not win this game. Thank you for playing!`}`;
   }
   else {
-    answerIntent = isCorrectAnswer === null ? buildDontKnowIntent() : buildAnswerIntent(correctAnswers[GAME_LENGTH - 1] + 1); //+1 to simulate a wrong answer
+    answerIntent = isCorrectAnswer === null ? buildDontKnowIntent(isAplDevice) : buildAnswerIntent(correctAnswers[GAME_LENGTH - 1] + 1, isAplDevice); //+1 to simulate a wrong answer
     prompt = `${isCorrectAnswer === null ? `` : `That answer is wrong. `}The correct answer is ${correctAnswers[GAME_LENGTH - 1]}: ${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[GAME_LENGTH - 1] + 1} / Correct Answer. You got ${score} out of ${GAME_LENGTH} questions correct. ${isWinning ? `You won the game. Thank you for playing!` : `Unfortunately, you did not win this game. Thank you for playing!`}`;
   }
 
@@ -488,6 +599,20 @@ function buildLastAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnsw
     repromptsNothing: true,
     shouldEndSession: true,
     ignoreQuestionCheck: true,
+    get renderDocument() {
+      if (!isAplDevice) return undefined;
+      return {
+        token: RESULTS_VIEW_TOKEN,
+        document: (doc: any) => {
+          return deepEqual(doc, resultsDocument);
+        },
+        hasDataSources: {
+          resultsDataSource: (ds: any) => {
+            return verifyResultsDataSource(ds, isCorrectAnswer ? true : false, isCorrectAnswer ? score + 1 : score);
+          },
+        },
+      }
+    },
   };
 }
 

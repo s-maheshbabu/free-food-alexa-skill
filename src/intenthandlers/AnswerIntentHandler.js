@@ -1,3 +1,4 @@
+const Alexa = require("ask-sdk-core");
 const interactions = require("interactions");
 
 const {
@@ -7,6 +8,8 @@ const {
   determineResults
 } = require("gameManager");
 
+const userEventHandler = require("eventhandlers/UserEventHandler");
+const { APL_INTERFACE } = require("constants/APL");
 const questionAndAnswersDataSource = require("apl/data/QuestionAndAnswersDatasource");
 const questionAndAnswersDocument = require("apl/document/QuestionAndAnswersDocument");
 
@@ -37,6 +40,10 @@ const handleUserGuess = (handlerInput, userGaveUp = false) => {
 
   const sessionAttributes = attributesManager.getSessionAttributes();
   const userAnswer = isAnswerSlotValid(intent) ? parseInt(intent.slots.Answer.value, 10) : null;
+
+  if (Alexa.getSupportedInterfaces(requestEnvelope).hasOwnProperty(APL_INTERFACE)) {
+    return userEventHandler.tempExport(handlerInput, sessionAttributes, userAnswer);
+  }
 
   const previousQuestionResults = determineResults(sessionAttributes, userAnswer, userGaveUp);
   let updatedSessionAttributes = previousQuestionResults.sessionAttributes;
