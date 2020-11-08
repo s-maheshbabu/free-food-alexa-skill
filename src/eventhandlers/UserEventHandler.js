@@ -52,7 +52,6 @@ const deliverResults = (handlerInput, sessionAttributes, userAnswerIndex) => {
 
     handlerInput.attributesManager.setSessionAttributes(results.sessionAttributes);
 
-    const c = results.speak;
     return responseBuilder
         .addDirective(directives[0]).addDirective(directives[1])
         .speak(results.speak)
