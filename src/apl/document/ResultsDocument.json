@@ -1,7 +1,6 @@
 {
     "type": "APL",
-    "version": "1.4",
-    "settings": {},
+    "version": "1.5",
     "theme": "dark",
     "import": [
         {
@@ -9,21 +8,240 @@
             "version": "1.2.0"
         }
     ],
-    "resources": [],
-    "styles": {},
-    "onMount": [],
-    "graphics": {},
-    "commands": {},
-    "layouts": {},
     "mainTemplate": {
         "parameters": [
             "resultsDataSource"
         ],
         "items": [
             {
-                "type": "Text",
-                "text": "The answer is ${resultsDataSource.isCorrect} and the score is ${resultsDataSource.score}"
+                "type": "Container",
+                "height": "100vh",
+                "width": "100vw",
+                "items": [
+                    {
+                        "type": "AlexaBackground",
+                        "videoAutoPlay": true,
+                        "backgroundVideoSource": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                        "backgroundColor": "white",
+                        "videoAudioTrack": "none"
+                    },
+                    {
+                        "type": "Container",
+                        "width": "70%",
+                        "height": "100%",
+                        "items": [
+                            {
+                                "type": "AlexaProgressBarRadial",
+                                "progressValue": "${resultsDataSource.currentQuestionIndex}",
+                                "totalValue": "${resultsDataSource.totalNumberOfQuestions}",
+                                "progressFillColor": "green",
+                                "theme": "light",
+                                "position": "absolute"
+                            },
+                            {
+                                "type": "Text",
+                                "height": "100%",
+                                "paddingLeft": "@spacingSmall",
+                                "paddingRight": "@spacingSmall",
+                                "alignSelf": "center",
+                                "textAlignVertical": "center",
+                                "textAlign": "center",
+                                "text": "${resultsDataSource.currentQuestionIndex}/${resultsDataSource.totalNumberOfQuestions}",
+                                "fontSize": "100"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "Container",
+                        "width": "30%",
+                        "height": "100%",
+                        "position": "absolute",
+                        "right": "0",
+                        "item": [
+                            {
+                                "type": "Container",
+                                "height": "20%"
+                            },
+                            {
+                                "type": "Container",
+                                "height": "20%",
+                                "item": [
+                                    {
+                                        "type": "Image",
+                                        "width": "${viewport.width/15}",
+                                        "height": "100%",
+                                        "source": "https://smartypants-alexa-skill.s3.amazonaws.com/red-circle.png",
+                                        "alignSelf": "start"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "height": "100%",
+                                        "maxWidth": "${viewport.width/15}",
+                                        "paddingLeft": "@spacingSmall",
+                                        "paddingRight": "@spacingSmall",
+                                        "position": "absolute",
+                                        "alignSelf": "start",
+                                        "textAlignVertical": "center",
+                                        "text": "${resultsDataSource.incorrectAnswers}"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "height": "100%",
+                                        "left": "${viewport.width/15}",
+                                        "paddingLeft": "@spacingSmall",
+                                        "paddingRight": "@spacingSmall",
+                                        "position": "absolute",
+                                        "alignSelf": "start",
+                                        "textAlignVertical": "center",
+                                        "text": "Incorrect"
+                                    }
+                                ],
+                                "direction": "column"
+                            },
+                            {
+                                "type": "Container",
+                                "height": "20%",
+                                "item": [
+                                    {
+                                        "type": "Image",
+                                        "width": "${viewport.width/15}",
+                                        "height": "100%",
+                                        "source": "https://smartypants-alexa-skill.s3.amazonaws.com/green-circle.png",
+                                        "alignSelf": "start"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "height": "100%",
+                                        "maxWidth": "${viewport.width/15}",
+                                        "paddingLeft": "@spacingSmall",
+                                        "paddingRight": "@spacingSmall",
+                                        "position": "absolute",
+                                        "alignSelf": "start",
+                                        "textAlignVertical": "center",
+                                        "text": "${resultsDataSource.score}"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "height": "100%",
+                                        "left": "${viewport.width/15}",
+                                        "paddingLeft": "@spacingSmall",
+                                        "paddingRight": "@spacingSmall",
+                                        "position": "absolute",
+                                        "alignSelf": "start",
+                                        "textAlignVertical": "center",
+                                        "text": "Correct"
+                                    }
+                                ],
+                                "direction": "column"
+                            },
+                            {
+                                "type": "Container",
+                                "height": "20%",
+                                "item": [
+                                    {
+                                        "type": "Image",
+                                        "width": "${viewport.width/15}",
+                                        "height": "100%",
+                                        "source": "https://smartypants-alexa-skill.s3.amazonaws.com/orange-circle.png",
+                                        "alignSelf": "start"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "height": "100%",
+                                        "maxWidth": "${viewport.width/15}",
+                                        "paddingLeft": "@spacingSmall",
+                                        "paddingRight": "@spacingSmall",
+                                        "position": "absolute",
+                                        "alignSelf": "start",
+                                        "textAlignVertical": "center",
+                                        "text": "${resultsDataSource.skipped}"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "height": "100%",
+                                        "left": "${viewport.width/15}",
+                                        "paddingLeft": "@spacingSmall",
+                                        "paddingRight": "@spacingSmall",
+                                        "position": "absolute",
+                                        "alignSelf": "start",
+                                        "textAlignVertical": "center",
+                                        "text": "Skipped"
+                                    }
+                                ],
+                                "direction": "column"
+                            },
+                            {
+                                "type": "Container",
+                                "height": "20%",
+                                "item": {
+                                    "type": "AlexaButton",
+                                    "buttonText": "Next Question",
+                                    "buttonStyle": "ingress",
+                                    "touchForward": true,
+                                    "position": "absolute",
+                                    "bottom": "0",
+                                    "right": "0"
+                                }
+                            }
+                        ]
+                    }
+                ]
             }
         ]
-    }
+    },
+    "layouts": {},
+    "graphics": {
+        "avgttext__": {
+            "type": "AVG",
+            "version": "1.2",
+            "height": 100,
+            "width": 100,
+            "parameters": [
+                {
+                    "name": "circleColor",
+                    "type": "color",
+                    "default": "black"
+                },
+                {
+                    "name": "circleBorderWidth",
+                    "type": "number",
+                    "default": 2
+                }
+            ],
+            "items": [
+                {
+                    "type": "path",
+                    "pathData": "M25,50 a25,25 0 1 1 50,0 a25,25 0 1 1 -50,0",
+                    "stroke": "${circleColor}",
+                    "strokeWidth": "${circleBorderWidth}",
+                    "fill": "none"
+                }
+            ]
+        },
+        "avgttext": {
+            "type": "AVG",
+            "version": "1.2",
+            "height": 100,
+            "width": 100,
+            "items": [
+                {
+                    "type": "path",
+                    "pathData": "M25,50 a25,25 0 1 1 50,0 a25,25 0 1 1 -50,0",
+                    "fill": "blue",
+                    "stroke": "blue"
+                },
+                {
+                    "type": "text",
+                    "fill": "red",
+                    "fontFamily": "amazon-ember, sans-serif",
+                    "fontSize": 60,
+                    "text": "3",
+                    "x": 75,
+                    "y": 50,
+                    "textAnchor": "middle"
+                }
+            ]
+        }
+    },
+    "styles": {}
 }

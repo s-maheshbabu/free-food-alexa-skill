@@ -279,12 +279,14 @@ function getCorrectAnswerIndices() {
  * Validate that the APL datasource backing the results view is correctly populated.
  * 
  * @param datasource The APL data source to be validated.
- * @param isCorrect Is the result being displayed for a correct response or an incorrect response from the user
- * @param score The current score of the user, including the question that the user just answered.
  */
-function verifyResultsDataSource(datasource, isCorrect, score) {
+function verifyResultsDataSource(datasource, isCorrect, currentQuestionIndex, incorrectAnswers, score, skipped, totalNumberOfQuestions) {
   expect(datasource.isCorrect).to.equal(isCorrect);
+  expect(datasource.currentQuestionIndex).to.equal(currentQuestionIndex + 1);
+  expect(datasource.incorrectAnswers).to.equal(111);
   expect(datasource.score).to.equal(score);
+  expect(datasource.skipped).to.equal(222);
+  expect(datasource.totalNumberOfQuestions).to.equal(totalNumberOfQuestions);
 
   return true;
 }
@@ -412,7 +414,7 @@ function buildNthAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctA
         },
         hasDataSources: {
           resultsDataSource: (ds: any) => {
-            return verifyResultsDataSource(ds, isCorrectAnswer ? true : false, this.hasAttributes.score);
+            return verifyResultsDataSource(ds, isCorrectAnswer ? true : false, this.hasAttributes.questionIndex, null, this.hasAttributes.score, null, GAME_LENGTH);
           },
         },
       }
@@ -491,7 +493,7 @@ function buildLastAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correct
         },
         hasDataSources: {
           resultsDataSource: (ds: any) => {
-            return verifyResultsDataSource(ds, isCorrectAnswer ? true : false, isCorrectAnswer ? score + 1 : score);
+            return verifyResultsDataSource(ds, isCorrectAnswer ? true : false, GAME_LENGTH - 1, null, isCorrectAnswer ? score + 1 : score, null, GAME_LENGTH);
           },
         },
       }
@@ -571,7 +573,7 @@ function buildNthAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswe
         },
         hasDataSources: {
           resultsDataSource: (ds: any) => {
-            return verifyResultsDataSource(ds, isCorrectAnswer ? true : false, this.hasAttributes.score);
+            return verifyResultsDataSource(ds, isCorrectAnswer ? true : false, this.hasAttributes.questionIndex, null, this.hasAttributes.score, null, GAME_LENGTH);
           },
         },
       }
@@ -608,7 +610,7 @@ function buildLastAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnsw
         },
         hasDataSources: {
           resultsDataSource: (ds: any) => {
-            return verifyResultsDataSource(ds, isCorrectAnswer ? true : false, isCorrectAnswer ? score + 1 : score);
+            return verifyResultsDataSource(ds, isCorrectAnswer ? true : false, GAME_LENGTH - 1, null, isCorrectAnswer ? score + 1 : score, null, GAME_LENGTH);
           },
         },
       }

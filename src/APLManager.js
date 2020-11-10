@@ -1,5 +1,5 @@
 const APL = require("constants/APL");
-const { determineResults } = require("gameManager");
+const { GAME_LENGTH } = require("gameManager");
 
 const resultsDataSource = require("apl/data/ResultsDatasource");
 const resultsDocument = require("apl/document/ResultsDocument");
@@ -41,7 +41,16 @@ const getResultsViewDirective = (isCorrect, sessionAttributes) => {
         version: APL.APL_DOCUMENT_VERSION,
         token: APL.RESULTS_VIEW_TOKEN,
         document: resultsDocument,
-        datasources: { resultsDataSource: resultsDataSource(isCorrect, sessionAttributes.score), },
+        datasources: {
+            resultsDataSource: resultsDataSource(
+                isCorrect,
+                sessionAttributes.questionIndex + 1,
+                111,
+                sessionAttributes.score,
+                222,
+                GAME_LENGTH,
+            ),
+        },
     },
     {
         type: APL.APL_COMMANDS_TYPE,
