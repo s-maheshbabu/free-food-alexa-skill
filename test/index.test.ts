@@ -19,7 +19,7 @@ const {
   RESULTS_VIEW_TOKEN,
   USER_INITIATED_CLICK_EVENT } = require("../src/constants/APL");
 
-const resultsDocument = require("../src/apl/document/ResultsDocument");
+const questionResultsDocument = require("../src/apl/document/QuestionResultsDocument");
 const questionAndAnswersDocument = require("../src/apl/document/QuestionAndAnswersDocument");
 
 const skillHandler = require("../src/index").handler;
@@ -67,8 +67,8 @@ describe("Starting a game", () => {
     alexaTest.test([
       {
         request: new LaunchRequestBuilder(skillSettings).build(),
-        says: 'Welcome to Trivia Challenge. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
-        reprompts: 'Welcome to Trivia Challenge. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
+        says: 'Welcome to Smarty Pants. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
+        reprompts: 'Welcome to Smarty Pants. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
         shouldEndSession: false,
       },
     ]);
@@ -78,8 +78,8 @@ describe("Starting a game", () => {
     alexaTest.test([
       {
         request: new IntentRequestBuilder(skillSettings, 'AMAZON.StartOverIntent').build(),
-        says: 'Welcome to Trivia Challenge. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
-        reprompts: 'Welcome to Trivia Challenge. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
+        says: 'Welcome to Smarty Pants. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
+        reprompts: 'Welcome to Smarty Pants. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
         shouldEndSession: false,
       },
     ]);
@@ -90,8 +90,8 @@ describe("Starting a game", () => {
       [
         {
           request: new LaunchRequestBuilder(skillSettings).build(),
-          says: 'Welcome to Trivia Challenge. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
-          reprompts: 'Welcome to Trivia Challenge. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
+          says: 'Welcome to Smarty Pants. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
+          reprompts: 'Welcome to Smarty Pants. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
           shouldEndSession: false,
           ignoreQuestionCheck: true,
         },
@@ -102,8 +102,8 @@ describe("Starting a game", () => {
         },
         {
           request: new IntentRequestBuilder(skillSettings, 'AMAZON.StartOverIntent').build(),
-          says: 'Welcome to Trivia Challenge. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
-          reprompts: 'Welcome to Trivia Challenge. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
+          says: 'Welcome to Smarty Pants. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
+          reprompts: 'Welcome to Smarty Pants. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
           shouldEndSession: false,
           ignoreQuestionCheck: true,
         },
@@ -280,7 +280,7 @@ function getCorrectAnswerIndices() {
  * 
  * @param datasource The APL data source to be validated.
  */
-function verifyResultsDataSource(datasource, isCorrect, currentQuestionIndex, incorrectAnswers, score, skipped, totalNumberOfQuestions) {
+function verifyQuestionResultsDataSource(datasource, isCorrect, currentQuestionIndex, incorrectAnswers, score, skipped, totalNumberOfQuestions) {
   expect(datasource.isCorrect).to.equal(isCorrect);
   expect(datasource.currentQuestionIndex).to.equal(currentQuestionIndex + 1);
   expect(datasource.incorrectAnswers).to.equal(111);
@@ -410,11 +410,11 @@ function buildNthAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctA
       return {
         token: RESULTS_VIEW_TOKEN,
         document: (doc: any) => {
-          return deepEqual(doc, resultsDocument);
+          return deepEqual(doc, questionResultsDocument);
         },
         hasDataSources: {
-          resultsDataSource: (ds: any) => {
-            return verifyResultsDataSource(ds, isCorrectAnswer ? true : false, this.hasAttributes.questionIndex, null, this.hasAttributes.score, null, GAME_LENGTH);
+          questionResultsDataSource: (ds: any) => {
+            return verifyQuestionResultsDataSource(ds, isCorrectAnswer ? true : false, this.hasAttributes.questionIndex, null, this.hasAttributes.score, null, GAME_LENGTH);
           },
         },
       }
@@ -489,11 +489,11 @@ function buildLastAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correct
       return {
         token: RESULTS_VIEW_TOKEN,
         document: (doc: any) => {
-          return deepEqual(doc, resultsDocument);
+          return deepEqual(doc, questionResultsDocument);
         },
         hasDataSources: {
-          resultsDataSource: (ds: any) => {
-            return verifyResultsDataSource(ds, isCorrectAnswer ? true : false, GAME_LENGTH - 1, null, isCorrectAnswer ? score + 1 : score, null, GAME_LENGTH);
+          questionResultsDataSource: (ds: any) => {
+            return verifyQuestionResultsDataSource(ds, isCorrectAnswer ? true : false, GAME_LENGTH - 1, null, isCorrectAnswer ? score + 1 : score, null, GAME_LENGTH);
           },
         },
       }
@@ -569,11 +569,11 @@ function buildNthAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswe
       return {
         token: RESULTS_VIEW_TOKEN,
         document: (doc: any) => {
-          return deepEqual(doc, resultsDocument);
+          return deepEqual(doc, questionResultsDocument);
         },
         hasDataSources: {
-          resultsDataSource: (ds: any) => {
-            return verifyResultsDataSource(ds, isCorrectAnswer ? true : false, this.hasAttributes.questionIndex, null, this.hasAttributes.score, null, GAME_LENGTH);
+          questionResultsDataSource: (ds: any) => {
+            return verifyQuestionResultsDataSource(ds, isCorrectAnswer ? true : false, this.hasAttributes.questionIndex, null, this.hasAttributes.score, null, GAME_LENGTH);
           },
         },
       }
@@ -606,11 +606,11 @@ function buildLastAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnsw
       return {
         token: RESULTS_VIEW_TOKEN,
         document: (doc: any) => {
-          return deepEqual(doc, resultsDocument);
+          return deepEqual(doc, questionResultsDocument);
         },
         hasDataSources: {
-          resultsDataSource: (ds: any) => {
-            return verifyResultsDataSource(ds, isCorrectAnswer ? true : false, GAME_LENGTH - 1, null, isCorrectAnswer ? score + 1 : score, null, GAME_LENGTH);
+          questionResultsDataSource: (ds: any) => {
+            return verifyQuestionResultsDataSource(ds, isCorrectAnswer ? true : false, GAME_LENGTH - 1, null, isCorrectAnswer ? score + 1 : score, null, GAME_LENGTH);
           },
         },
       }

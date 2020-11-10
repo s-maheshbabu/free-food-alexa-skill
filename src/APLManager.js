@@ -1,8 +1,8 @@
 const APL = require("constants/APL");
 const { GAME_LENGTH } = require("gameManager");
 
-const resultsDataSource = require("apl/data/ResultsDatasource");
-const resultsDocument = require("apl/document/ResultsDocument");
+const questionResultsDataSource = require("apl/data/QuestionResultsDatasource");
+const questionResultsDocument = require("apl/document/QuestionResultsDocument");
 
 const questionAndAnswersDataSource = require("apl/data/QuestionAndAnswersDatasource");
 const questionAndAnswersDocument = require("apl/document/QuestionAndAnswersDocument");
@@ -40,9 +40,9 @@ const getResultsViewDirective = (isCorrect, sessionAttributes) => {
         type: APL.APL_DOCUMENT_TYPE,
         version: APL.APL_DOCUMENT_VERSION,
         token: APL.RESULTS_VIEW_TOKEN,
-        document: resultsDocument,
+        document: questionResultsDocument,
         datasources: {
-            resultsDataSource: resultsDataSource(
+            questionResultsDataSource: questionResultsDataSource(
                 isCorrect,
                 sessionAttributes.questionIndex + 1,
                 111,

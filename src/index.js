@@ -24,13 +24,13 @@ const ResponseSanitizationInterceptor = require("./interceptors/ResponseSanitiza
 
 const LogRequestInterceptor = {
   process(handlerInput) {
-    //console.log(`REQUEST ENVELOPE = ${JSON.stringify(handlerInput.requestEnvelope)}`);
+    console.log(`REQUEST ENVELOPE = ${JSON.stringify(handlerInput.requestEnvelope)}`);
   },
 };
 
 const LogResponseInterceptor = {
   process(handlerInput, response) {
-    //console.log(`RESPONSE = ${JSON.stringify(response)}`);
+    console.log(`RESPONSE = ${JSON.stringify(response)}`);
   },
 };
 

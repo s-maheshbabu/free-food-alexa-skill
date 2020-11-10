@@ -10,7 +10,7 @@
     ],
     "mainTemplate": {
         "parameters": [
-            "resultsDataSource"
+            "questionResultsDataSource"
         ],
         "items": [
             {
@@ -32,8 +32,8 @@
                         "items": [
                             {
                                 "type": "AlexaProgressBarRadial",
-                                "progressValue": "${resultsDataSource.currentQuestionIndex}",
-                                "totalValue": "${resultsDataSource.totalNumberOfQuestions}",
+                                "progressValue": "${questionResultsDataSource.currentQuestionIndex}",
+                                "totalValue": "${questionResultsDataSource.totalNumberOfQuestions}",
                                 "progressFillColor": "green",
                                 "theme": "light",
                                 "position": "absolute"
@@ -46,7 +46,7 @@
                                 "alignSelf": "center",
                                 "textAlignVertical": "center",
                                 "textAlign": "center",
-                                "text": "${resultsDataSource.currentQuestionIndex}/${resultsDataSource.totalNumberOfQuestions}",
+                                "text": "${questionResultsDataSource.currentQuestionIndex}/${questionResultsDataSource.totalNumberOfQuestions}",
                                 "fontSize": "100"
                             }
                         ]
@@ -82,7 +82,7 @@
                                         "position": "absolute",
                                         "alignSelf": "start",
                                         "textAlignVertical": "center",
-                                        "text": "${resultsDataSource.incorrectAnswers}"
+                                        "text": "${questionResultsDataSource.incorrectAnswers}"
                                     },
                                     {
                                         "type": "Text",
@@ -118,7 +118,7 @@
                                         "position": "absolute",
                                         "alignSelf": "start",
                                         "textAlignVertical": "center",
-                                        "text": "${resultsDataSource.score}"
+                                        "text": "${questionResultsDataSource.score}"
                                     },
                                     {
                                         "type": "Text",
@@ -154,7 +154,7 @@
                                         "position": "absolute",
                                         "alignSelf": "start",
                                         "textAlignVertical": "center",
-                                        "text": "${resultsDataSource.skipped}"
+                                        "text": "${questionResultsDataSource.skipped}"
                                     },
                                     {
                                         "type": "Text",
