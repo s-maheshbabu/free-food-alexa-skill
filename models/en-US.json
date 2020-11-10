@@ -1,7 +1,7 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "free food trivia",
+      "invocationName": "smarty pants",
       "intents": [
         {
           "name": "AMAZON.CancelIntent",
@@ -117,7 +117,9 @@
               "id": "SUSTAINABILITY",
               "name": {
                 "value": "sustainability",
-                "synonyms": ["environment"]
+                "synonyms": [
+                  "environment"
+                ]
               }
             },
             {
@@ -146,14 +148,20 @@
               "id": "ANIMALS",
               "name": {
                 "value": "animals",
-                "synonyms": ["zoology", "biology"]
+                "synonyms": [
+                  "zoology",
+                  "biology"
+                ]
               }
             },
             {
               "id": "TECHNOLOGY",
               "name": {
                 "value": "technology",
-                "synonyms": ["technical", "tech"]
+                "synonyms": [
+                  "technical",
+                  "tech"
+                ]
               }
             }
           ]
