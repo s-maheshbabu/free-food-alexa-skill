@@ -35,7 +35,7 @@ module.exports = UserEventHandler = {
 
         return deliverResults(handlerInput, sessionAttributes, userAnswerIndex);
     },
-    tempExport(handlerInput, sessionAttributes, userAnswerIndex) {
+    deliverResults(handlerInput, sessionAttributes, userAnswerIndex) {
         return deliverResults(handlerInput, sessionAttributes, userAnswerIndex);
     }
 }

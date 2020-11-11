@@ -10,8 +10,6 @@ const {
 
 const userEventHandler = require("eventhandlers/UserEventHandler");
 const { APL_INTERFACE } = require("constants/APL");
-const questionAndAnswersDataSource = require("apl/data/QuestionAndAnswersDatasource");
-const questionAndAnswersDocument = require("apl/document/QuestionAndAnswersDocument");
 
 const GAME_WINNING_THRESHOLD_PERCENTAGE = 0.5;
 
@@ -29,9 +27,6 @@ module.exports = AnswerIntentHandler = {
     }
     return handleUserGuess(handlerInput, true);
   },
-  temporaryMethod(userGaveUp, handlerInput) {
-    return handleUserGuess(handlerInput, userGaveUp);
-  },
 };
 
 const handleUserGuess = (handlerInput, userGaveUp = false) => {
@@ -42,7 +37,7 @@ const handleUserGuess = (handlerInput, userGaveUp = false) => {
   const userAnswer = isAnswerSlotValid(intent) ? parseInt(intent.slots.Answer.value, 10) : null;
 
   if (Alexa.getSupportedInterfaces(requestEnvelope).hasOwnProperty(APL_INTERFACE)) {
-    return userEventHandler.tempExport(handlerInput, sessionAttributes, userAnswer);
+    return userEventHandler.deliverResults(handlerInput, sessionAttributes, userAnswer);
   }
 
   const previousQuestionResults = determineResults(sessionAttributes, userAnswer, userGaveUp);
