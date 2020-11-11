@@ -37,7 +37,7 @@ const handleUserGuess = (handlerInput, userGaveUp = false) => {
   const userAnswer = isAnswerSlotValid(intent) ? parseInt(intent.slots.Answer.value, 10) : null;
 
   if (Alexa.getSupportedInterfaces(requestEnvelope).hasOwnProperty(APL_INTERFACE)) {
-    return userEventHandler.deliverResults(handlerInput, sessionAttributes, userAnswer);
+    return userEventHandler.deliverResults(handlerInput, sessionAttributes, userAnswer, userGaveUp);
   }
 
   const previousQuestionResults = determineResults(sessionAttributes, userAnswer, userGaveUp);

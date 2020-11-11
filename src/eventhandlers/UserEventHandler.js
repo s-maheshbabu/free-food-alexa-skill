@@ -12,7 +12,6 @@ module.exports = UserEventHandler = {
     handle(handlerInput) {
         const { responseBuilder } = handlerInput;
 
-        // Take argument sent from the button to speak back to the user
         if (handlerInput.requestEnvelope.request.arguments[0] === NEXT_QUESTION_AUTO_GENERATED_EVENT) {
             const sessionAttributes = handlerInput.requestEnvelope.request.arguments[1];
             const nextQuestionInfo = determineNextQuestion(sessionAttributes, handlerInput.requestEnvelope.request.locale);
@@ -35,13 +34,13 @@ module.exports = UserEventHandler = {
 
         return deliverResults(handlerInput, sessionAttributes, userAnswerIndex);
     },
-    deliverResults(handlerInput, sessionAttributes, userAnswerIndex) {
-        return deliverResults(handlerInput, sessionAttributes, userAnswerIndex);
+    deliverResults(handlerInput, sessionAttributes, userAnswerIndex, userGaveUp) {
+        return deliverResults(handlerInput, sessionAttributes, userAnswerIndex, userGaveUp);
     }
 }
 
-const deliverResults = (handlerInput, sessionAttributes, userAnswerIndex) => {
-    const results = determineResults(sessionAttributes, userAnswerIndex);
+const deliverResults = (handlerInput, sessionAttributes, userAnswerIndex, userGaveUp = false) => {
+    const results = determineResults(sessionAttributes, userAnswerIndex, userGaveUp);
 
     const { responseBuilder } = handlerInput;
     // Check if we can exit the game session after GAME_LENGTH questions (zero-indexed)

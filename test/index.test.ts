@@ -177,6 +177,16 @@ describe("Interactions through a combination of voice and touch", () => {
         [ResponseModes.VOICE, ResponseModes.VOICE, ResponseModes.VOICE, ResponseModes.TOUCH, ResponseModes.TOUCH],
         true));
   });
+
+  describe('should be able to handle the case where user gives up on some questions via voice (by saying -i dont know-) and then goes on to win the game.', () => {
+    alexaTest.test(
+      buildGameSequence_MixedUIAndVoiceInteraction(
+        getGameQuestionsIndices(),
+        getCorrectAnswerIndices(),
+        [true, false, null, false, false],
+        [ResponseModes.VOICE, ResponseModes.VOICE, ResponseModes.VOICE, ResponseModes.TOUCH, ResponseModes.TOUCH],
+        true));
+  });
 });
 
 function buildGameSequence_VoiceInteraction(gameQuestionsIndices, correctAnswers, customerAnswers) {
