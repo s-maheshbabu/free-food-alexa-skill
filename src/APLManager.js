@@ -4,6 +4,9 @@ const { GAME_LENGTH } = require("gameManager");
 const questionResultsDataSource = require("apl/data/QuestionResultsDatasource");
 const questionResultsDocument = require("apl/document/QuestionResultsDocument");
 
+const gameResultsDataSource = require("apl/data/GameResultsDatasource");
+const gameResultsDocument = require("apl/document/GameResultsDocument");
+
 const questionAndAnswersDataSource = require("apl/data/QuestionAndAnswersDatasource");
 const questionAndAnswersDocument = require("apl/document/QuestionAndAnswersDocument");
 
@@ -33,6 +36,30 @@ const getQuestionAndAnswersViewDirective = (question, answers, sessionAttributes
     }
 }
 
+/**
+ * Returns APL directives to be rendered at the end of the game declaring the game results.
+ */
+const getGameResultsViewDirectives = (isWon, sessionAttributes) => {
+    const { score } = sessionAttributes;
+    return [{
+        type: APL.APL_DOCUMENT_TYPE,
+        version: APL.APL_DOCUMENT_VERSION,
+        document: gameResultsDocument,
+        datasources: {
+            gameResultsDataSource: gameResultsDataSource(
+                isWon,
+                111,
+                score,
+                222,
+                GAME_LENGTH,
+            ),
+        },
+    },];
+}
+
+/**
+ * Returns APL directives to be rendered after the user answers a question. 
+ */
 const getResultsViewDirective = (isCorrect, sessionAttributes) => {
     // TODO Validate inputs
     // TODO ask-sdk-test currently has no provision to test Alexa.Presentation.APL.ExecuteCommands. Report bug.
@@ -66,6 +93,7 @@ const getResultsViewDirective = (isCorrect, sessionAttributes) => {
 }
 
 module.exports = {
+    getGameResultsViewDirectives: getGameResultsViewDirectives,
     getResultsViewDirective: getResultsViewDirective,
     getQuestionAndAnswersViewDirective: getQuestionAndAnswersViewDirective,
 };

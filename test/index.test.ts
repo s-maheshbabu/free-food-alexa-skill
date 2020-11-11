@@ -19,6 +19,7 @@ const {
   RESULTS_VIEW_TOKEN,
   USER_INITIATED_CLICK_EVENT } = require("../src/constants/APL");
 
+const gameResultsDocument = require("../src/apl/document/GameResultsDocument");
 const questionResultsDocument = require("../src/apl/document/QuestionResultsDocument");
 const questionAndAnswersDocument = require("../src/apl/document/QuestionAndAnswersDocument");
 
@@ -292,6 +293,21 @@ function verifyQuestionResultsDataSource(datasource, isCorrect, currentQuestionI
 }
 
 /**
+ * Validate that the APL datasource backing the game results view is correctly populated.
+ * 
+ * @param datasource The APL data source to be validated.
+ */
+function verifyGameResultsDataSource(datasource, isWon, incorrectAnswers, score, skipped, totalNumberOfQuestions) {
+  expect(datasource.isWon).to.equal(isWon);
+  expect(datasource.incorrectAnswers).to.equal(111);
+  expect(datasource.score).to.equal(score);
+  expect(datasource.skipped).to.equal(222);
+  expect(datasource.totalNumberOfQuestions).to.equal(totalNumberOfQuestions);
+
+  return true;
+}
+
+/**
  * Validate that the APL datasource backing the question&answers view is correctly populated.
  *
  * @param datasource The APL data source to be validated.
@@ -489,11 +505,11 @@ function buildLastAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correct
       return {
         token: RESULTS_VIEW_TOKEN,
         document: (doc: any) => {
-          return deepEqual(doc, questionResultsDocument);
+          return deepEqual(doc, gameResultsDocument);
         },
         hasDataSources: {
-          questionResultsDataSource: (ds: any) => {
-            return verifyQuestionResultsDataSource(ds, isCorrectAnswer ? true : false, GAME_LENGTH - 1, null, isCorrectAnswer ? score + 1 : score, null, GAME_LENGTH);
+          gameResultsDataSource: (ds: any) => {
+            return verifyGameResultsDataSource(ds, isWinning, null, isCorrectAnswer ? score + 1 : score, null, GAME_LENGTH);
           },
         },
       }
@@ -606,11 +622,11 @@ function buildLastAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnsw
       return {
         token: RESULTS_VIEW_TOKEN,
         document: (doc: any) => {
-          return deepEqual(doc, questionResultsDocument);
+          return deepEqual(doc, gameResultsDocument);
         },
         hasDataSources: {
-          questionResultsDataSource: (ds: any) => {
-            return verifyQuestionResultsDataSource(ds, isCorrectAnswer ? true : false, GAME_LENGTH - 1, null, isCorrectAnswer ? score + 1 : score, null, GAME_LENGTH);
+          gameResultsDataSource: (ds: any) => {
+            return verifyGameResultsDataSource(ds, isWinning, null, isCorrectAnswer ? score + 1 : score, null, GAME_LENGTH);
           },
         },
       }

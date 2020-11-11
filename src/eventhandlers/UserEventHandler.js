@@ -42,16 +42,16 @@ module.exports = UserEventHandler = {
 
 const deliverResults = (handlerInput, sessionAttributes, userAnswerIndex) => {
     const results = determineResults(sessionAttributes, userAnswerIndex);
-    const directives = APLManager.getResultsViewDirective(results.isCorrect, results.sessionAttributes);
 
     const { responseBuilder } = handlerInput;
     // Check if we can exit the game session after GAME_LENGTH questions (zero-indexed)
     if (results.sessionAttributes.questionIndex === GAME_LENGTH - 1) {
-        return endGame(responseBuilder, results.sessionAttributes, results, directives);
+        return endGame(responseBuilder, results.sessionAttributes, results);
     }
 
     handlerInput.attributesManager.setSessionAttributes(results.sessionAttributes);
 
+    const directives = APLManager.getResultsViewDirective(results.isCorrect, results.sessionAttributes);
     return responseBuilder
         .addDirective(directives[0]).addDirective(directives[1])
         .speak(results.speak)
@@ -59,11 +59,12 @@ const deliverResults = (handlerInput, sessionAttributes, userAnswerIndex) => {
         .getResponse();
 }
 
-const endGame = (responseBuilder, sessionAttributes, results, directives) => {
+const endGame = (responseBuilder, sessionAttributes, results) => {
     const { score: newScore } = sessionAttributes;
     const isGameWon = newScore / GAME_LENGTH >= GAME_WINNING_THRESHOLD_PERCENTAGE;
     const speechOutput = `${results.speak}${isGameWon ? interactions.t("GAME_WON_MESSAGE") : interactions.t("GAME_LOST_MESSAGE")}`;
 
+    const directives = APLManager.getGameResultsViewDirectives(isGameWon, sessionAttributes);
     return responseBuilder
         .speak(speechOutput)
         .addDirective(directives[0])

@@ -1,0 +1,188 @@
+{
+    "type": "APL",
+    "version": "1.5",
+    "theme": "dark",
+    "import": [
+        {
+            "name": "alexa-layouts",
+            "version": "1.2.0"
+        }
+    ],
+    "mainTemplate": {
+        "parameters": [
+            "gameResultsDataSource"
+        ],
+        "items": [
+            {
+                "type": "Container",
+                "height": "100vh",
+                "width": "100vw",
+                "items": [
+                    {
+                        "type": "AlexaBackground",
+                        "backgroundColor": "black",
+                        "videoAudioTrack": "none"
+                    },
+                    {
+                        "type": "Container",
+                        "width": "70%",
+                        "height": "100%",
+                        "items": [
+                            {
+                                "type": "AlexaImage",
+                                "when": "${gameResultsDataSource.isWon}",
+                                "imageSource": "https://thumbs.dreamstime.com/z/prize-cup-illustration-51511994.jpg",
+                                "imageWidth": "100%",
+                                "imageHeight": "100%"
+                            },
+                            {
+                                "type": "AlexaImage",
+                                "when": "${!gameResultsDataSource.isWon}",
+                                "imageSource": "https://res.cloudinary.com/teepublic/image/private/s---IgfywED--/t_Preview/b_rgb:191920,c_limit,f_jpg,h_630,q_90,w_630/v1479424787/production/designs/830241_1.jpg",
+                                "imageWidth": "100%",
+                                "imageHeight": "100%"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "Container",
+                        "width": "30%",
+                        "height": "100%",
+                        "position": "absolute",
+                        "right": "0",
+                        "item": [
+                            {
+                                "type": "Container",
+                                "height": "20%",
+                                "items": [
+                                    {
+                                        "type": "Text",
+                                        "height": "100%",
+                                        "textAlignVertical": "center",
+                                        "textAlign": "center",
+                                        "text": "Summary"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "Container",
+                                "height": "20%",
+                                "item": [
+                                    {
+                                        "type": "Image",
+                                        "width": "${viewport.width/15}",
+                                        "height": "100%",
+                                        "source": "https://smartypants-alexa-skill.s3.amazonaws.com/red-circle.png",
+                                        "alignSelf": "start"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "height": "100%",
+                                        "maxWidth": "${viewport.width/15}",
+                                        "paddingLeft": "@spacingSmall",
+                                        "paddingRight": "@spacingSmall",
+                                        "position": "absolute",
+                                        "alignSelf": "start",
+                                        "textAlignVertical": "center",
+                                        "text": "${gameResultsDataSource.incorrectAnswers}"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "height": "100%",
+                                        "left": "${viewport.width/15}",
+                                        "paddingLeft": "@spacingSmall",
+                                        "paddingRight": "@spacingSmall",
+                                        "position": "absolute",
+                                        "alignSelf": "start",
+                                        "textAlignVertical": "center",
+                                        "text": "Incorrect"
+                                    }
+                                ],
+                                "direction": "column"
+                            },
+                            {
+                                "type": "Container",
+                                "height": "20%",
+                                "item": [
+                                    {
+                                        "type": "Image",
+                                        "width": "${viewport.width/15}",
+                                        "height": "100%",
+                                        "source": "https://smartypants-alexa-skill.s3.amazonaws.com/green-circle.png",
+                                        "alignSelf": "start"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "height": "100%",
+                                        "maxWidth": "${viewport.width/15}",
+                                        "paddingLeft": "@spacingSmall",
+                                        "paddingRight": "@spacingSmall",
+                                        "position": "absolute",
+                                        "alignSelf": "start",
+                                        "textAlignVertical": "center",
+                                        "text": "${gameResultsDataSource.score}"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "height": "100%",
+                                        "left": "${viewport.width/15}",
+                                        "paddingLeft": "@spacingSmall",
+                                        "paddingRight": "@spacingSmall",
+                                        "position": "absolute",
+                                        "alignSelf": "start",
+                                        "textAlignVertical": "center",
+                                        "text": "Correct"
+                                    }
+                                ],
+                                "direction": "column"
+                            },
+                            {
+                                "type": "Container",
+                                "height": "20%",
+                                "item": [
+                                    {
+                                        "type": "Image",
+                                        "width": "${viewport.width/15}",
+                                        "height": "100%",
+                                        "source": "https://smartypants-alexa-skill.s3.amazonaws.com/orange-circle.png",
+                                        "alignSelf": "start"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "height": "100%",
+                                        "maxWidth": "${viewport.width/15}",
+                                        "paddingLeft": "@spacingSmall",
+                                        "paddingRight": "@spacingSmall",
+                                        "position": "absolute",
+                                        "alignSelf": "start",
+                                        "textAlignVertical": "center",
+                                        "text": "${gameResultsDataSource.skipped}"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "height": "100%",
+                                        "left": "${viewport.width/15}",
+                                        "paddingLeft": "@spacingSmall",
+                                        "paddingRight": "@spacingSmall",
+                                        "position": "absolute",
+                                        "alignSelf": "start",
+                                        "textAlignVertical": "center",
+                                        "text": "Skipped"
+                                    }
+                                ],
+                                "direction": "column"
+                            },
+                            {
+                                "type": "Container",
+                                "height": "20%"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "layouts": {},
+    "graphics": {},
+    "styles": {}
+}
