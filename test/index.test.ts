@@ -46,7 +46,7 @@ const SCIENCE_CATEGORY = "SCIENCE";
 const questionBank = require("../src/questionBank");
 let allQuestions;
 
-const GAME_LENGTH = 5;
+const { GAME_LENGTH } = require("../src/gameManager");
 
 const ResponseModes = { TOUCH: "touch", VOICE: "voice", };
 
