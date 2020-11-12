@@ -221,6 +221,9 @@ function buildGameSequence_MixedUIAndVoiceInteraction(gameQuestionsIndices, corr
 
 
   for (let index = 0; index < customerAnswers.length - 1; index++) {
+    if (customerAnswers[index]) {
+      score++;
+    }
     if (responseModes[index] === ResponseModes.TOUCH)
       // User taps on an answer. The skill informs the user whether they are right or wrong and kicks off an auto_generated event.
       gameSequence.push(buildNthAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctAnswers, customerAnswers, customerAnswers[index], score, index));
@@ -228,9 +231,6 @@ function buildGameSequence_MixedUIAndVoiceInteraction(gameQuestionsIndices, corr
       // User answers by voice. The skill informs the user whether they are right or wrong. If it is an APL device, it then kicks off an auto_generated event
       // to fetch the next question. If it is not an APL device, it just fetches the next question as well and renders.
       gameSequence.push(buildNthAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswers, customerAnswers, score, index, isAplDevice));
-    if (customerAnswers[index]) {
-      score++;
-    }
 
     if (isAplDevice)
       // For APL devices, auto generated event to fetch the next question arrives. The skill fetches the next question and asks the user.
@@ -238,6 +238,9 @@ function buildGameSequence_MixedUIAndVoiceInteraction(gameQuestionsIndices, corr
   }
 
   const customersLastAnswer = customerAnswers[GAME_LENGTH - 1];
+  if (customersLastAnswer) {
+    score++;
+  }
   const isWinning = isWinningGame(customerAnswers);
   if (responseModes[GAME_LENGTH - 1] === ResponseModes.TOUCH)
     // User taps on an answer for the last question in the game. The skill informs the user their final score and whether or not they won the game.
@@ -396,7 +399,7 @@ function buildStartGameSequenceItem(gameQuestionsIndices, correctAnswers, isAplD
 function buildNthAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctAnswers, customerAnswers, isCorrectAnswer, score, index) {
   let prompt;
   if (isCorrectAnswer) {
-    prompt = `That answer is correct. Your score is ${score + 1}.`;
+    prompt = `That answer is correct. Your score is ${score}.`;
   }
   else {
     prompt = `${customerAnswers[index] === null ? `` : `That answer is wrong. `}The correct answer is ${correctAnswers[index]}: ${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer. Your score is ${score}.`;
@@ -418,7 +421,7 @@ function buildNthAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctA
           correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer`,
           questionIndex: index,
           gameQuestionsIndices: gameQuestionsIndices,
-          score: score,
+          score: isCorrectAnswer ? score - 1 : score, // The score argument into this method is already incremented if the answer is correct. However, this APLUserEvent argument is simulating the user's touch based answer. So, use the old score from before the current question was answered.
         }).build(),
     says: prompt,
     repromptsNothing: true,
@@ -430,7 +433,7 @@ function buildNthAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctA
       correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer`,
       questionIndex: index,
       gameQuestionsIndices: gameQuestionsIndices,
-      score: isCorrectAnswer ? score + 1 : score,
+      score: score,
     },
     get renderDocument() {
       return {
@@ -484,7 +487,7 @@ function buildFetchNextQuestionEventGameSequenceItem(gameQuestionsIndices, corre
 function buildLastAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctAnswers, isCorrectAnswer, score, isWinning) {
   let prompt;
   if (isCorrectAnswer) {
-    prompt = `That answer is correct. You got ${score + 1} out of ${GAME_LENGTH} questions correct. ${isWinning ? `You won the game. Thank you for playing!` : `Unfortunately, you did not win this game. Thank you for playing!`}`;
+    prompt = `That answer is correct. You got ${score} out of ${GAME_LENGTH} questions correct. ${isWinning ? `You won the game. Thank you for playing!` : `Unfortunately, you did not win this game. Thank you for playing!`}`;
   }
   else {
     prompt = `That answer is wrong. The correct answer is ${correctAnswers[GAME_LENGTH - 1]}: ${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[GAME_LENGTH - 1] + 1} / Correct Answer. You got ${score} out of ${GAME_LENGTH} questions correct. ${isWinning ? `You won the game. Thank you for playing!` : `Unfortunately, you did not win this game. Thank you for playing!`}`;
@@ -506,7 +509,7 @@ function buildLastAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correct
           correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[GAME_LENGTH - 1] + 1} / Correct Answer`,
           questionIndex: GAME_LENGTH - 1,
           gameQuestionsIndices: gameQuestionsIndices,
-          score: score,
+          score: isCorrectAnswer ? score - 1 : score, // The score argument into this method is already incremented if the answer is correct. However, this APLUserEvent argument is simulating the user's touch based answer. So, use the old score from before the current question was answered.
         }).build(),
     says: prompt,
     repromptsNothing: true,
@@ -519,7 +522,7 @@ function buildLastAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correct
         },
         hasDataSources: {
           gameResultsDataSource: (ds: any) => {
-            return verifyGameResultsDataSource(ds, isWinning, null, isCorrectAnswer ? score + 1 : score, null, GAME_LENGTH);
+            return verifyGameResultsDataSource(ds, isWinning, null, score, null, GAME_LENGTH);
           },
         },
       }
@@ -539,8 +542,8 @@ function buildNthAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswe
     answerIntent = buildAnswerIntent(correctAnswers[index], isAplDevice);
 
     // We deliver the next question only on non-APL devices.
-    if (!isAplDevice) prompt = `That answer is correct. Your score is ${score + 1}. Question ${index + 2}. ${SCIENCE_CATEGORY} Question`;
-    else prompt = `That answer is correct. Your score is ${score + 1}.`;
+    if (!isAplDevice) prompt = `That answer is correct. Your score is ${score}. Question ${index + 2}. ${SCIENCE_CATEGORY} Question`;
+    else prompt = `That answer is correct. Your score is ${score}.`;
   }
   else {
     answerIntent = isCorrectAnswer === null ? buildDontKnowIntent(isAplDevice) : buildAnswerIntent(correctAnswers[index] + 1, isAplDevice); //+1 to simulate a wrong answer
@@ -559,7 +562,7 @@ function buildNthAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswe
       correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer`,
       questionIndex: index,
       gameQuestionsIndices: gameQuestionsIndices,
-      score: isCorrectAnswer ? score + 1 : score,
+      score: score,
     };
   }
   else {
@@ -569,7 +572,7 @@ function buildNthAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswe
       correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index + 1] + 1} / Correct Answer`,
       questionIndex: index + 1,
       gameQuestionsIndices: gameQuestionsIndices,
-      score: isCorrectAnswer ? score + 1 : score,
+      score: score,
     };
   }
 
@@ -614,7 +617,7 @@ function buildLastAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnsw
 
   if (isCorrectAnswer) {
     answerIntent = buildAnswerIntent(correctAnswers[GAME_LENGTH - 1], isAplDevice);
-    prompt = `That answer is correct. You got ${score + 1} out of ${GAME_LENGTH} questions correct. ${isWinning ? `You won the game. Thank you for playing!` : `Unfortunately, you did not win this game. Thank you for playing!`}`;
+    prompt = `That answer is correct. You got ${score} out of ${GAME_LENGTH} questions correct. ${isWinning ? `You won the game. Thank you for playing!` : `Unfortunately, you did not win this game. Thank you for playing!`}`;
   }
   else {
     answerIntent = isCorrectAnswer === null ? buildDontKnowIntent(isAplDevice) : buildAnswerIntent(correctAnswers[GAME_LENGTH - 1] + 1, isAplDevice); //+1 to simulate a wrong answer
@@ -636,7 +639,7 @@ function buildLastAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnsw
         },
         hasDataSources: {
           gameResultsDataSource: (ds: any) => {
-            return verifyGameResultsDataSource(ds, isWinning, null, isCorrectAnswer ? score + 1 : score, null, GAME_LENGTH);
+            return verifyGameResultsDataSource(ds, isWinning, null, score, null, GAME_LENGTH);
           },
         },
       }
