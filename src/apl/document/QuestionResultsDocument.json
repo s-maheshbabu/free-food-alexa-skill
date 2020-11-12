@@ -46,7 +46,7 @@
                                 "alignSelf": "center",
                                 "textAlignVertical": "center",
                                 "textAlign": "center",
-                                "text": "${questionResultsDataSource.currentQuestionIndex}/${questionResultsDataSource.totalNumberOfQuestions}",
+                                "text": "${questionResultsDataSource.isCorrect ? 'Correct' : 'Sorry'}",
                                 "fontSize": "100"
                             }
                         ]
