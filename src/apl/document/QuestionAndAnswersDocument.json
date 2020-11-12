@@ -17,22 +17,62 @@
     "layouts": {},
     "mainTemplate": {
         "parameters": [
-            "payload",
             "questionAndAnswersDataSource"
         ],
         "items": [
             {
-                "type": "AlexaTextList",
-                "id": "answersList",
-                "headerTitle": "${questionAndAnswersDataSource.textListData.title}",
-                "headerBackButton": false,
-                "headerAttributionImage": "${questionAndAnswersDataSource.textListData.logoUrl}",
-                "backgroundImageSource": "${questionAndAnswersDataSource.textListData.backgroundImage.sources[0].url}",
-                "backgroundBlur": false,
-                "backgroundColorOverlay": true,
-                "listItems": "${questionAndAnswersDataSource.textListData.listItems}",
-                "touchForward": true,
-                "hintText": "${questionAndAnswersDataSource.textListData.hintText}"
+                "type": "Container",
+                "height": "100%",
+                "item": [
+                    {
+                        "type": "Container",
+                        "height": "20%",
+                        "item": [
+                            {
+                                "type": "ScrollView",
+                                "height": "100%",
+                                "item": [
+                                    {
+                                        "type": "Text",
+                                        "maxLines": 3,
+                                        "text": "${questionAndAnswersDataSource.title}",
+                                        "backgroundImageSource": "${questionAndAnswersDataSource.backgroundImage.sources[0].url}",
+                                        "fontSize": "30dp"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "Container",
+                        "height": "80%",
+                        "item": [
+                            {
+                                "type": "AlexaBackground",
+                                "videoAutoPlay": true,
+                                "backgroundVideoSource": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                                "backgroundColor": "white",
+                                "videoAudioTrack": "none"
+                            },
+                            {
+                                "type": "ScrollView",
+                                "height": "100%",
+                                "item": {
+                                    "type": "AlexaTextList",
+                                    "id": "answersList",
+                                    "headerBackButton": false,
+                                    "backgroundBlur": false,
+                                    "backgroundColorOverlay": true,
+                                    "listItems": "${questionAndAnswersDataSource.listItems}",
+                                    "touchForward": true,
+                                    "videoAutoPlay": true,
+                                    "backgroundVideoSource": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                                    "backgroundColor": "white"
+                                }
+                            }
+                        ]
+                    }
+                ]
             }
         ]
     }

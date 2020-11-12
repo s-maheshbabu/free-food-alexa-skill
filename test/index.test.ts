@@ -328,9 +328,9 @@ function verifyQuestionAndAnswersDataSource(datasource, questionIndex, sessionAt
   const question = allQuestions[questionIndex];
   const questionText = Object.keys(question)[0];
   const answers = question[Object.keys(question)[0]].slice();
-  expect(datasource.textListData.title).to.equal(questionText);
+  expect(datasource.title).to.equal(questionText);
 
-  const displayedAnswers = datasource.textListData.listItems;
+  const displayedAnswers = datasource.listItems;
   for (let index = 0; index < displayedAnswers.length; index++) {
     const displayedAnswer = displayedAnswers[index];
 
