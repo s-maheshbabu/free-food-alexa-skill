@@ -84,6 +84,8 @@ const startGame = (isNewGame, handlerInput) => {
     questionIndex: nextQuestionIndex,
     gameQuestionsIndices: gameQuestionsIndices,
     score: 0,
+    incorrectAnswers: 0,
+    skippedAnswers: 0,
   });
   handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 

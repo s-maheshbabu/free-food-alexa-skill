@@ -154,7 +154,7 @@
                                         "position": "absolute",
                                         "alignSelf": "start",
                                         "textAlignVertical": "center",
-                                        "text": "${questionResultsDataSource.skipped}"
+                                        "text": "${questionResultsDataSource.skippedAnswers}"
                                     },
                                     {
                                         "type": "Text",

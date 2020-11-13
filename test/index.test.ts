@@ -209,7 +209,7 @@ function buildGameSequence_UIInteraction(gameQuestionsIndices, correctAnswers, c
 
 function buildGameSequence_MixedUIAndVoiceInteraction(gameQuestionsIndices, correctAnswers, customerAnswers, responseModes, isAplDevice = true) {
   assert(gameQuestionsIndices.length == GAME_LENGTH && correctAnswers.length == GAME_LENGTH && customerAnswers.length == GAME_LENGTH && responseModes.length == GAME_LENGTH);
-  let score = 0;
+  let score = 0, incorrectAnswers = 0, skippedAnswers = 0;
 
   const gameSequence = [];
 
@@ -223,31 +223,39 @@ function buildGameSequence_MixedUIAndVoiceInteraction(gameQuestionsIndices, corr
   for (let index = 0; index < customerAnswers.length - 1; index++) {
     if (customerAnswers[index]) {
       score++;
+    } else if (customerAnswers[index] === null) {
+      skippedAnswers++;
+    } else {
+      incorrectAnswers++;
     }
     if (responseModes[index] === ResponseModes.TOUCH)
       // User taps on an answer. The skill informs the user whether they are right or wrong and kicks off an auto_generated event.
-      gameSequence.push(buildNthAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctAnswers, customerAnswers, customerAnswers[index], score, index));
+      gameSequence.push(buildNthAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctAnswers, customerAnswers, customerAnswers[index], score, incorrectAnswers, skippedAnswers, index));
     else if (responseModes[index] === ResponseModes.VOICE)
       // User answers by voice. The skill informs the user whether they are right or wrong. If it is an APL device, it then kicks off an auto_generated event
       // to fetch the next question. If it is not an APL device, it just fetches the next question as well and renders.
-      gameSequence.push(buildNthAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswers, customerAnswers, score, index, isAplDevice));
+      gameSequence.push(buildNthAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswers, customerAnswers, score, incorrectAnswers, skippedAnswers, index, isAplDevice));
 
     if (isAplDevice)
       // For APL devices, auto generated event to fetch the next question arrives. The skill fetches the next question and asks the user.
-      gameSequence.push(buildFetchNextQuestionEventGameSequenceItem(gameQuestionsIndices, correctAnswers, score, index));
+      gameSequence.push(buildFetchNextQuestionEventGameSequenceItem(gameQuestionsIndices, correctAnswers, score, incorrectAnswers, skippedAnswers, index));
   }
 
   const customersLastAnswer = customerAnswers[GAME_LENGTH - 1];
   if (customersLastAnswer) {
     score++;
+  } else if (customersLastAnswer === null) {
+    skippedAnswers++;
+  } else {
+    incorrectAnswers++;
   }
   const isWinning = isWinningGame(customerAnswers);
   if (responseModes[GAME_LENGTH - 1] === ResponseModes.TOUCH)
     // User taps on an answer for the last question in the game. The skill informs the user their final score and whether or not they won the game.
-    gameSequence.push(buildLastAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctAnswers, customersLastAnswer, score, isWinning));
+    gameSequence.push(buildLastAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctAnswers, customersLastAnswer, score, incorrectAnswers, skippedAnswers, isWinning));
   else if (responseModes[GAME_LENGTH - 1] === ResponseModes.VOICE)
     // User answers the last question in the game with voice. The skill informs the user their final score and whether or not they won the game.
-    gameSequence.push(buildLastAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswers, customersLastAnswer, score, isWinning, isAplDevice));
+    gameSequence.push(buildLastAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswers, customersLastAnswer, score, incorrectAnswers, skippedAnswers, isWinning, isAplDevice));
 
   console.log(`This is a ${isWinning ? 'Winning' : 'Losing'} game`);
   console.log(`Score is ${score} out of ${GAME_LENGTH}`);
@@ -294,12 +302,12 @@ function getCorrectAnswerIndices() {
  * 
  * @param datasource The APL data source to be validated.
  */
-function verifyQuestionResultsDataSource(datasource, isCorrect, currentQuestionIndex, incorrectAnswers, score, skipped, totalNumberOfQuestions) {
+function verifyQuestionResultsDataSource(datasource, isCorrect, currentQuestionIndex, incorrectAnswers, score, skippedAnswers, totalNumberOfQuestions) {
   expect(datasource.isCorrect).to.equal(isCorrect);
   expect(datasource.currentQuestionIndex).to.equal(currentQuestionIndex + 1);
-  expect(datasource.incorrectAnswers).to.equal(111);
+  expect(datasource.incorrectAnswers).to.equal(incorrectAnswers);
   expect(datasource.score).to.equal(score);
-  expect(datasource.skipped).to.equal(222);
+  expect(datasource.skippedAnswers).to.equal(skippedAnswers);
   expect(datasource.totalNumberOfQuestions).to.equal(totalNumberOfQuestions);
 
   return true;
@@ -310,11 +318,11 @@ function verifyQuestionResultsDataSource(datasource, isCorrect, currentQuestionI
  * 
  * @param datasource The APL data source to be validated.
  */
-function verifyGameResultsDataSource(datasource, isWon, incorrectAnswers, score, skipped, totalNumberOfQuestions) {
+function verifyGameResultsDataSource(datasource, isWon, incorrectAnswers, score, skippedAnswers, totalNumberOfQuestions) {
   expect(datasource.isWon).to.equal(isWon);
-  expect(datasource.incorrectAnswers).to.equal(111);
+  expect(datasource.incorrectAnswers).to.equal(incorrectAnswers);
   expect(datasource.score).to.equal(score);
-  expect(datasource.skipped).to.equal(222);
+  expect(datasource.skippedAnswers).to.equal(skippedAnswers);
   expect(datasource.totalNumberOfQuestions).to.equal(totalNumberOfQuestions);
 
   return true;
@@ -373,6 +381,8 @@ function buildStartGameSequenceItem(gameQuestionsIndices, correctAnswers, isAplD
       questionIndex: 0,
       gameQuestionsIndices: gameQuestionsIndices,
       score: 0,
+      incorrectAnswers: 0,
+      skippedAnswers: 0,
     },
     get renderDocument() {
       // No APL directives should be included for devices that don't support APL.
@@ -396,7 +406,7 @@ function buildStartGameSequenceItem(gameQuestionsIndices, correctAnswers, isAplD
 
 // Simulates the user answering by touch one of the questions in the game (not the last question which is a special case)
 // and verifies the expected skill responses.
-function buildNthAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctAnswers, customerAnswers, isCorrectAnswer, score, index) {
+function buildNthAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctAnswers, customerAnswers, isCorrectAnswer, score, incorrectAnswers, skippedAnswers, index) {
   let prompt;
   if (isCorrectAnswer) {
     prompt = `That answer is correct. Your score is ${score}.`;
@@ -421,6 +431,8 @@ function buildNthAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctA
           correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer`,
           questionIndex: index,
           gameQuestionsIndices: gameQuestionsIndices,
+          skippedAnswers: isCorrectAnswer === null ? skippedAnswers - 1 : skippedAnswers, // The skippedAnswers argument into this method is already incremented if the answer is null. However, this APLUserEvent argument is simulating the user's touch based answer. So, use the old skippedAnswers value from before the current question was answered.
+          incorrectAnswers: isCorrectAnswer === false ? incorrectAnswers - 1 : incorrectAnswers, // The incorrectAnswers argument into this method is already decremented if the answer is incorrect. However, this APLUserEvent argument is simulating the user's touch based answer. So, use the old incorrectAnswers count from before the current question was answered.
           score: isCorrectAnswer ? score - 1 : score, // The score argument into this method is already incremented if the answer is correct. However, this APLUserEvent argument is simulating the user's touch based answer. So, use the old score from before the current question was answered.
         }).build(),
     says: prompt,
@@ -431,9 +443,11 @@ function buildNthAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctA
       category: SCIENCE_CATEGORY,
       correctAnswerIndex: correctAnswers[index],
       correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer`,
+      incorrectAnswers: incorrectAnswers,
       questionIndex: index,
       gameQuestionsIndices: gameQuestionsIndices,
       score: score,
+      skippedAnswers: skippedAnswers,
     },
     get renderDocument() {
       return {
@@ -443,7 +457,7 @@ function buildNthAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctA
         },
         hasDataSources: {
           questionResultsDataSource: (ds: any) => {
-            return verifyQuestionResultsDataSource(ds, isCorrectAnswer ? true : false, this.hasAttributes.questionIndex, null, this.hasAttributes.score, null, GAME_LENGTH);
+            return verifyQuestionResultsDataSource(ds, isCorrectAnswer ? true : false, this.hasAttributes.questionIndex, this.hasAttributes.incorrectAnswers, this.hasAttributes.score, this.hasAttributes.skippedAnswers, GAME_LENGTH);
           },
         },
       }
@@ -452,7 +466,7 @@ function buildNthAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctA
 }
 
 // Simulates an auto-generated event from APL devices to fetch next question and verifies the expected skill responses.
-function buildFetchNextQuestionEventGameSequenceItem(gameQuestionsIndices, correctAnswers, score, index) {
+function buildFetchNextQuestionEventGameSequenceItem(gameQuestionsIndices, correctAnswers, score, incorrectAnswers, skippedAnswers, index) {
   return {
     request: new AplUserEventRequestBuilder(skillSettings)
       .withInterfaces({ apl: true })
@@ -466,6 +480,8 @@ function buildFetchNextQuestionEventGameSequenceItem(gameQuestionsIndices, corre
           questionIndex: index,
           gameQuestionsIndices: gameQuestionsIndices,
           score: score,
+          incorrectAnswers: incorrectAnswers,
+          skippedAnswers: skippedAnswers,
         }).build(),
     saysLike: `Question ${index + 2}. ${SCIENCE_CATEGORY} Question `,
     repromptsLike: `Question ${index + 2}. ${SCIENCE_CATEGORY} Question `,
@@ -478,13 +494,15 @@ function buildFetchNextQuestionEventGameSequenceItem(gameQuestionsIndices, corre
       questionIndex: index + 1,
       gameQuestionsIndices: gameQuestionsIndices,
       score: score,
+      incorrectAnswers: incorrectAnswers,
+      skippedAnswers: skippedAnswers,
     },
   }
 }
 
 // Simulates the user clicking on one of the answers for the last question in the game. It then verifies the expected skill responses
 // which includes declaring if the user won or lost the game.
-function buildLastAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctAnswers, isCorrectAnswer, score, isWinning) {
+function buildLastAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctAnswers, isCorrectAnswer, score, incorrectAnswers, skippedAnswers, isWinning) {
   let prompt;
   if (isCorrectAnswer) {
     prompt = `That answer is correct. You got ${score} out of ${GAME_LENGTH} questions correct. ${isWinning ? `You won the game. Thank you for playing!` : `Unfortunately, you did not win this game. Thank you for playing!`}`;
@@ -509,6 +527,8 @@ function buildLastAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correct
           correctAnswerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[GAME_LENGTH - 1] + 1} / Correct Answer`,
           questionIndex: GAME_LENGTH - 1,
           gameQuestionsIndices: gameQuestionsIndices,
+          incorrectAnswers: isCorrectAnswer === false ? incorrectAnswers - 1 : incorrectAnswers, // The incorrectAnswers argument into this method is already decremented if the answer is incorrect. However, this APLUserEvent argument is simulating the user's touch based answer. So, use the old incorrectAnswers count from before the current question was answered.
+          skippedAnswers: isCorrectAnswer === null ? skippedAnswers - 1 : skippedAnswers, // The skippedAnswers argument into this method is already incremented if the answer is null. However, this APLUserEvent argument is simulating the user's touch based answer. So, use the old skippedAnswers value from before the current question was answered.
           score: isCorrectAnswer ? score - 1 : score, // The score argument into this method is already incremented if the answer is correct. However, this APLUserEvent argument is simulating the user's touch based answer. So, use the old score from before the current question was answered.
         }).build(),
     says: prompt,
@@ -522,7 +542,7 @@ function buildLastAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correct
         },
         hasDataSources: {
           gameResultsDataSource: (ds: any) => {
-            return verifyGameResultsDataSource(ds, isWinning, null, score, null, GAME_LENGTH);
+            return verifyGameResultsDataSource(ds, isWinning, incorrectAnswers, score, skippedAnswers, GAME_LENGTH);
           },
         },
       }
@@ -534,7 +554,7 @@ function buildLastAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correct
 // Users can answer by voice both on APL and non-APL devices. So, we verify that the right responses are returned in each case.
 // For APL devices we just deliver results of the previous question and kick off an auto-generated event to fetch the next question.
 // For non-APL devices, we deliver results of the previous question and also render the next question.
-function buildNthAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswers, customerAnswers, score, index, isAplDevice) {
+function buildNthAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswers, customerAnswers, score, incorrectAnswers, skippedAnswers, index, isAplDevice) {
   const isCorrectAnswer = customerAnswers[index];
 
   let prompt, answerIntent, attributes;
@@ -563,6 +583,8 @@ function buildNthAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswe
       questionIndex: index,
       gameQuestionsIndices: gameQuestionsIndices,
       score: score,
+      incorrectAnswers: incorrectAnswers,
+      skippedAnswers: skippedAnswers,
     };
   }
   else {
@@ -573,6 +595,8 @@ function buildNthAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswe
       questionIndex: index + 1,
       gameQuestionsIndices: gameQuestionsIndices,
       score: score,
+      incorrectAnswers: incorrectAnswers,
+      skippedAnswers: skippedAnswers,
     };
   }
 
@@ -602,7 +626,7 @@ function buildNthAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswe
         },
         hasDataSources: {
           questionResultsDataSource: (ds: any) => {
-            return verifyQuestionResultsDataSource(ds, isCorrectAnswer ? true : false, this.hasAttributes.questionIndex, null, this.hasAttributes.score, null, GAME_LENGTH);
+            return verifyQuestionResultsDataSource(ds, isCorrectAnswer ? true : false, this.hasAttributes.questionIndex, this.hasAttributes.incorrectAnswers, this.hasAttributes.score, this.hasAttributes.skippedAnswers, GAME_LENGTH);
           },
         },
       }
@@ -612,7 +636,7 @@ function buildNthAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswe
 
 // Simulates the user answering by voice the last question in the game. It then verifies the expected skill responses
 // which includes declaring if the user won or lost the game.
-function buildLastAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswers, isCorrectAnswer, score, isWinning, isAplDevice) {
+function buildLastAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswers, isCorrectAnswer, score, incorrectAnswers, skippedAnswers, isWinning, isAplDevice) {
   let prompt, answerIntent;
 
   if (isCorrectAnswer) {
@@ -639,7 +663,7 @@ function buildLastAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnsw
         },
         hasDataSources: {
           gameResultsDataSource: (ds: any) => {
-            return verifyGameResultsDataSource(ds, isWinning, null, score, null, GAME_LENGTH);
+            return verifyGameResultsDataSource(ds, isWinning, incorrectAnswers, score, skippedAnswers, GAME_LENGTH);
           },
         },
       }

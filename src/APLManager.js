@@ -40,7 +40,7 @@ const getQuestionAndAnswersViewDirective = (question, answers, sessionAttributes
  * Returns APL directives to be rendered at the end of the game declaring the game results.
  */
 const getGameResultsViewDirectives = (isWon, sessionAttributes) => {
-    const { score } = sessionAttributes;
+    const { incorrectAnswers, score, skippedAnswers } = sessionAttributes;
     return [{
         type: APL.APL_DOCUMENT_TYPE,
         version: APL.APL_DOCUMENT_VERSION,
@@ -48,9 +48,9 @@ const getGameResultsViewDirectives = (isWon, sessionAttributes) => {
         datasources: {
             gameResultsDataSource: gameResultsDataSource(
                 isWon,
-                111,
+                incorrectAnswers,
                 score,
-                222,
+                skippedAnswers,
                 GAME_LENGTH,
             ),
         },
@@ -62,7 +62,8 @@ const getGameResultsViewDirectives = (isWon, sessionAttributes) => {
  */
 const getResultsViewDirective = (isCorrect, sessionAttributes) => {
     // TODO Validate inputs
-    // TODO ask-sdk-test currently has no provision to test Alexa.Presentation.APL.ExecuteCommands. Report bug.
+    // TODO ask-sdk-test currently has no provision to test Alexa.Presentation.APL.ExecuteCommands. Report bug.    
+    const { incorrectAnswers, score, skippedAnswers } = sessionAttributes;
     return [{
         type: APL.APL_DOCUMENT_TYPE,
         version: APL.APL_DOCUMENT_VERSION,
@@ -72,9 +73,9 @@ const getResultsViewDirective = (isCorrect, sessionAttributes) => {
             questionResultsDataSource: questionResultsDataSource(
                 isCorrect,
                 sessionAttributes.questionIndex + 1,
-                111,
-                sessionAttributes.score,
-                222,
+                incorrectAnswers,
+                score,
+                skippedAnswers,
                 GAME_LENGTH,
             ),
         },

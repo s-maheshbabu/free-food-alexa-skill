@@ -128,9 +128,17 @@ const determineResults = (sessionAttributes, userAnswerIndex, userGaveUp = false
   const isUserAnswerCorrect = userAnswerIndex && userAnswerIndex === correctAnswerIndexOfAlreadyAskedQuestion;
 
   let newScore = parseInt(sessionAttributes.score, 10);
+  let newIncorrectAnswers = parseInt(sessionAttributes.incorrectAnswers, 10);
+  let newskippedAnswers = parseInt(sessionAttributes.skippedAnswers, 10);
   if (isUserAnswerCorrect) newScore += 1;
+  else {
+    if (userGaveUp) newskippedAnswers++;
+    else newIncorrectAnswers++;
+  }
   const updatedSessionAttributes = Object.assign({}, sessionAttributes, {
     score: newScore,
+    incorrectAnswers: newIncorrectAnswers,
+    skippedAnswers: newskippedAnswers,
   });
 
   const isEndOfGame = sessionAttributes.questionIndex === GAME_LENGTH - 1;
