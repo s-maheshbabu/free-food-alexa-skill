@@ -3,7 +3,7 @@ const APLManager = require("APLManager");
 
 const interactions = require("interactions");
 
-const { NEXT_QUESTION_AUTO_GENERATED_EVENT } = require("constants/APL");
+const { NEXT_QUESTION_USER_GENERATED_EVENT, NEXT_QUESTION_AUTO_GENERATED_EVENT } = require("constants/APL");
 
 module.exports = UserEventHandler = {
     canHandle(handlerInput) {
@@ -12,7 +12,8 @@ module.exports = UserEventHandler = {
     handle(handlerInput) {
         const { responseBuilder } = handlerInput;
 
-        if (handlerInput.requestEnvelope.request.arguments[0] === NEXT_QUESTION_AUTO_GENERATED_EVENT) {
+        if (handlerInput.requestEnvelope.request.arguments[0] === NEXT_QUESTION_AUTO_GENERATED_EVENT ||
+            handlerInput.requestEnvelope.request.arguments[0] === NEXT_QUESTION_USER_GENERATED_EVENT) {
             const sessionAttributes = handlerInput.requestEnvelope.request.arguments[1];
             const nextQuestionInfo = determineNextQuestion(sessionAttributes, handlerInput.requestEnvelope.request.locale);
 

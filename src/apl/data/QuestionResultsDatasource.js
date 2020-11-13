@@ -1,11 +1,9 @@
-module.exports = (isCorrect, currentQuestionIndex, incorrectAnswers, score, skippedAnswers, totalNumberOfQuestions) => {
+module.exports = (isCorrect, sessionAttributes, totalNumberOfQuestions, nextQuestionUserEventName) => {
   //TODO: Input validation and testing?
   return {
     isCorrect: isCorrect,
-    currentQuestionIndex: currentQuestionIndex,
-    incorrectAnswers: incorrectAnswers,
-    score: score,
-    skippedAnswers: skippedAnswers,
+    nextQuestionUserEventName: nextQuestionUserEventName,
+    sessionAttributes: sessionAttributes,
     totalNumberOfQuestions: totalNumberOfQuestions,
   };
 };

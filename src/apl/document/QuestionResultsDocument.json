@@ -32,7 +32,7 @@
                         "items": [
                             {
                                 "type": "AlexaProgressBarRadial",
-                                "progressValue": "${questionResultsDataSource.currentQuestionIndex}",
+                                "progressValue": "${questionResultsDataSource.sessionAttributes.currentQuestionIndex + 1}",
                                 "totalValue": "${questionResultsDataSource.totalNumberOfQuestions}",
                                 "progressFillColor": "green",
                                 "theme": "light",
@@ -82,7 +82,7 @@
                                         "position": "absolute",
                                         "alignSelf": "start",
                                         "textAlignVertical": "center",
-                                        "text": "${questionResultsDataSource.incorrectAnswers}"
+                                        "text": "${questionResultsDataSource.sessionAttributes.incorrectAnswers}"
                                     },
                                     {
                                         "type": "Text",
@@ -118,7 +118,7 @@
                                         "position": "absolute",
                                         "alignSelf": "start",
                                         "textAlignVertical": "center",
-                                        "text": "${questionResultsDataSource.score}"
+                                        "text": "${questionResultsDataSource.sessionAttributes.score}"
                                     },
                                     {
                                         "type": "Text",
@@ -154,7 +154,7 @@
                                         "position": "absolute",
                                         "alignSelf": "start",
                                         "textAlignVertical": "center",
-                                        "text": "${questionResultsDataSource.skippedAnswers}"
+                                        "text": "${questionResultsDataSource.sessionAttributes.skippedAnswers}"
                                     },
                                     {
                                         "type": "Text",
@@ -180,7 +180,14 @@
                                     "touchForward": true,
                                     "position": "absolute",
                                     "bottom": "0",
-                                    "right": "0"
+                                    "right": "0",
+                                    "primaryAction": {
+                                        "type": "SendEvent",
+                                        "arguments": [
+                                            "${questionResultsDataSource.nextQuestionUserEventName}",
+                                            "${questionResultsDataSource.sessionAttributes}"
+                                        ]
+                                    }
                                 }
                             }
                         ]
@@ -190,58 +197,6 @@
         ]
     },
     "layouts": {},
-    "graphics": {
-        "avgttext__": {
-            "type": "AVG",
-            "version": "1.2",
-            "height": 100,
-            "width": 100,
-            "parameters": [
-                {
-                    "name": "circleColor",
-                    "type": "color",
-                    "default": "black"
-                },
-                {
-                    "name": "circleBorderWidth",
-                    "type": "number",
-                    "default": 2
-                }
-            ],
-            "items": [
-                {
-                    "type": "path",
-                    "pathData": "M25,50 a25,25 0 1 1 50,0 a25,25 0 1 1 -50,0",
-                    "stroke": "${circleColor}",
-                    "strokeWidth": "${circleBorderWidth}",
-                    "fill": "none"
-                }
-            ]
-        },
-        "avgttext": {
-            "type": "AVG",
-            "version": "1.2",
-            "height": 100,
-            "width": 100,
-            "items": [
-                {
-                    "type": "path",
-                    "pathData": "M25,50 a25,25 0 1 1 50,0 a25,25 0 1 1 -50,0",
-                    "fill": "blue",
-                    "stroke": "blue"
-                },
-                {
-                    "type": "text",
-                    "fill": "red",
-                    "fontFamily": "amazon-ember, sans-serif",
-                    "fontSize": 60,
-                    "text": "3",
-                    "x": 75,
-                    "y": 50,
-                    "textAnchor": "middle"
-                }
-            ]
-        }
-    },
+    "graphics": {},
     "styles": {}
 }

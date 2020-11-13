@@ -15,6 +15,7 @@ const SkillSettings = require('ask-sdk-test').SkillSettings;
 const {
   APL_DOCUMENT_VERSION,
   NEXT_QUESTION_AUTO_GENERATED_EVENT,
+  NEXT_QUESTION_USER_GENERATED_EVENT,
   QUESTION_VIEW_TOKEN: QUESTION_AND_ANSWERS_VIEW_TOKEN,
   RESULTS_VIEW_TOKEN,
   USER_INITIATED_CLICK_EVENT } = require("../src/constants/APL");
@@ -302,13 +303,12 @@ function getCorrectAnswerIndices() {
  * 
  * @param datasource The APL data source to be validated.
  */
-function verifyQuestionResultsDataSource(datasource, isCorrect, currentQuestionIndex, incorrectAnswers, score, skippedAnswers, totalNumberOfQuestions) {
+function verifyQuestionResultsDataSource(datasource, sessionAttributes, isCorrect, totalNumberOfQuestions) {
+  assert(deepEqual(datasource.sessionAttributes, sessionAttributes));
+
   expect(datasource.isCorrect).to.equal(isCorrect);
-  expect(datasource.currentQuestionIndex).to.equal(currentQuestionIndex + 1);
-  expect(datasource.incorrectAnswers).to.equal(incorrectAnswers);
-  expect(datasource.score).to.equal(score);
-  expect(datasource.skippedAnswers).to.equal(skippedAnswers);
   expect(datasource.totalNumberOfQuestions).to.equal(totalNumberOfQuestions);
+  expect(datasource.nextQuestionUserEventName).to.equal(NEXT_QUESTION_USER_GENERATED_EVENT);
 
   return true;
 }
@@ -457,7 +457,7 @@ function buildNthAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctA
         },
         hasDataSources: {
           questionResultsDataSource: (ds: any) => {
-            return verifyQuestionResultsDataSource(ds, isCorrectAnswer ? true : false, this.hasAttributes.questionIndex, this.hasAttributes.incorrectAnswers, this.hasAttributes.score, this.hasAttributes.skippedAnswers, GAME_LENGTH);
+            return verifyQuestionResultsDataSource(ds, this.hasAttributes, isCorrectAnswer ? true : false, GAME_LENGTH);
           },
         },
       }
@@ -472,7 +472,7 @@ function buildFetchNextQuestionEventGameSequenceItem(gameQuestionsIndices, corre
       .withInterfaces({ apl: true })
       .withToken(QUESTION_AND_ANSWERS_VIEW_TOKEN)
       .withArguments(
-        NEXT_QUESTION_AUTO_GENERATED_EVENT,
+        Math.random() >= 0.5 ? NEXT_QUESTION_AUTO_GENERATED_EVENT : NEXT_QUESTION_USER_GENERATED_EVENT,
         {
           category: SCIENCE_CATEGORY,
           correctAnswerIndex: correctAnswers[index],
@@ -626,7 +626,7 @@ function buildNthAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswe
         },
         hasDataSources: {
           questionResultsDataSource: (ds: any) => {
-            return verifyQuestionResultsDataSource(ds, isCorrectAnswer ? true : false, this.hasAttributes.questionIndex, this.hasAttributes.incorrectAnswers, this.hasAttributes.score, this.hasAttributes.skippedAnswers, GAME_LENGTH);
+            return verifyQuestionResultsDataSource(ds, this.hasAttributes, isCorrectAnswer ? true : false, GAME_LENGTH);
           },
         },
       }

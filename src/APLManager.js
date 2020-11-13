@@ -9,6 +9,7 @@ const gameResultsDocument = require("apl/document/GameResultsDocument");
 
 const questionAndAnswersDataSource = require("apl/data/QuestionAndAnswersDatasource");
 const questionAndAnswersDocument = require("apl/document/QuestionAndAnswersDocument");
+const { NEXT_QUESTION_USER_GENERATED_EVENT } = require("./constants/APL");
 
 const getQuestionAndAnswersViewDirective = (question, answers, sessionAttributes) => {
     // TODO Validate inputs
@@ -63,7 +64,6 @@ const getGameResultsViewDirectives = (isWon, sessionAttributes) => {
 const getResultsViewDirective = (isCorrect, sessionAttributes) => {
     // TODO Validate inputs
     // TODO ask-sdk-test currently has no provision to test Alexa.Presentation.APL.ExecuteCommands. Report bug.    
-    const { incorrectAnswers, score, skippedAnswers } = sessionAttributes;
     return [{
         type: APL.APL_DOCUMENT_TYPE,
         version: APL.APL_DOCUMENT_VERSION,
@@ -72,11 +72,9 @@ const getResultsViewDirective = (isCorrect, sessionAttributes) => {
         datasources: {
             questionResultsDataSource: questionResultsDataSource(
                 isCorrect,
-                sessionAttributes.questionIndex + 1,
-                incorrectAnswers,
-                score,
-                skippedAnswers,
+                sessionAttributes,
                 GAME_LENGTH,
+                NEXT_QUESTION_USER_GENERATED_EVENT,
             ),
         },
     },
