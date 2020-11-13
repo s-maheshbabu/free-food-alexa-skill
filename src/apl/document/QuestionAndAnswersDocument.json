@@ -34,10 +34,13 @@
                                 "item": [
                                     {
                                         "type": "Text",
+                                        "height": "100%",
                                         "maxLines": 3,
+                                        "textAlignVertical": "center",
                                         "text": "${questionAndAnswersDataSource.title}",
                                         "backgroundImageSource": "${questionAndAnswersDataSource.backgroundImage.sources[0].url}",
-                                        "fontSize": "30dp"
+                                        "fontSize": "30dp",
+                                        "textAlign": "center"
                                     }
                                 ]
                             }
