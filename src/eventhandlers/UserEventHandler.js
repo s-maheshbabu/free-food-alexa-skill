@@ -55,7 +55,7 @@ const deliverResults = (handlerInput, sessionAttributes, userAnswerIndex, userGa
     return responseBuilder
         .addDirective(directives[0]).addDirective(directives[1])
         .speak(results.speak)
-        .withShouldEndSession(false)
+        .withShouldEndSession(undefined)
         .getResponse();
 }
 

@@ -437,7 +437,7 @@ function buildNthAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctA
         }).build(),
     says: prompt,
     repromptsNothing: true,
-    shouldEndSession: false,
+    shouldEndSession: undefined,
     ignoreQuestionCheck: true,
     hasAttributes: {
       category: SCIENCE_CATEGORY,
@@ -614,7 +614,7 @@ function buildNthAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswe
       if (isAplDevice) return undefined;
       return `Question ${index + 2}. ${SCIENCE_CATEGORY} Question `;
     },
-    shouldEndSession: false,
+    shouldEndSession: isAplDevice ? undefined : false,
     ignoreQuestionCheck: true,
     hasAttributes: attributes,
     get renderDocument() {
