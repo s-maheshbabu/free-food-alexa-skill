@@ -9,7 +9,7 @@ const gameResultsDocument = require("apl/document/GameResultsDocument");
 
 const questionAndAnswersDataSource = require("apl/data/QuestionAndAnswersDatasource");
 const questionAndAnswersDocument = require("apl/document/QuestionAndAnswersDocument");
-const { NEXT_QUESTION_USER_GENERATED_EVENT } = require("./constants/APL");
+const { NEXT_QUESTION_USER_GENERATED_EVENT, NEW_GAME_USER_GENERATED_EVENT } = require("./constants/APL");
 
 const getQuestionAndAnswersViewDirective = (question, answers, sessionAttributes) => {
     // TODO Validate inputs
@@ -52,6 +52,7 @@ const getGameResultsViewDirectives = (isWon, sessionAttributes) => {
                 incorrectAnswers,
                 score,
                 skippedAnswers,
+                NEW_GAME_USER_GENERATED_EVENT,
                 GAME_LENGTH,
             ),
         },

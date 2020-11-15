@@ -3,7 +3,11 @@ const APLManager = require("APLManager");
 
 const interactions = require("interactions");
 
-const { NEXT_QUESTION_USER_GENERATED_EVENT, NEXT_QUESTION_AUTO_GENERATED_EVENT } = require("constants/APL");
+const { NEXT_QUESTION_USER_GENERATED_EVENT,
+    NEXT_QUESTION_AUTO_GENERATED_EVENT,
+    NEW_GAME_USER_GENERATED_EVENT, } = require("constants/APL");
+
+const startNewGame = require("requesthandlers/LaunchRequestHandler").handle;
 
 module.exports = UserEventHandler = {
     canHandle(handlerInput) {
@@ -28,6 +32,8 @@ module.exports = UserEventHandler = {
                 .addDirective(directive)
                 .withSimpleCard(interactions.t("GAME_NAME"), nextQuestionInfo.speak)
                 .getResponse();
+        } else if (handlerInput.requestEnvelope.request.arguments[0] === NEW_GAME_USER_GENERATED_EVENT) {
+            return startNewGame(handlerInput);
         }
 
         const sessionAttributes = handlerInput.requestEnvelope.request.arguments[1];

@@ -174,7 +174,43 @@
                             },
                             {
                                 "type": "Container",
-                                "height": "20%"
+                                "height": "20%",
+                                "justifyContent": "center",
+                                "direction": "row",
+                                "item": {
+                                    "type": "AlexaButton",
+                                    "buttonText": "Play Again",
+                                    "buttonStyle": "ingress",
+                                    "touchForward": true,
+                                    "primaryAction": {
+                                        "type": "SendEvent",
+                                        "arguments": [
+                                            "${gameResultsDataSource.newGameEventName}"
+                                        ]
+                                    },
+                                    "onMount": {
+                                        "type": "AnimateItem",
+                                        "easing": "ease-in-out",
+                                        "duration": 500,
+                                        "repeatCount": 3,
+                                        "repeatMode": "reverse",
+                                        "value": [
+                                            {
+                                                "property": "transform",
+                                                "from": [
+                                                    {
+                                                        "translateY": 0
+                                                    }
+                                                ],
+                                                "to": [
+                                                    {
+                                                        "translateY": "${viewport.height*0.2/5}"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
                             }
                         ]
                     }

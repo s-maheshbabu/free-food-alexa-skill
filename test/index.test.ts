@@ -16,6 +16,7 @@ const {
   APL_DOCUMENT_VERSION,
   NEXT_QUESTION_AUTO_GENERATED_EVENT,
   NEXT_QUESTION_USER_GENERATED_EVENT,
+  NEW_GAME_USER_GENERATED_EVENT,
   QUESTION_VIEW_TOKEN: QUESTION_AND_ANSWERS_VIEW_TOKEN,
   RESULTS_VIEW_TOKEN,
   USER_INITIATED_CLICK_EVENT } = require("../src/constants/APL");
@@ -220,7 +221,6 @@ function buildGameSequence_MixedUIAndVoiceInteraction(gameQuestionsIndices, corr
   else if (responseModes[0] === ResponseModes.VOICE)
     gameSequence.push(buildStartGameSequenceItem(gameQuestionsIndices, correctAnswers, isAplDevice));
 
-
   for (let index = 0; index < customerAnswers.length - 1; index++) {
     if (customerAnswers[index]) {
       score++;
@@ -323,6 +323,7 @@ function verifyGameResultsDataSource(datasource, isWon, incorrectAnswers, score,
   expect(datasource.incorrectAnswers).to.equal(incorrectAnswers);
   expect(datasource.score).to.equal(score);
   expect(datasource.skippedAnswers).to.equal(skippedAnswers);
+  expect(datasource.newGameEventName).to.equal(NEW_GAME_USER_GENERATED_EVENT);
   expect(datasource.totalNumberOfQuestions).to.equal(totalNumberOfQuestions);
 
   return true;
