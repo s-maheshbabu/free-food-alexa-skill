@@ -2,25 +2,24 @@ require("app-module-path").addPath(__dirname);
 
 const Alexa = require("ask-sdk-core");
 
-// TODO: The paths need not be relative. Fix it.
-const LaunchRequestHandler = require("./requesthandlers/LaunchRequestHandler");
-const SessionEndedRequestHandler = require("./requesthandlers/SessionEndedRequestHandler");
+const LaunchRequestHandler = require("requesthandlers/LaunchRequestHandler");
+const SessionEndedRequestHandler = require("requesthandlers/SessionEndedRequestHandler");
 
-const ErrorHandler = require("./errors/ErrorHandler");
+const ErrorHandler = require("errors/ErrorHandler");
 
-const AnswerIntentHandler = require("./intenthandlers/AnswerIntentHandler");
-const HelpIntentHandler = require("./intenthandlers/HelpIntentHandler");
-const NoIntentHandler = require("./intenthandlers/NoIntentHandler");
-const RepeatIntentHandler = require("./intenthandlers/RepeatIntentHandler");
-const StartGameIntentHandler = require("./intenthandlers/StartGameIntentHandler");
-const StopIntentHandler = require("./intenthandlers/StopIntentHandler");
-const UnhandledIntentHandler = require("./intenthandlers/UnhandledIntentHandler");
-const YesIntentHandler = require("./intenthandlers/YesIntentHandler");
+const AnswerIntentHandler = require("intenthandlers/AnswerIntentHandler");
+const HelpIntentHandler = require("intenthandlers/HelpIntentHandler");
+const NoIntentHandler = require("intenthandlers/NoIntentHandler");
+const RepeatIntentHandler = require("intenthandlers/RepeatIntentHandler");
+const StartGameIntentHandler = require("intenthandlers/StartGameIntentHandler");
+const StopIntentHandler = require("intenthandlers/StopIntentHandler");
+const UnhandledIntentHandler = require("intenthandlers/UnhandledIntentHandler");
+const YesIntentHandler = require("intenthandlers/YesIntentHandler");
 
 const UserEventHandler = require("eventhandlers/UserEventHandler");
 
-const LocalizationInterceptor = require("./interceptors/LocalizationInterceptor");
-const ResponseSanitizationInterceptor = require("./interceptors/ResponseSanitizationInterceptor");
+const LocalizationInterceptor = require("interceptors/LocalizationInterceptor");
+const ResponseSanitizationInterceptor = require("interceptors/ResponseSanitizationInterceptor");
 
 const LogRequestInterceptor = {
   process(handlerInput) {
