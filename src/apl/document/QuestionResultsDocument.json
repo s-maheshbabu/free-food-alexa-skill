@@ -21,7 +21,7 @@
                     {
                         "type": "AlexaBackground",
                         "videoAutoPlay": true,
-                        "backgroundVideoSource": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                        "backgroundVideoSource": "${questionResultsDataSource.isCorrect ? 'https://smartypants-alexa-skill.s3.amazonaws.com/Videos/QuestionResults_Correct_BackgroundVideo.mp4' : 'https://smartypants-alexa-skill.s3.amazonaws.com/Videos/QuestionResults_Incorrect_BackgroundVideo.mp4'}",
                         "backgroundColor": "white",
                         "videoAudioTrack": "none"
                     },
@@ -32,7 +32,7 @@
                         "items": [
                             {
                                 "type": "AlexaProgressBarRadial",
-                                "progressValue": "${questionResultsDataSource.sessionAttributes.currentQuestionIndex + 1}",
+                                "progressValue": "${questionResultsDataSource.sessionAttributes.questionIndex + 1}",
                                 "totalValue": "${questionResultsDataSource.totalNumberOfQuestions}",
                                 "progressFillColor": "green",
                                 "theme": "light",

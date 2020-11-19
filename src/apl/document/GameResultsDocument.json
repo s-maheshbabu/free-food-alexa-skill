@@ -20,8 +20,7 @@
                 "items": [
                     {
                         "type": "AlexaBackground",
-                        "backgroundColor": "black",
-                        "videoAudioTrack": "none"
+                        "backgroundImageSource": "${gameResultsDataSource.isWon ? 'https://imgix.bustle.com/lovelace/uploads/1053/4e05e210-2291-0133-76ea-0aecee5a8273.gif' : 'https://media1.giphy.com/media/KuJesxZSpHoXu/giphy.gif'}"
                     },
                     {
                         "type": "Container",
@@ -31,14 +30,14 @@
                             {
                                 "type": "AlexaImage",
                                 "when": "${gameResultsDataSource.isWon}",
-                                "imageSource": "https://thumbs.dreamstime.com/z/prize-cup-illustration-51511994.jpg",
+                                "imageSource": "https://invalid.jpg",
                                 "imageWidth": "100%",
                                 "imageHeight": "100%"
                             },
                             {
                                 "type": "AlexaImage",
                                 "when": "${!gameResultsDataSource.isWon}",
-                                "imageSource": "https://res.cloudinary.com/teepublic/image/private/s---IgfywED--/t_Preview/b_rgb:191920,c_limit,f_jpg,h_630,q_90,w_630/v1479424787/production/designs/830241_1.jpg",
+                                "imageSource": "https://invalid.jpg",
                                 "imageWidth": "100%",
                                 "imageHeight": "100%"
                             }

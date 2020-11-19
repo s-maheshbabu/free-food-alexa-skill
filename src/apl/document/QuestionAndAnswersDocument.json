@@ -25,6 +25,11 @@
                 "height": "100%",
                 "item": [
                     {
+                        "type": "AlexaBackground",
+                        "backgroundVideoSource": "https://smartypants-alexa-skill.s3.amazonaws.com/Videos/QuestionAndAnswersBackgroundVideo.mp4",
+                        "videoAutoPlay": true
+                    },
+                    {
                         "type": "Container",
                         "height": "20%",
                         "item": [
@@ -38,25 +43,20 @@
                                         "maxLines": 3,
                                         "textAlignVertical": "center",
                                         "text": "${questionAndAnswersDataSource.title}",
-                                        "backgroundImageSource": "${questionAndAnswersDataSource.backgroundImage.sources[0].url}",
                                         "fontSize": "30dp",
                                         "textAlign": "center"
                                     }
                                 ]
                             }
-                        ]
+                        ],
+                        "shadowColor": "red",
+                        "shadowRadius": "20",
+                        "shadowVerticalOffset": "1"
                     },
                     {
                         "type": "Container",
                         "height": "80%",
                         "item": [
-                            {
-                                "type": "AlexaBackground",
-                                "videoAutoPlay": true,
-                                "backgroundVideoSource": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-                                "backgroundColor": "white",
-                                "videoAudioTrack": "none"
-                            },
                             {
                                 "type": "ScrollView",
                                 "height": "100%",
