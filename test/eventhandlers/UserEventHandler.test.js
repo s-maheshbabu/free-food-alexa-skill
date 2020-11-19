@@ -1,6 +1,8 @@
 const AlexaTest = require('ask-sdk-test').AlexaTest;
 const AplUserEventRequestBuilder = require('ask-sdk-test').AplUserEventRequestBuilder;
 
+const deepEqual = require('deep-equal');
+
 const {
     NEW_GAME_USER_GENERATED_EVENT,
     RESULTS_VIEW_TOKEN, } = require("../../src/constants/APL");
@@ -15,6 +17,8 @@ const skillSettings = {
 };
 const alexaTest = new AlexaTest(skillHandler, skillSettings);
 
+const launchGameAudioDocument = require("../../src/responses/LaunchGame/document");
+
 describe("Start new game", () => {
     describe('should be able to start a new game when user clicks on the button to start a new game', () => {
         alexaTest.test(
@@ -24,7 +28,16 @@ describe("Start new game", () => {
                         .withInterfaces({ apl: true })
                         .withToken(RESULTS_VIEW_TOKEN)
                         .withArguments(NEW_GAME_USER_GENERATED_EVENT).build(),
-                    says: 'Welcome to Smarty Pants. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
+                    get renderDocument() {
+                        return {
+                            document: (doc) => {
+                                return deepEqual(doc, launchGameAudioDocument);
+                            },
+                            hasDataSources: (ds) => {
+                                return verifyLaunchGameAudioDatasource(ds, welcomeSpeech);
+                            },
+                        }
+                    },
                     reprompts: 'Welcome to Smarty Pants. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
                     shouldEndSession: false,
                     ignoreQuestionCheck: true,
@@ -33,3 +46,14 @@ describe("Start new game", () => {
         );
     });
 });
+
+/**
+ * Validate that the APL-A datasource backing the game launch is correctly populated.
+ * 
+ * @param datasource The APL-A data source to be validated.
+ */
+function verifyLaunchGameAudioDatasource(datasource, speech) {
+    console.log(datasource)
+    expect(datasource.speech).to.equal(speech);
+    return true;
+}

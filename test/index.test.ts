@@ -25,6 +25,8 @@ const gameResultsDocument = require("../src/apl/document/GameResultsDocument");
 const questionResultsDocument = require("../src/apl/document/QuestionResultsDocument");
 const questionAndAnswersDocument = require("../src/apl/document/QuestionAndAnswersDocument");
 
+const launchGameAudioDocument = require("../src/responses/LaunchGame/document");
+
 const skillHandler = require("../src/index").handler;
 const Random = require("../src/Random");
 
@@ -33,7 +35,7 @@ const skillSettings: typeof SkillSettings = {
   userId: 'amzn1.ask.account.VOID',
   deviceId: 'amzn1.ask.device.VOID',
   locale: 'en-US',
-  debug: true,
+  debug: false,
 };
 
 const alexaTest = new AlexaTest(skillHandler, skillSettings);
@@ -67,33 +69,65 @@ after(function () {
 
 describe("Starting a game", () => {
   describe('should be able to launch the skill and offer the list of supported trivia categories.', () => {
+    const welcomeSpeech = 'Welcome to Smarty Pants. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?';
     alexaTest.test([
       {
         request: new LaunchRequestBuilder(skillSettings).build(),
-        says: 'Welcome to Smarty Pants. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
+        get renderDocument() {
+          return {
+            document: (doc: any) => {
+              return deepEqual(doc, launchGameAudioDocument);
+            },
+            hasDataSources: (ds: any) => {
+              return verifyLaunchGameAudioDatasource(ds, welcomeSpeech);
+            },
+          }
+        },
         reprompts: 'Welcome to Smarty Pants. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
         shouldEndSession: false,
+        ignoreQuestionCheck: true,
       },
     ]);
   });
 
   describe('should be able to start over the game.', () => {
+    const welcomeSpeech = 'Welcome to Smarty Pants. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?';
     alexaTest.test([
       {
         request: new IntentRequestBuilder(skillSettings, 'AMAZON.StartOverIntent').build(),
-        says: 'Welcome to Smarty Pants. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
+        get renderDocument() {
+          return {
+            document: (doc: any) => {
+              return deepEqual(doc, launchGameAudioDocument);
+            },
+            hasDataSources: (ds: any) => {
+              return verifyLaunchGameAudioDatasource(ds, welcomeSpeech);
+            },
+          }
+        },
         reprompts: 'Welcome to Smarty Pants. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
         shouldEndSession: false,
+        ignoreQuestionCheck: true,
       },
     ]);
   });
 
   describe('should be able to start a game and then half way through, start over a new game.', () => {
+    const welcomeSpeech = 'Welcome to Smarty Pants. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?';
     alexaTest.test(
       [
         {
           request: new LaunchRequestBuilder(skillSettings).build(),
-          says: 'Welcome to Smarty Pants. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
+          get renderDocument() {
+            return {
+              document: (doc: any) => {
+                return deepEqual(doc, launchGameAudioDocument);
+              },
+              hasDataSources: (ds: any) => {
+                return verifyLaunchGameAudioDatasource(ds, welcomeSpeech);
+              },
+            }
+          },
           reprompts: 'Welcome to Smarty Pants. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
           shouldEndSession: false,
           ignoreQuestionCheck: true,
@@ -105,7 +139,16 @@ describe("Starting a game", () => {
         },
         {
           request: new IntentRequestBuilder(skillSettings, 'AMAZON.StartOverIntent').build(),
-          says: 'Welcome to Smarty Pants. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
+          get renderDocument() {
+            return {
+              document: (doc: any) => {
+                return deepEqual(doc, launchGameAudioDocument);
+              },
+              hasDataSources: (ds: any) => {
+                return verifyLaunchGameAudioDatasource(ds, welcomeSpeech);
+              },
+            }
+          },
           reprompts: 'Welcome to Smarty Pants. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?',
           shouldEndSession: false,
           ignoreQuestionCheck: true,
@@ -326,6 +369,17 @@ function verifyGameResultsDataSource(datasource, isWon, incorrectAnswers, score,
   expect(datasource.newGameEventName).to.equal(NEW_GAME_USER_GENERATED_EVENT);
   expect(datasource.totalNumberOfQuestions).to.equal(totalNumberOfQuestions);
 
+  return true;
+}
+
+/**
+ * Validate that the APL-A datasource backing the game launch is correctly populated.
+ * 
+ * @param datasource The APL-A data source to be validated.
+ */
+function verifyLaunchGameAudioDatasource(datasource, speech) {
+  console.log(datasource)
+  expect(datasource.speech).to.equal(speech);
   return true;
 }
 
