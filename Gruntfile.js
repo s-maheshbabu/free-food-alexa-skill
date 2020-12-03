@@ -17,7 +17,7 @@ grunt.initConfig({
         enableVersioning: true
       },
       arn:
-        "arn:aws:lambda:us-east-1:837603326872:function:free-food-development"
+        "arn:aws:lambda:us-east-1:837603326872:function:smarty-pants-alexa-skill"
     },
     prod: {
       options: {
@@ -25,7 +25,7 @@ grunt.initConfig({
         enableVersioning: true
       },
       arn:
-        "arn:aws:lambda:us-east-1:837603326872:function:free-food-development"
+        "arn:aws:lambda:us-east-1:837603326872:function:smarty-pants-alexa-skill"
     }
   },
   lambda_package: {
