@@ -14,12 +14,13 @@ const SkillSettings = require('ask-sdk-test').SkillSettings;
 
 const {
   APL_DOCUMENT_VERSION,
+  CLICK_ANSWER_EVENT,
+  NEW_GAME_USER_GENERATED_EVENT,
   NEXT_QUESTION_AUTO_GENERATED_EVENT,
   NEXT_QUESTION_USER_GENERATED_EVENT,
-  NEW_GAME_USER_GENERATED_EVENT,
   QUESTION_VIEW_TOKEN: QUESTION_AND_ANSWERS_VIEW_TOKEN,
   RESULTS_VIEW_TOKEN,
-  USER_INITIATED_CLICK_EVENT } = require("../src/constants/APL");
+  SWIPE_ANSWER_EVENT, } = require("../src/constants/APL");
 
 const gameResultsDocument = require("../src/apl/document/GameResultsDocument");
 const questionResultsDocument = require("../src/apl/document/QuestionResultsDocument");
@@ -52,7 +53,7 @@ let allQuestions;
 
 const { GAME_LENGTH } = require("../src/gameManager");
 
-const ResponseModes = { TOUCH: "touch", VOICE: "voice", };
+const ResponseModes = require("../src/constants/ResponseModes");
 
 before(async () => {
   await questionBank.init('en_US', 'test-data/questions/{{lng}}/{{ns}}.json');
@@ -202,14 +203,14 @@ describe("Interactions through touch", () => {
   });
 });
 
-describe("Interactions through a combination of voice and touch", () => {
-  describe('should be able to play a winning game through a combination of voice and touch responses', () => {
+describe("Interactions through a combination of voice and touch and swipe", () => {
+  describe('should be able to play a winning game through a combination of voice, touch and swipe responses', () => {
     alexaTest.test(
       buildGameSequence_MixedUIAndVoiceInteraction(
         getGameQuestionsIndices(),
         getCorrectAnswerIndices(),
-        [true, true, true, false, false],
-        [ResponseModes.TOUCH, ResponseModes.VOICE, ResponseModes.VOICE, ResponseModes.TOUCH, ResponseModes.VOICE],
+        [true, false, true, true, false],
+        [ResponseModes.TAP, ResponseModes.SWIPE, ResponseModes.VOICE, ResponseModes.TAP, ResponseModes.VOICE],
       ));
   });
 
@@ -219,7 +220,7 @@ describe("Interactions through a combination of voice and touch", () => {
         getGameQuestionsIndices(),
         getCorrectAnswerIndices(),
         [true, false, true, false, false],
-        [ResponseModes.VOICE, ResponseModes.VOICE, ResponseModes.VOICE, ResponseModes.TOUCH, ResponseModes.TOUCH],
+        [ResponseModes.VOICE, ResponseModes.VOICE, ResponseModes.VOICE, ResponseModes.TAP, ResponseModes.TAP],
         true));
   });
 
@@ -229,7 +230,7 @@ describe("Interactions through a combination of voice and touch", () => {
         getGameQuestionsIndices(),
         getCorrectAnswerIndices(),
         [true, false, null, false, false],
-        [ResponseModes.VOICE, ResponseModes.VOICE, ResponseModes.VOICE, ResponseModes.TOUCH, ResponseModes.TOUCH],
+        [ResponseModes.VOICE, ResponseModes.VOICE, ResponseModes.VOICE, ResponseModes.TAP, ResponseModes.TAP],
         true));
   });
 });
@@ -248,7 +249,7 @@ function buildGameSequence_UIInteraction(gameQuestionsIndices, correctAnswers, c
     gameQuestionsIndices,
     correctAnswers,
     customerAnswers,
-    [ResponseModes.TOUCH, ResponseModes.TOUCH, ResponseModes.TOUCH, ResponseModes.TOUCH, ResponseModes.TOUCH],
+    [ResponseModes.TAP, ResponseModes.TAP, ResponseModes.TAP, ResponseModes.TAP, ResponseModes.TAP],
   );
 }
 
@@ -259,10 +260,7 @@ function buildGameSequence_MixedUIAndVoiceInteraction(gameQuestionsIndices, corr
   const gameSequence = [];
 
   // User initiates the game with voice. The skill launches the game and asks the first question.
-  if (responseModes[0] === ResponseModes.TOUCH)
-    gameSequence.push(buildStartGameSequenceItem(gameQuestionsIndices, correctAnswers, isAplDevice));
-  else if (responseModes[0] === ResponseModes.VOICE)
-    gameSequence.push(buildStartGameSequenceItem(gameQuestionsIndices, correctAnswers, isAplDevice));
+  gameSequence.push(buildStartGameSequenceItem(gameQuestionsIndices, correctAnswers, isAplDevice));
 
   for (let index = 0; index < customerAnswers.length - 1; index++) {
     if (customerAnswers[index]) {
@@ -272,9 +270,15 @@ function buildGameSequence_MixedUIAndVoiceInteraction(gameQuestionsIndices, corr
     } else {
       incorrectAnswers++;
     }
-    if (responseModes[index] === ResponseModes.TOUCH)
+    if (responseModes[index] === ResponseModes.TAP || responseModes[index] === ResponseModes.SWIPE) {
+      // Users swiping away incorrect answers is handled on the device. If a swipe event came to the backend, it means that the user swiped away the correct answer which is akin to them answering the question incorrectly.
+      if (responseModes[index] === ResponseModes.SWIPE) assert(!customerAnswers[index], "A swipe event will not be generated if the user answered the question correctly. Make sure the test is setup correctly.");
+
       // User taps on an answer. The skill informs the user whether they are right or wrong and kicks off an auto_generated event.
-      gameSequence.push(buildNthAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctAnswers, customerAnswers, customerAnswers[index], score, incorrectAnswers, skippedAnswers, index));
+      // OR
+      // User swipes on an answer. The skill informs the user that they swiped away the correct answer and kicks off an auto_generated event to move on to the next question.
+      gameSequence.push(buildNthAnswerTouchEventGameSequenceItem(responseModes[index], gameQuestionsIndices, correctAnswers, customerAnswers, customerAnswers[index], score, incorrectAnswers, skippedAnswers, index));
+    }
     else if (responseModes[index] === ResponseModes.VOICE)
       // User answers by voice. The skill informs the user whether they are right or wrong. If it is an APL device, it then kicks off an auto_generated event
       // to fetch the next question. If it is not an APL device, it just fetches the next question as well and renders.
@@ -294,9 +298,12 @@ function buildGameSequence_MixedUIAndVoiceInteraction(gameQuestionsIndices, corr
     incorrectAnswers++;
   }
   const isWinning = isWinningGame(customerAnswers);
-  if (responseModes[GAME_LENGTH - 1] === ResponseModes.TOUCH)
+  if (responseModes[GAME_LENGTH - 1] === ResponseModes.TAP || responseModes[GAME_LENGTH - 1] === ResponseModes.SWIPE) {
     // User taps on an answer for the last question in the game. The skill informs the user their final score and whether or not they won the game.
-    gameSequence.push(buildLastAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctAnswers, customersLastAnswer, score, incorrectAnswers, skippedAnswers, isWinning));
+    // OR
+    // User swipes away the correct answer for the last question in the game. The skill informs the user their final score and whether or not they won the game.
+    gameSequence.push(buildLastAnswerTouchEventGameSequenceItem(responseModes[GAME_LENGTH - 1], gameQuestionsIndices, correctAnswers, customersLastAnswer, score, incorrectAnswers, skippedAnswers, isWinning));
+  }
   else if (responseModes[GAME_LENGTH - 1] === ResponseModes.VOICE)
     // User answers the last question in the game with voice. The skill informs the user their final score and whether or not they won the game.
     gameSequence.push(buildLastAnswerIntentGameSequenceItem(gameQuestionsIndices, correctAnswers, customersLastAnswer, score, incorrectAnswers, skippedAnswers, isWinning, isAplDevice));
@@ -394,29 +401,22 @@ function verifyQuestionAndAnswersDataSource(datasource, questionIndex, sessionAt
   const question = allQuestions[questionIndex];
   const questionText = Object.keys(question)[0];
   const answers = question[Object.keys(question)[0]].slice();
-  expect(datasource.title).to.equal(questionText);
+  expect(datasource.question).to.equal(questionText);
 
   const displayedAnswers = datasource.listItems;
   for (let index = 0; index < displayedAnswers.length; index++) {
     const displayedAnswer = displayedAnswers[index];
-
     assert(answers.includes(displayedAnswer.primaryText));
 
-    const firstPrimaryAction = displayedAnswer.primaryAction[0];
-    assert(firstPrimaryAction.type === "SendEvent");
-
-    assert(firstPrimaryAction.arguments.length === 2);
-
-    const answerObject = firstPrimaryAction.arguments[0];
-    assert(answerObject.index === index + 1);
-    assert(answerObject.type === USER_INITIATED_CLICK_EVENT);
-    assert(answerObject.answerText === displayedAnswer.primaryText);
-
-    const sessionAttributesInEvent = firstPrimaryAction.arguments[1];
-    assert(deepEqual(sessionAttributesInEvent, sessionAttributes));
-
-    assert(deepEqual(displayedAnswer.primaryAction[1], { type: 'SetValue', property: 'disabled', value: true }));
+    expect(datasource.answers[index].index).to.equal(index + 1);
+    assert(answers.includes(datasource.answers[index].answerText));
   }
+
+  expect(datasource.TAP_ANSWER_EVENT).to.equal(ResponseModes.TAP);
+  expect(datasource.SWIPE_ANSWER_EVENT).to.equal(ResponseModes.SWIPE);
+
+  expect(datasource.correctAnswerIndex).to.equal(sessionAttributes.correctAnswerIndex);
+  assert(deepEqual(datasource.sessionAttributes, sessionAttributes), 'Session attributes did not match.');
 
   return true;
 }
@@ -461,13 +461,16 @@ function buildStartGameSequenceItem(gameQuestionsIndices, correctAnswers, isAplD
 
 // Simulates the user answering by touch one of the questions in the game (not the last question which is a special case)
 // and verifies the expected skill responses.
-function buildNthAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctAnswers, customerAnswers, isCorrectAnswer, score, incorrectAnswers, skippedAnswers, index) {
+function buildNthAnswerTouchEventGameSequenceItem(responseMode, gameQuestionsIndices, correctAnswers, customerAnswers, isCorrectAnswer, score, incorrectAnswers, skippedAnswers, index) {
   let prompt;
   if (isCorrectAnswer) {
     prompt = `That answer is correct. Your score is ${score}.`;
   }
   else {
-    prompt = `${customerAnswers[index] === null ? `` : `That answer is wrong. `}The correct answer is ${correctAnswers[index]}: ${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer. Your score is ${score}.`;
+    if (responseMode == ResponseModes.TAP)
+      prompt = `${customerAnswers[index] === null ? `` : `That answer is wrong. `}The correct answer is ${correctAnswers[index]}: ${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer. Your score is ${score}.`;
+    else if (responseMode == ResponseModes.SWIPE)
+      prompt = `Sorry but you swiped away ${correctAnswers[index]}: ${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer which is the correct answer. Your score is ${score}.`;
   }
 
   return {
@@ -475,9 +478,9 @@ function buildNthAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctA
       .withInterfaces({ apl: true })
       .withToken(RESULTS_VIEW_TOKEN)
       .withArguments(
+        responseMode,
         {
           index: isCorrectAnswer ? correctAnswers[index] : correctAnswers[index] + 1, // +1 to simulate incorrect answer
-          type: USER_INITIATED_CLICK_EVENT,
           answerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer`,
         },
         {
@@ -557,13 +560,16 @@ function buildFetchNextQuestionEventGameSequenceItem(gameQuestionsIndices, corre
 
 // Simulates the user clicking on one of the answers for the last question in the game. It then verifies the expected skill responses
 // which includes declaring if the user won or lost the game.
-function buildLastAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correctAnswers, isCorrectAnswer, score, incorrectAnswers, skippedAnswers, isWinning) {
+function buildLastAnswerTouchEventGameSequenceItem(responseMode, gameQuestionsIndices, correctAnswers, isCorrectAnswer, score, incorrectAnswers, skippedAnswers, isWinning) {
   let prompt;
   if (isCorrectAnswer) {
     prompt = `That answer is correct. You got ${score} out of ${GAME_LENGTH} questions correct. ${isWinning ? `You won the game. Thank you for playing!` : `Unfortunately, you did not win this game. Thank you for playing!`}`;
   }
   else {
-    prompt = `That answer is wrong. The correct answer is ${correctAnswers[GAME_LENGTH - 1]}: ${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[GAME_LENGTH - 1] + 1} / Correct Answer. You got ${score} out of ${GAME_LENGTH} questions correct. ${isWinning ? `You won the game. Thank you for playing!` : `Unfortunately, you did not win this game. Thank you for playing!`}`;
+    if (responseMode == ResponseModes.TAP)
+      prompt = `That answer is wrong. The correct answer is ${correctAnswers[GAME_LENGTH - 1]}: ${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[GAME_LENGTH - 1] + 1} / Correct Answer. You got ${score} out of ${GAME_LENGTH} questions correct. ${isWinning ? `You won the game. Thank you for playing!` : `Unfortunately, you did not win this game. Thank you for playing!`}`;
+    else if (responseMode == ResponseModes.SWIPE)
+      prompt = `Sorry but you swiped away ${correctAnswers[GAME_LENGTH - 1]}: ${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[GAME_LENGTH - 1] + 1} / Correct Answer which is the correct answer. You got ${score} out of ${GAME_LENGTH} questions correct. ${isWinning ? `You won the game. Thank you for playing!` : `Unfortunately, you did not win this game. Thank you for playing!`}`;
   }
 
   return {
@@ -571,9 +577,9 @@ function buildLastAnswerTouchEventGameSequenceItem(gameQuestionsIndices, correct
       .withInterfaces({ apl: true })
       .withToken(RESULTS_VIEW_TOKEN)
       .withArguments(
+        responseMode,
         {
           index: isCorrectAnswer ? correctAnswers[GAME_LENGTH - 1] : correctAnswers[GAME_LENGTH - 1] + 1, // +1 to simulate incorrect answer
-          type: USER_INITIATED_CLICK_EVENT,
           answerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[GAME_LENGTH - 1] + 1} / Correct Answer`,
         },
         {

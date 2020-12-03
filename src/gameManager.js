@@ -10,6 +10,7 @@ const quesionAndAnswersDataSource = require("apl/data/QuestionAndAnswersDatasour
 const quesionAndAnswersDocument = require("apl/document/QuestionAndAnswersDocument");
 
 const GAME_WINNING_THRESHOLD_PERCENTAGE = 0.5;
+const { SWIPE } = require("constants/ResponseModes");
 
 /**
  * Fetches the requested number of random questions from the given set of
@@ -123,7 +124,7 @@ const determineNextQuestion = (sessionAttributes, locale) => {
   }
 }
 
-const determineResults = (sessionAttributes, userAnswerIndex, userGaveUp = false) => {
+const determineResults = (responseMode, sessionAttributes, userAnswerIndex, userGaveUp = false) => {
   let correctAnswerIndexOfAlreadyAskedQuestion = parseInt(sessionAttributes.correctAnswerIndex, 10);
   const isUserAnswerCorrect = userAnswerIndex && userAnswerIndex === correctAnswerIndexOfAlreadyAskedQuestion;
 
@@ -146,7 +147,7 @@ const determineResults = (sessionAttributes, userAnswerIndex, userGaveUp = false
   const { correctAnswerText: answerTextOfAlreadyAskedQuestion } = sessionAttributes;
   return {
     isCorrect: isUserAnswerCorrect ? true : false,
-    speak: `${buildResultsPrompt(isUserAnswerCorrect, correctAnswerIndexOfAlreadyAskedQuestion, answerTextOfAlreadyAskedQuestion, userGaveUp)}${buildScorePrompt(newScore, isEndOfGame)}`,
+    speak: `${buildResultsPrompt(responseMode, isUserAnswerCorrect, correctAnswerIndexOfAlreadyAskedQuestion, answerTextOfAlreadyAskedQuestion, userGaveUp)}${buildScorePrompt(newScore, isEndOfGame)}`,
     sessionAttributes: updatedSessionAttributes,
   };
 }
@@ -156,7 +157,10 @@ const buildScorePrompt = (score, isEndOfGame = false) => {
   return `${interactions.t("SCORE_IS_MESSAGE", score.toString())}`;
 }
 
-const buildResultsPrompt = (isUserAnswerCorrect, correctAnswerIndexOfAlreadyAskedQuestion, answerTextOfAlreadyAskedQuestion, userGaveUp = false) => {
+const buildResultsPrompt = (responseMode, isUserAnswerCorrect, correctAnswerIndexOfAlreadyAskedQuestion, answerTextOfAlreadyAskedQuestion, userGaveUp = false) => {
+  if (responseMode === SWIPE)
+    return `Sorry but you swiped away ${correctAnswerIndexOfAlreadyAskedQuestion}: ${answerTextOfAlreadyAskedQuestion} which is the correct answer. `;
+
   let results = userGaveUp ? "" : interactions.t("ANSWER_IS_MESSAGE");
   if (isUserAnswerCorrect) {
     results += interactions.t("ANSWER_CORRECT_MESSAGE");

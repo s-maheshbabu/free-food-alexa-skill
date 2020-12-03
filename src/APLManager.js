@@ -17,7 +17,6 @@ const getQuestionAndAnswersViewDirective = (question, answers, sessionAttributes
     for (var index = 0; index < answers.length; index++) {
         const answerMetadatum = {
             index: index + 1,
-            type: APL.USER_INITIATED_CLICK_EVENT,
             answerText: answers[index],
         }
         answerMetadata.push(answerMetadatum);

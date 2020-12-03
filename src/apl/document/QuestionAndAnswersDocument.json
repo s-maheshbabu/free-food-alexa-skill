@@ -42,7 +42,7 @@
                                         "height": "100%",
                                         "maxLines": 3,
                                         "textAlignVertical": "center",
-                                        "text": "${questionAndAnswersDataSource.title}",
+                                        "text": "${questionAndAnswersDataSource.question}",
                                         "fontSize": "30dp",
                                         "textAlign": "center"
                                     }
@@ -67,13 +67,121 @@
                                     "backgroundBlur": false,
                                     "backgroundColorOverlay": true,
                                     "listItems": "${questionAndAnswersDataSource.listItems}",
+                                    "primaryAction": [
+                                        {
+                                            "type": "SendEvent",
+                                            "arguments": [
+                                                "${questionAndAnswersDataSource.TAP_ANSWER_EVENT}",
+                                                "${questionAndAnswersDataSource.answers[ordinal - 1]}",
+                                                "${questionAndAnswersDataSource.sessionAttributes}"
+                                            ]
+                                        },
+                                        {
+                                            "type": "SetValue",
+                                            "property": "disabled",
+                                            "value": true
+                                        }
+                                    ],
                                     "touchForward": true,
                                     "videoAutoPlay": true,
                                     "backgroundVideoSource": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-                                    "backgroundColor": "white"
+                                    "backgroundColor": "white",
+                                    "swipeDirection": "right",
+                                    "swipeActionIconBackground": "red",
+                                    "swipeActionIconType": "image",
+                                    "swipeActionIcon": "https://smartypants-alexa-skill.s3.amazonaws.com/swipe-away-object.png",
+                                    "onSwipeDone": {
+                                        "type": "Parallel",
+                                        "delay": 100,
+                                        "commands": [
+                                            {
+                                                "when": "${ordinal != questionAndAnswersDataSource.correctAnswerIndex}",
+                                                "type": "AnimateItem",
+                                                "easing": "path(0.25, 0.6, 0.5, 0.8, 0.75, 0.9)",
+                                                "duration": 1000,
+                                                "value": [
+                                                    {
+                                                        "property": "opacity",
+                                                        "to": 0
+                                                    },
+                                                    {
+                                                        "property": "transform",
+                                                        "from": [
+                                                            {
+                                                                "translateX": 200
+                                                            },
+                                                            {
+                                                                "rotate": 90
+                                                            }
+                                                        ],
+                                                        "to": [
+                                                            {
+                                                                "translateX": 0
+                                                            },
+                                                            {
+                                                                "rotate": 0
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "type": "Sequential",
+                                                "delay": 10,
+                                                "when": "${ordinal == questionAndAnswersDataSource.correctAnswerIndex}",
+                                                "commands": [
+                                                    {
+                                                        "type": "AnimateItem",
+                                                        "easing": "path(0.25, 0.6, 0.5, 0.8, 0.75, 0.9)",
+                                                        "duration": 250,
+                                                        "repeatCount": 3,
+                                                        "value": [
+                                                            {
+                                                                "property": "opacity",
+                                                                "to": 0
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": "SetValue",
+                                                        "componentId": "overlayContainer",
+                                                        "property": "display",
+                                                        "value": "normal"
+                                                    },
+                                                    {
+                                                        "type": "SendEvent",
+                                                        "arguments": [
+                                                            "${questionAndAnswersDataSource.SWIPE_ANSWER_EVENT}",
+                                                            "${questionAndAnswersDataSource.answers[ordinal - 1]}",
+                                                            "${questionAndAnswersDataSource.sessionAttributes}"
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
                                 }
                             }
                         ]
+                    },
+                    {
+                        "type": "Container",
+                        "id": "overlayContainer",
+                        "width": "100%",
+                        "height": "100%",
+                        "position": "absolute",
+                        "display": "invisible",
+                        "items": [
+                            {
+                                "type": "AlexaImage",
+                                "imageSource": "https://smartypants-alexa-skill.s3.amazonaws.com/swiped-away-correct-answer.jpg",
+                                "imageWidth": "100%",
+                                "imageHeight": "100%",
+                                "imageScale": "fill"
+                            }
+                        ],
+                        "alignItems": "start",
+                        "justifyContent": "center"
                     }
                 ]
             }

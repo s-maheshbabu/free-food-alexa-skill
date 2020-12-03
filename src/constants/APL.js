@@ -10,5 +10,4 @@ module.exports = {
   NEXT_QUESTION_USER_GENERATED_EVENT: "NextQuestionUserGeneratedEvent",
   QUESTION_AND_ANSWERS_VIEW_TOKEN: "QuestionAndAnswersViewToken",
   RESULTS_VIEW_TOKEN: "ResultsViewToken",
-  USER_INITIATED_CLICK_EVENT: "UserInitiatedClickEvent",
 };

@@ -36,18 +36,19 @@ module.exports = UserEventHandler = {
             return startNewGame(handlerInput);
         }
 
-        const sessionAttributes = handlerInput.requestEnvelope.request.arguments[1];
-        const userAnswerIndex = handlerInput.requestEnvelope.request.arguments[0].index;
+        const responseMode = handlerInput.requestEnvelope.request.arguments[0];
+        const sessionAttributes = handlerInput.requestEnvelope.request.arguments[2];
+        const userAnswerIndex = handlerInput.requestEnvelope.request.arguments[1].index;
 
-        return deliverResults(handlerInput, sessionAttributes, userAnswerIndex);
+        return deliverResults(responseMode, handlerInput, sessionAttributes, userAnswerIndex);
     },
-    deliverResults(handlerInput, sessionAttributes, userAnswerIndex, userGaveUp) {
-        return deliverResults(handlerInput, sessionAttributes, userAnswerIndex, userGaveUp);
+    deliverResults(responseMode, handlerInput, sessionAttributes, userAnswerIndex, userGaveUp) {
+        return deliverResults(responseMode, handlerInput, sessionAttributes, userAnswerIndex, userGaveUp);
     }
 }
 
-const deliverResults = (handlerInput, sessionAttributes, userAnswerIndex, userGaveUp = false) => {
-    const results = determineResults(sessionAttributes, userAnswerIndex, userGaveUp);
+const deliverResults = (responseMode, handlerInput, sessionAttributes, userAnswerIndex, userGaveUp = false) => {
+    const results = determineResults(responseMode, sessionAttributes, userAnswerIndex, userGaveUp);
 
     const { responseBuilder } = handlerInput;
     // Check if we can exit the game session after GAME_LENGTH questions (zero-indexed)

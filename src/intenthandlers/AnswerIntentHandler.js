@@ -10,6 +10,7 @@ const {
 
 const userEventHandler = require("eventhandlers/UserEventHandler");
 const { APL_INTERFACE } = require("constants/APL");
+const { VOICE } = require("constants/ResponseModes");
 
 const GAME_WINNING_THRESHOLD_PERCENTAGE = 0.5;
 
@@ -37,10 +38,10 @@ const handleUserGuess = (handlerInput, userGaveUp = false) => {
   const userAnswer = isAnswerSlotValid(intent) ? parseInt(intent.slots.Answer.value, 10) : null;
 
   if (Alexa.getSupportedInterfaces(requestEnvelope).hasOwnProperty(APL_INTERFACE)) {
-    return userEventHandler.deliverResults(handlerInput, sessionAttributes, userAnswer, userGaveUp);
+    return userEventHandler.deliverResults(VOICE, handlerInput, sessionAttributes, userAnswer, userGaveUp);
   }
 
-  const previousQuestionResults = determineResults(sessionAttributes, userAnswer, userGaveUp);
+  const previousQuestionResults = determineResults(VOICE, sessionAttributes, userAnswer, userGaveUp);
   let updatedSessionAttributes = previousQuestionResults.sessionAttributes;
 
   // Check if we can exit the game session after GAME_LENGTH questions (zero-indexed)

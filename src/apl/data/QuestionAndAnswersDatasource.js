@@ -1,69 +1,33 @@
+const {
+  SWIPE,
+  TAP, } = require("constants/ResponseModes");
+
 module.exports = (data) => {
   //TODO: Input validation and testing?
+  const answers = data.answers;
+
   return {
     type: "object",
-    objectId: "questionAndAnswersListId",
-    title: `${data.question}`,
-    listItemsSequence: [],
+    objectId: "questionAndAnswersDatasourceId",
+    question: `${data.question}`,
+    correctAnswerIndex: data.sessionAttributes.correctAnswerIndex,
+    answers: answers,
+    sessionAttributes: data.sessionAttributes,
+    TAP_ANSWER_EVENT: TAP,
+    SWIPE_ANSWER_EVENT: SWIPE,
     listItems: [
       {
-        primaryText: `${data.answers[0].answerText}`,
-        primaryAction: [
-          {
-            type: "SendEvent",
-            arguments: [data.answers[0], data.sessionAttributes],
-          },
-          {
-            type: "SetValue",
-            property: "disabled",
-            value: true
-          }
-        ]
+        primaryText: `${answers[0].answerText}`,
       },
       {
-        primaryText: `${data.answers[1].answerText}`,
-        primaryAction: [
-          {
-            type: "SendEvent",
-            arguments: [data.answers[1], data.sessionAttributes],
-          },
-          {
-            type: "SetValue",
-            property: "disabled",
-            value: true
-          }
-        ],
+        primaryText: `${answers[1].answerText}`,
       },
       {
-        primaryText: `${data.answers[2].answerText}`,
-        primaryAction: [
-          {
-            type: "SendEvent",
-            arguments: [data.answers[2], data.sessionAttributes],
-          },
-          {
-            type: "SetValue",
-            property: "disabled",
-            value: true
-          }
-        ],
+        primaryText: `${answers[2].answerText}`,
       },
       {
-        primaryText: `${data.answers[3].answerText}`,
-        primaryAction: [
-          {
-            type: "SendEvent",
-            arguments: [data.answers[3], data.sessionAttributes],
-          },
-          {
-            type: "SetValue",
-            property: "disabled",
-            value: true
-          }
-        ],
+        primaryText: `${answers[3].answerText}`,
       }
-    ],
-    logoUrl: "https://d2o906d8ln7ui1.cloudfront.net/images/templates_v2/icon_cheese.png",
-    hintText: "You can tap on the answers too"
+    ]
   };
 };
