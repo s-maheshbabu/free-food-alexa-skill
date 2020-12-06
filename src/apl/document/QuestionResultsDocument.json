@@ -191,26 +191,20 @@
                                     "onMount": {
                                         "type": "AnimateItem",
                                         "easing": "ease-in-out",
-                                        "duration": 100,
-                                        "repeatCount": 15,
+                                        "duration": 1000,
+                                        "repeatCount": 5,
                                         "repeatMode": "reverse",
                                         "value": [
                                             {
                                                 "property": "transform",
                                                 "from": [
                                                     {
-                                                        "translateX": 0
-                                                    },
-                                                    {
-                                                        "rotate": 0
+                                                        "scale": 1
                                                     }
                                                 ],
                                                 "to": [
                                                     {
-                                                        "translateX": -10
-                                                    },
-                                                    {
-                                                        "rotate": 1
+                                                        "scale": 1.1
                                                     }
                                                 ]
                                             }
