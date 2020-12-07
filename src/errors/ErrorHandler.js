@@ -5,13 +5,7 @@ module.exports = ErrorHandler = {
     return true;
   },
   handle(handlerInput, error) {
-    console.log(
-      `Error handled: ` +
-        util.inspect(error, {
-          showHidden: true,
-          depth: null
-        })
-    );
+    console.error(`Error handled: ${error.message}`);
 
     return handlerInput.responseBuilder
       .speak("Sorry, I can't understand the command. Please say again.")
