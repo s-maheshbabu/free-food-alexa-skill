@@ -1,0 +1,24 @@
+{
+    "type": "APL",
+    "version": "1.4",
+    "import": [
+        {
+            "name": "alexa-layouts",
+            "version": "1.2.0"
+        }
+    ],
+    "mainTemplate": {
+        "items": [
+            {
+                "type": "AlexaHeadline",
+                "primaryText": "Animals, General, Science, Sustainability or Technology",
+                "secondaryText": "Pick a category from the above",
+                "footerHintText": "Try, \"Alexa, play a science game\"",
+                "headerAttributionImage": "https://smartypants-alexa-skill.s3.amazonaws.com/SkillIcons/512x512.png",
+                "headerSubtitle": "An Educational Trivia Skill",
+                "headerTitle": "Welcome to Smarty Pants",
+                "backgroundImageSource": "https://smartypants-alexa-skill.s3.amazonaws.com/launch-skill.jpg"
+            }
+        ]
+    }
+}

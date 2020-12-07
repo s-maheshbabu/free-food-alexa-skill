@@ -69,6 +69,7 @@ after(function () {
 });
 
 // TODO: verifyLaunchGameAudioDatasource can be anything and this test doesn't fail. Need to fix these tests.
+// TODO: test APL directive being rendered.
 describe("Starting a game", () => {
   describe('should be able to launch the skill and offer the list of supported trivia categories.', () => {
     const welcomeSpeech = 'Welcome to Smarty Pants. Choose a category to play. ANIMALS, GENERAL, SCIENCE, SUSTAINABILITY or TECHNOLOGY?';

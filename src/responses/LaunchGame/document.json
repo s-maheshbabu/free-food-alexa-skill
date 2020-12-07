@@ -19,7 +19,26 @@
                 {
                     "type": "Audio",
                     "description": "Background music when the skill is launched",
-                    "source": "soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_countdown_loop_64s_full_01"
+                    "source": "soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_countdown_loop_64s_full_01",
+                    "filter": [
+                        {
+                            "type": "Trim",
+                            "start": 0,
+                            "end": 8000
+                        },
+                        {
+                            "type": "FadeIn",
+                            "duration": 3000
+                        },
+                        {
+                            "type": "FadeOut",
+                            "duration": 5000
+                        },
+                        {
+                            "type": "Volume",
+                            "amount": 0.75
+                        }
+                    ]
                 }
             ]
         }

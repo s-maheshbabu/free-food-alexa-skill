@@ -1,6 +1,7 @@
 const Alexa = require('ask-sdk-core');
 const utilities = require("utilities");
 const APL = require("constants/APL");
+const APLManager = require("APLManager");
 
 const interactions = require("interactions");
 const CATEGORIES_NAMESPACE = "categories";
@@ -27,6 +28,7 @@ module.exports = LaunchRequest = {
         document: launchGameAudioDocument,
         datasources: launchGameAudioDatasource(welcomeMessage),
       })
+      .addDirective(APLManager.getLaunchSkillViewDirectives())
       .reprompt(welcomeMessage)
       .withShouldEndSession(false)
       .getResponse();

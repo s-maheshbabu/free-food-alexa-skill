@@ -7,6 +7,8 @@ const questionResultsDocument = require("apl/document/QuestionResultsDocument");
 const gameResultsDataSource = require("apl/data/GameResultsDatasource");
 const gameResultsDocument = require("apl/document/GameResultsDocument");
 
+const launchSkillDocument = require("apl/document/LaunchSkillDocument");
+
 const questionAndAnswersDataSource = require("apl/data/QuestionAndAnswersDatasource");
 const questionAndAnswersDocument = require("apl/document/QuestionAndAnswersDocument");
 const { NEXT_QUESTION_USER_GENERATED_EVENT, NEW_GAME_USER_GENERATED_EVENT } = require("./constants/APL");
@@ -59,6 +61,17 @@ const getGameResultsViewDirectives = (isWon, sessionAttributes) => {
 }
 
 /**
+ * Returns an APL directive to be rendered at skill launch.
+ */
+const getLaunchSkillViewDirectives = () => {
+    return {
+        type: APL.APL_DOCUMENT_TYPE,
+        version: APL.APL_DOCUMENT_VERSION,
+        document: launchSkillDocument,
+    };
+}
+
+/**
  * Returns APL directives to be rendered after the user answers a question. 
  */
 const getResultsViewDirective = (isCorrect, sessionAttributes) => {
@@ -93,6 +106,7 @@ const getResultsViewDirective = (isCorrect, sessionAttributes) => {
 
 module.exports = {
     getGameResultsViewDirectives: getGameResultsViewDirectives,
-    getResultsViewDirective: getResultsViewDirective,
+    getLaunchSkillViewDirectives: getLaunchSkillViewDirectives,
     getQuestionAndAnswersViewDirective: getQuestionAndAnswersViewDirective,
+    getResultsViewDirective: getResultsViewDirective,
 };
