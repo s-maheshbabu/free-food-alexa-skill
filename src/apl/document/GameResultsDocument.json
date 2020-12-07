@@ -59,7 +59,7 @@
                                         "height": "100%",
                                         "textAlignVertical": "center",
                                         "textAlign": "center",
-                                        "text": "Summary"
+                                        "text": "${gameResultsDataSource.isWon ? 'You Won!' : 'You Lost"
                                     }
                                 ]
                             },
