@@ -1,6 +1,6 @@
 {
     "type": "APL",
-    "version": "1.5",
+    "version": "1.4",
     "theme": "dark",
     "import": [
         {
@@ -59,7 +59,7 @@
                                         "height": "100%",
                                         "textAlignVertical": "center",
                                         "textAlign": "center",
-                                        "text": "${gameResultsDataSource.isWon ? 'You Won!' : 'You Lost"
+                                        "text": "${gameResultsDataSource.isWon ? 'You Won!' : 'You Lost'}"
                                     }
                                 ]
                             },
