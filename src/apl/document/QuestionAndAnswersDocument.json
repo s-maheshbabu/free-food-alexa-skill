@@ -27,7 +27,8 @@
                     {
                         "type": "AlexaBackground",
                         "backgroundVideoSource": "https://smartypants-alexa-skill.s3.amazonaws.com/Videos/QuestionAndAnswersBackgroundVideo.mp4",
-                        "videoAutoPlay": true
+                        "videoAutoPlay": true,
+                        "videoAudioTrack": "none"
                     },
                     {
                         "type": "Container",
@@ -84,8 +85,7 @@
                                     ],
                                     "touchForward": true,
                                     "videoAutoPlay": true,
-                                    "backgroundVideoSource": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-                                    "backgroundColor": "white",
+                                    "backgroundVideoSource": "https://smartypants-alexa-skill.s3.amazonaws.com/Videos/QuestionAndAnswersBackgroundVideo.mp4",
                                     "swipeDirection": "right",
                                     "swipeActionIconBackground": "red",
                                     "swipeActionIconType": "image",
