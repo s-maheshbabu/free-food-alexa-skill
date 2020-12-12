@@ -27,7 +27,7 @@
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.6.8",
     "@types/sinon": "^7.0.13",
-    "ask-sdk-test": "^2.5.0",
+    "ask-sdk-test": "s-maheshbabu/ask-sdk-test",
     "chai": "^4.2.0",
     "deep-equal": "^2.0.4",
     "grunt": "^1.0.4",
