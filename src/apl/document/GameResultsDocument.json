@@ -20,7 +20,15 @@
                 "items": [
                     {
                         "type": "AlexaBackground",
-                        "backgroundImageSource": "${gameResultsDataSource.isWon ? 'https://imgix.bustle.com/lovelace/uploads/1053/4e05e210-2291-0133-76ea-0aecee5a8273.gif' : 'https://media1.giphy.com/media/KuJesxZSpHoXu/giphy.gif'}"
+                        "when": "${gameResultsDataSource.isWon}",
+                        "backgroundVideoSource": "https://smartypants-alexa-skill.s3.amazonaws.com/Videos/GameResults_Won_BackgroundVideo.mp4",
+                        "videoAutoPlay": true,
+                        "videoAudioTrack": "none"
+                    },
+                    {
+                        "type": "AlexaBackground",
+                        "when": "${!gameResultsDataSource.isWon}",
+                        "backgroundImageSource": "https://smartypants-alexa-skill.s3.amazonaws.com/GameResults_Lost_BackgroundVideo.jpg"
                     },
                     {
                         "type": "Container",
