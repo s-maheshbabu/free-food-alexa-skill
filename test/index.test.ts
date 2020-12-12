@@ -214,6 +214,14 @@ describe("Interactions through a combination of voice and touch and swipe", () =
         [true, false, true, true, false],
         [ResponseModes.TAP, ResponseModes.SWIPE, ResponseModes.VOICE, ResponseModes.TAP, ResponseModes.VOICE],
       ));
+
+    alexaTest.test(
+      buildGameSequence_MixedUIAndVoiceInteraction(
+        getGameQuestionsIndices(),
+        getCorrectAnswerIndices(),
+        [true, false, true, true, false],
+        [ResponseModes.TAP, ResponseModes.SWIPE, ResponseModes.VOICE, ResponseModes.TAP, ResponseModes.SWIPE],
+      ));
   });
 
   describe('should be able to play a losing game through a combination of voice and touch responses', () => {
@@ -481,10 +489,13 @@ function buildNthAnswerTouchEventGameSequenceItem(responseMode, gameQuestionsInd
       .withToken(RESULTS_VIEW_TOKEN)
       .withArguments(
         responseMode,
-        {
-          index: isCorrectAnswer ? correctAnswers[index] : correctAnswers[index] + 1, // +1 to simulate incorrect answer
-          answerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer`,
-        },
+        ...(responseMode == ResponseModes.TAP ?
+          [{
+            index: isCorrectAnswer ? correctAnswers[index] : correctAnswers[index] + 1, /* +1 to simulate incorrect answer*/
+            answerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[index] + 1} / Correct Answer`,
+          }]
+          :
+          [null]), // For swipe events, there is no answer argument needed because the event gets raised only when the user swiped away the correct answer. In other words, swipe event implicitly means an incorrect user answer.
         {
           category: SCIENCE_CATEGORY,
           correctAnswerIndex: correctAnswers[index],
@@ -580,10 +591,13 @@ function buildLastAnswerTouchEventGameSequenceItem(responseMode, gameQuestionsIn
       .withToken(RESULTS_VIEW_TOKEN)
       .withArguments(
         responseMode,
-        {
-          index: isCorrectAnswer ? correctAnswers[GAME_LENGTH - 1] : correctAnswers[GAME_LENGTH - 1] + 1, // +1 to simulate incorrect answer
-          answerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[GAME_LENGTH - 1] + 1} / Correct Answer`,
-        },
+        ...(responseMode == ResponseModes.TAP ?
+          [{
+            index: isCorrectAnswer ? correctAnswers[GAME_LENGTH - 1] : correctAnswers[GAME_LENGTH - 1] + 1, // +1 to simulate incorrect answer
+            answerText: `${SCIENCE_CATEGORY} Question Number ${gameQuestionsIndices[GAME_LENGTH - 1] + 1} / Correct Answer`,
+          }]
+          :
+          [null]), // For swipe events, there is no answer argument needed because the event gets raised only when the user swiped away the correct answer. In other words, swipe event implicitly means an incorrect user answer.
         {
           category: SCIENCE_CATEGORY,
           correctAnswerIndex: correctAnswers[GAME_LENGTH - 2],

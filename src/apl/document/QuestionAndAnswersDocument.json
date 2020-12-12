@@ -152,7 +152,7 @@
                                                         "type": "SendEvent",
                                                         "arguments": [
                                                             "${questionAndAnswersDataSource.SWIPE_ANSWER_EVENT}",
-                                                            "${questionAndAnswersDataSource.answers[ordinal - 1]}",
+                                                            null,
                                                             "${questionAndAnswersDataSource.sessionAttributes}"
                                                         ]
                                                     }

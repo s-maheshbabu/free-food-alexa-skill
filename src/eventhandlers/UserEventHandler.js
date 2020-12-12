@@ -1,5 +1,6 @@
 const { determineNextQuestion, determineResults, GAME_LENGTH, GAME_WINNING_THRESHOLD_PERCENTAGE } = require("gameManager");
 const APLManager = require("APLManager");
+const { getIn } = require('immutable');
 
 const interactions = require("interactions");
 
@@ -37,8 +38,9 @@ module.exports = UserEventHandler = {
         }
 
         const responseMode = handlerInput.requestEnvelope.request.arguments[0];
+        // null indicates the user swiping away the correct answer or tapping the 'i dont know' buttton, for example
+        const userAnswerIndex = getIn(handlerInput, ["requestEnvelope", "request", "arguments", "1", "index"], null);
         const sessionAttributes = handlerInput.requestEnvelope.request.arguments[2];
-        const userAnswerIndex = handlerInput.requestEnvelope.request.arguments[1].index;
 
         return deliverResults(responseMode, handlerInput, sessionAttributes, userAnswerIndex);
     },
