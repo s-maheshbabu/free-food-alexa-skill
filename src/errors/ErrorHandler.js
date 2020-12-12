@@ -5,7 +5,7 @@ module.exports = ErrorHandler = {
     return true;
   },
   handle(handlerInput, error) {
-    console.error(`Error handled: ${error.message}`);
+    console.log(`ERROR: ${error.stack}`);
 
     return handlerInput.responseBuilder
       .speak("Sorry, I can't understand the command. Please say again.")
